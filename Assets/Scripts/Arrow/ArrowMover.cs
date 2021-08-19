@@ -7,6 +7,7 @@ public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;
     [SerializeField] private float _seconds;
+    [SerializeField] private float _randomCoefficient;
 
     private Arrow _arrow;
     private Rigidbody _rigidbody;
@@ -19,12 +20,12 @@ public class ArrowMover : MonoBehaviour
 
     public void Shoot(Transform target)
     {
-        _arrow.ArrowStates = ArrowStates.Killer;
+        _arrow.ArrowState = ArrowStates.Killer;
         transform.LookAt(target);
         Vector3 delta = target.position - transform.position;
         delta.Normalize();
         _rigidbody.isKinematic = false;
-        _rigidbody.velocity = (delta) * _force;
+        _rigidbody.velocity = (delta + Random.insideUnitSphere * _randomCoefficient) * _force;
     }
 
     public void Shoot(Transform[] targets)
@@ -35,7 +36,7 @@ public class ArrowMover : MonoBehaviour
 
     public void Stop()
     {
-        _arrow.ArrowStates = ArrowStates.NotKiller;
+        _arrow.ArrowState = ArrowStates.NotKiller;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }

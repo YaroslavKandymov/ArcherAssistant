@@ -1,15 +1,21 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
 
-    public void TakeArrows(int count)
-    {
-        if(count <= 0)
-            throw new ArgumentOutOfRangeException(count.ToString());
+    public event Action ArrowsIncreased;
 
-        _quiver.Add(count);
+    public void TakeArrows(IEnumerable<Arrow> arrows)
+    {
+        if(arrows == null)
+            throw new NullReferenceException(arrows.ToString());
+
+        _quiver.Add(arrows);
+        ArrowsIncreased?.Invoke();
     }
 }

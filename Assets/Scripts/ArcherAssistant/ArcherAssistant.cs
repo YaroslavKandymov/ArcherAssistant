@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -17,30 +18,44 @@ public class ArcherAssistant : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out Arrow arrow))
+            if (arrow.ArrowState == ArrowStates.Killer)
+                Die();
+    }
+
     public void GiveAllArrows()
     {
         if (Vector3.Distance(_archer.transform.position, transform.position) > _transmissionRadius)
             return;
 
-        _archer.TakeArrows(_quiver.ArrowsCount);
+        List<Arrow> arrows = new List<Arrow>();
+
+        while (true)
+        {
+            Arrow newArrow = _quiver.TryGetArrow();
+
+            if(newArrow == null)
+                break;
+
+            arrows.Add(newArrow);
+        }
+
+        _archer.TakeArrows(arrows);
         _quiver.ClearArrowList();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void TakeArrow(Arrow arrow)
     {
-        if (other.TryGetComponent(out Arrow arrow))
-            if (arrow.ArrowStates == ArrowStates.Killer)
-                Die();
-    }
-
-    public void TakeArrow()
-    {
-        _quiver.Add(1);
+        _animator.SetTrigger(AnimatorArcherAssistantController.Params.TakeArrow);
+        _quiver.Add(arrow);
     }
 
     private void Die()
     {
-        Debug.Log("Умер " + name);
+        _animator.SetTrigger(AnimatorArcherAssistantController.Params.TakeDamage);
+        Time.timeScale = 0;
         Died?.Invoke();
     }
 }

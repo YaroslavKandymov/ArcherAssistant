@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////
-//  Archer Animations - BowLoadScript                                    //
+//  ArcherTextView Animations - BowLoadScript                                    //
 //  Kevin Iglesias - https://www.keviniglesias.com/     			     //
 //  Contact Support: support@keviniglesias.com                           //
 ///////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@ public class QuiverView : MonoBehaviour
 {
     [SerializeField] private List<QuiverPrefab> _quiverPrefabs;
     [SerializeField] private Quiver _quiver;
+    [SerializeField] private float _secondsBeforeChange;
 
     private void OnEnable()
     {
@@ -19,13 +20,21 @@ public class QuiverView : MonoBehaviour
 
     private void OnArrowCountChanged()
     {
+        StartCoroutine(TakeArrow());
+    }
+
+    private IEnumerator TakeArrow()
+    {
+        WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeChange);
+
+        yield return seconds;
+
         foreach (var quiverPrefab in _quiverPrefabs)
         {
-            if(quiverPrefab.ArrowCount == _quiver.ArrowsCount)
+            if (quiverPrefab.ArrowCount == _quiver.ArrowsCount)
                 quiverPrefab.gameObject.SetActive(true);
             else
                 quiverPrefab.gameObject.SetActive(false);
         }
     }
-
 }

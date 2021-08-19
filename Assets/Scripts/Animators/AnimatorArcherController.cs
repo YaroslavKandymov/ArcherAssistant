@@ -6,7 +6,8 @@ public static class AnimatorArcherController
 {
     public static class Params
     {
-        
+        public const string Shot = nameof(Shot);
+        public const string GetArrow = nameof(GetArrow);
     }
 
     public static class States

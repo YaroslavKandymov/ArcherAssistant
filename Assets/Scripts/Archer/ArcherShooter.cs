@@ -2,58 +2,59 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class ArcherShooter : MonoBehaviour
 {
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private Transform[] _targets;
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
+    [SerializeField] private float _secondsBeforeShot;
 
-    private ArrowMover _currentArrow;
+    private Arrow _currentArrow;
     private float _lastShootTime;
+    private Animator _animator;
 
     public event Action ArrowsEnded;
 
-    private void OnEnable()
+    private void Start()
     {
-        _quiver.ArrowsCountChanged += OnArrowCountChanged;
+        _animator = GetComponent<Animator>();
     }
 
-    private void OnDisable()
+    private void Update()
     {
-        _quiver.ArrowsCountChanged -= OnArrowCountChanged;
-    }
-
-    private void OnArrowCountChanged()
-    {
-        //StartCoroutine(Shoot());
-    }
-
-    private IEnumerator Shoot()
-    {
-        while (true)
+        if (_lastShootTime <= 0)
         {
-            if (_lastShootTime <= 0)
+            _animator.SetTrigger(AnimatorArcherController.Params.GetArrow);
+            _currentArrow = _quiver.TryGetArrow();
+
+            if (_currentArrow == null)
             {
-                _currentArrow = _quiver.TryGetArrow(_shootPoint);
-
-                if (_currentArrow == null)
-                {
-                    Debug.Log("Стрелы кончились");
-                    ArrowsEnded?.Invoke();
-                    StopCoroutine(Shoot());
-                }
-                else
-                {
-                    _currentArrow.Shoot(_targets);
-                }
-
-                _lastShootTime = _secondsBetweenShot;
+                Debug.Log("Стрелы кончились");
+                ArrowsEnded?.Invoke();
+            }
+            else
+            {
+                StartCoroutine(Shot());
             }
 
-            _lastShootTime -= Time.deltaTime;
-
-            yield return null;
+            _lastShootTime = _secondsBetweenShot;
         }
+
+        _lastShootTime -= Time.deltaTime;
+    }
+
+    private IEnumerator Shot()
+    {
+        WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeShot);
+
+        _animator.SetTrigger(AnimatorArcherController.Params.Shot);
+
+        yield return seconds;
+
+        _currentArrow.transform.position = _shootPoint.position;
+        _currentArrow.gameObject.SetActive(true);
+        _currentArrow.Shoot(_targets);
     }
 }
