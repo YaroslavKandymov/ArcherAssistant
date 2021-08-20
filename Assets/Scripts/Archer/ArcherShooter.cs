@@ -10,6 +10,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
+    [SerializeField] private EnemyArcherAssistantMover _enemyArcherAssistant;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -31,12 +32,11 @@ public class ArcherShooter : MonoBehaviour
 
             if (_currentArrow == null)
             {
-                Debug.Log("Стрелы кончились");
                 ArrowsEnded?.Invoke();
             }
             else
             {
-                StartCoroutine(Shot());
+                StartCoroutine(Shoot());
             }
 
             _lastShootTime = _secondsBetweenShot;
@@ -45,7 +45,7 @@ public class ArcherShooter : MonoBehaviour
         _lastShootTime -= Time.deltaTime;
     }
 
-    private IEnumerator Shot()
+    private IEnumerator Shoot()
     {
         WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeShot);
 
@@ -56,5 +56,6 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.Shoot(_targets);
+        _enemyArcherAssistant.AddArrow(_currentArrow);
     }
 }

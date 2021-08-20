@@ -6,6 +6,7 @@ public class Quiver : ObjectPool<Arrow>
 {
     [SerializeField] private int _startArrowsCount;
     [SerializeField] private Arrow _arrowTemplate;
+    [SerializeField] private EnemyArcherAssistantMover _enemyArcherAssistant;
 
     private readonly Stack<Arrow> _arrows = new Stack<Arrow>();
 

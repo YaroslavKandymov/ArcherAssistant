@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Arrow))]
@@ -11,6 +13,8 @@ public class ArrowMover : MonoBehaviour
 
     private Arrow _arrow;
     private Rigidbody _rigidbody;
+
+    public event Action ArrowMissed;
 
     private void Awake()
     {
@@ -39,6 +43,7 @@ public class ArrowMover : MonoBehaviour
         _arrow.ArrowState = ArrowStates.NotKiller;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        ArrowMissed?.Invoke();
     }
 
     private IEnumerator ShotPause(Transform target)

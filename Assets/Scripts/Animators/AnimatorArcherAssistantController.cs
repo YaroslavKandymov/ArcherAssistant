@@ -6,6 +6,7 @@ public class AnimatorArcherAssistantController : MonoBehaviour
     {
         public const string TakeDamage = nameof(TakeDamage);
         public const string TakeArrow = nameof(TakeArrow);
+        public const string Speed = nameof(Speed);
     }
 
     public static class States
