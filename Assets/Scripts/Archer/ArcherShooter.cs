@@ -31,7 +31,6 @@ public class ArcherShooter : MonoBehaviour
 
             if (_currentArrow == null)
             {
-                Debug.Log(_currentArrow.name);
                 ArrowsEnded?.Invoke();
             }
             else
@@ -47,7 +46,6 @@ public class ArcherShooter : MonoBehaviour
 
     private IEnumerator Shoot()
     {
-        Debug.Log("Shoot");
         WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeShot);
 
         _animator.SetTrigger(ArcherAnimatorController.Params.Shot);

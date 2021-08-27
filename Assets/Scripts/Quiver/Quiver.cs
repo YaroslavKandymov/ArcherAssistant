@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Quiver : ObjectPool<Arrow>
@@ -20,13 +21,13 @@ public class Quiver : ObjectPool<Arrow>
         Initialize(_arrowTemplate);
 
         foreach (var arrow in Pool)
-            if(ArrowsCount != _startArrowsCount) 
+            if (ArrowsCount != _startArrowsCount)
                 Add(arrow);
     }
 
     public void Add(Arrow arrow)
     {
-        if(arrow == null)
+        if (arrow == null)
             throw new NullReferenceException(arrow.name);
 
         _arrows.Push(arrow);
@@ -38,7 +39,7 @@ public class Quiver : ObjectPool<Arrow>
 
     public void Add(IEnumerable<Arrow> arrows)
     {
-        if(arrows == null)
+        if (arrows == null)
             throw new NullReferenceException(arrows.ToString());
 
         foreach (var arrow in arrows)
@@ -47,17 +48,11 @@ public class Quiver : ObjectPool<Arrow>
 
     public Arrow TryGetArrow()
     {
-        Debug.Log("TryGetArrow()" + _arrows.Count + " " + gameObject.name);
-        if (TryGetObject(out Arrow arrow))
+        if (_arrows.Count > 0)
         {
-            Debug.Log("TryGetArrow()" + _arrows.Count + " " + gameObject.name);
-
-            if (_arrows.Count > 0)
-            {
-                var newArrow = _arrows.Pop();
-                ArrowsCountChanged?.Invoke();
-                return newArrow;
-            }
+            var newArrow = _arrows.Pop();
+            ArrowsCountChanged?.Invoke();
+            return newArrow;
         }
 
         return null;

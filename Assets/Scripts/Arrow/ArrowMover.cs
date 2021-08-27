@@ -23,6 +23,7 @@ public class ArrowMover : MonoBehaviour
 
     public void Shoot(Transform target)
     {
+        _rigidbody.constraints = RigidbodyConstraints.None;
         _arrow.ArrowState = ArrowStates.Killer;
         transform.LookAt(target);
         Vector3 delta = (target.position - transform.position).normalized;
