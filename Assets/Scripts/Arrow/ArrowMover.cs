@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Arrow))]
@@ -14,7 +13,7 @@ public class ArrowMover : MonoBehaviour
     private Arrow _arrow;
     private Rigidbody _rigidbody;
 
-    public event Action ArrowMissed;
+    public event Action<Arrow> ArrowMissed;
 
     private void Awake()
     {
@@ -26,10 +25,9 @@ public class ArrowMover : MonoBehaviour
     {
         _arrow.ArrowState = ArrowStates.Killer;
         transform.LookAt(target);
-        Vector3 delta = target.position - transform.position;
-        delta.Normalize();
+        Vector3 delta = (target.position - transform.position).normalized;
         _rigidbody.isKinematic = false;
-        _rigidbody.velocity = (delta + Random.insideUnitSphere * _randomCoefficient) * _force;
+        _rigidbody.velocity = (delta + UnityEngine.Random.insideUnitSphere * _randomCoefficient) * _force;
     }
 
     public void Shoot(Transform[] targets)
@@ -43,7 +41,7 @@ public class ArrowMover : MonoBehaviour
         _arrow.ArrowState = ArrowStates.NotKiller;
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        ArrowMissed?.Invoke();
+        ArrowMissed?.Invoke(_arrow);
     }
 
     private IEnumerator ShotPause(Transform target)

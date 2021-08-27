@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 
+[RequireComponent(typeof(ArrowMover))]
 public class Arrow : MonoBehaviour
 {
     [SerializeField] private float _collectRange;
@@ -15,6 +17,9 @@ public class Arrow : MonoBehaviour
 
     public void Shoot(Transform[] targets)
     {
+        if(targets == null)
+            throw new NullReferenceException(targets.ToString());
+
         _arrowMover.Shoot(targets);
     }
 
@@ -24,8 +29,7 @@ public class Arrow : MonoBehaviour
         {
             if (ArrowState == ArrowStates.NotKiller)
             {
-                archerAssistant.TakeArrow(this);
-                gameObject.SetActive(false);
+                //archerAssistant.TakeArrow(this);
             }
         }
     }

@@ -10,7 +10,6 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
-    [SerializeField] private EnemyArcherAssistantMover _enemyArcherAssistant;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -27,11 +26,12 @@ public class ArcherShooter : MonoBehaviour
     {
         if (_lastShootTime <= 0)
         {
-            _animator.SetTrigger(AnimatorArcherController.Params.GetArrow);
+            _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
             _currentArrow = _quiver.TryGetArrow();
 
             if (_currentArrow == null)
             {
+                Debug.Log(_currentArrow.name);
                 ArrowsEnded?.Invoke();
             }
             else
@@ -47,15 +47,15 @@ public class ArcherShooter : MonoBehaviour
 
     private IEnumerator Shoot()
     {
+        Debug.Log("Shoot");
         WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeShot);
 
-        _animator.SetTrigger(AnimatorArcherController.Params.Shot);
+        _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
 
         yield return seconds;
 
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.Shoot(_targets);
-        _enemyArcherAssistant.AddArrow(_currentArrow);
     }
 }

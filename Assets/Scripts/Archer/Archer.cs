@@ -1,15 +1,20 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+[RequireComponent(typeof(Animator))]
 public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
-    [SerializeField] private GameObject _text;
 
     public event Action ArrowsIncreased;
+
+    private Animator _animator;
+
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -28,5 +33,6 @@ public class Archer : MonoBehaviour
 
         _quiver.Add(arrows);
         ArrowsIncreased?.Invoke();
+        _animator.Play(ArcherAnimatorController.States.TakeArrow);
     }
 }

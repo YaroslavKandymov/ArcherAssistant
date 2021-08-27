@@ -6,64 +6,60 @@ public class Quiver : ObjectPool<Arrow>
 {
     [SerializeField] private int _startArrowsCount;
     [SerializeField] private Arrow _arrowTemplate;
-    [SerializeField] private EnemyArcherAssistantMover _enemyArcherAssistant;
+    [SerializeField] private EnemyArcherAssistant _enemyArcherAssistant;
 
     private readonly Stack<Arrow> _arrows = new Stack<Arrow>();
 
     public int ArrowsCount => _arrows.Count;
 
     public event Action ArrowsCountChanged;
+    public event Action Fulled;
 
-    private void Start()
+    private void Awake()
     {
         Initialize(_arrowTemplate);
 
-        for (int i = 0; i < _startArrowsCount; i++)
-        {
-            if (TryGetObject(out _arrowTemplate))
-            {
-                Add(_arrowTemplate);
-            }
-        }
+        foreach (var arrow in Pool)
+            if(ArrowsCount != _startArrowsCount) 
+                Add(arrow);
     }
 
     public void Add(Arrow arrow)
     {
+        if(arrow == null)
+            throw new NullReferenceException(arrow.name);
+
         _arrows.Push(arrow);
         ArrowsCountChanged?.Invoke();
+
+        if (_arrows.Count >= Capacity)
+            Fulled?.Invoke();
     }
 
     public void Add(IEnumerable<Arrow> arrows)
     {
-        foreach (var arrow in arrows)
-        {
-            _arrows.Push(arrow);
-        }
+        if(arrows == null)
+            throw new NullReferenceException(arrows.ToString());
 
-        ArrowsCountChanged?.Invoke();
+        foreach (var arrow in arrows)
+            Add(arrow);
     }
 
     public Arrow TryGetArrow()
     {
-        if (TryGetObject(out _arrowTemplate))
+        Debug.Log("TryGetArrow()" + _arrows.Count + " " + gameObject.name);
+        if (TryGetObject(out Arrow arrow))
         {
+            Debug.Log("TryGetArrow()" + _arrows.Count + " " + gameObject.name);
+
             if (_arrows.Count > 0)
             {
-                _arrows.Pop();
+                var newArrow = _arrows.Pop();
                 ArrowsCountChanged?.Invoke();
-                return _arrowTemplate;
+                return newArrow;
             }
         }
 
         return null;
-    }
-
-    public void ClearArrowList()
-    {
-        if (_arrows.Count <= 0)
-            throw new ArgumentOutOfRangeException("Quiver have no arrows");
-
-        while (_arrows.Count > 0)
-            _arrows.Pop();
     }
 }

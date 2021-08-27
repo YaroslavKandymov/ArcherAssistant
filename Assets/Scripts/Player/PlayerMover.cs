@@ -1,52 +1,52 @@
 using UnityEngine;
+using UnityStandardAssets;
 
-[RequireComponent(typeof(Animator))]
-public class PlayerMover : MonoBehaviour
+namespace UnityStandardAssets.CrossPlatformInput
 {
-    [SerializeField] private Joystick _joystick;
-    [SerializeField] private float _speed;
-    [SerializeField] private float _border;
-    [SerializeField] private Transform _camera;
-    [SerializeField] private float _rotationSpeed;
-
-    private Animator _animator;
-
-    private void Start()
+    [RequireComponent(typeof(Animator))]
+    public class PlayerMover : MonoBehaviour
     {
-        _animator = GetComponent<Animator>();
-    }
+        [SerializeField] private Joystick _joystick;
 
-    private void Update()
-    {
-        Vector3 movement = Vector3.zero;
+        [SerializeField] private float _speed;
+        [SerializeField] private float _border;
 
-        float deltaX = _joystick.Horizontal;
-        float deltaZ = _joystick.Vertical;
+        private Animator _animator;
 
-        if (_joystick.Horizontal >= 0.2f)
+        private void Start()
         {
-            deltaX = _speed;
-        }
-        else if(_joystick.Horizontal <= 0.2f)
-        {
-            deltaX = -_speed;
+            _animator = GetComponent<Animator>();
         }
 
-        if (_joystick.Vertical >= 0.2f)
+        private void Update()
         {
-            deltaZ = _speed;
-        }
-        else if (_joystick.Vertical <= 0.2f)
-        {
-            deltaZ = -_speed;
-        }
+            Vector3 movement = Vector3.zero;
 
-        //_animator.SetFloat(AnimatorArcherAssistantController.Params.Speed, _speed);
-    }
-
-    private void LimitMovement(float direction)
-    {
-        if (Mathf.Abs(direction) > _border)
-            transform.position = new Vector3(_border, transform.position.y, _border);
+            /*float deltaX = _joystick.;
+            float deltaZ = _joystick.Vertical;
+            Debug.Log("1 " + deltaX + " " + deltaZ);
+            if (_joystick.Horizontal >= 0.2f)
+            {
+                deltaX = _speed;
+            }
+            else if(_joystick.Horizontal <= 0.2f)
+            {
+                deltaX = -_speed;
+            }
+    
+            if (_joystick.Vertical >= 0.2f)
+            {
+                deltaZ = _speed;
+            }
+            else if (_joystick.Vertical <= 0.2f)
+            {
+                deltaZ = -_speed;
+            }
+    
+            transform.Translate(deltaX, 0, deltaZ);
+    
+            Debug.Log("2 " + deltaX + " " + deltaZ);*/
+            //_animator.Play(ArcherAssistantAnimatorController.States.Run);
+        }
     }
 }

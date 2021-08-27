@@ -6,14 +6,12 @@ using UnityEngine;
 public class ArcherAssistant : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
-    [SerializeField] private Archer _archer;
-    [SerializeField] private float _transmissionRadius;
 
     private Animator _animator;
 
     public event Action Died;
 
-    private void Start()
+    private void Awake()
     {
         _animator = GetComponent<Animator>();
     }
@@ -25,10 +23,10 @@ public class ArcherAssistant : MonoBehaviour
                 Die();
     }
 
-    public void GiveAllArrows()
+    public void GiveAllArrows(Archer target)
     {
-        if (Vector3.Distance(_archer.transform.position, transform.position) > _transmissionRadius)
-            return;
+        if(target == null)
+            throw new NullReferenceException(target.name);
 
         List<Arrow> arrows = new List<Arrow>();
 
@@ -42,19 +40,24 @@ public class ArcherAssistant : MonoBehaviour
             arrows.Add(newArrow);
         }
 
-        _archer.TakeArrows(arrows);
-        _quiver.ClearArrowList();
+        target.TakeArrows(arrows);
+
+        _animator.Play(ArcherAssistantAnimatorController.States.GiveArrow);
     }
 
     public void TakeArrow(Arrow arrow)
     {
-        _animator.SetTrigger(AnimatorArcherAssistantController.Params.TakeArrow);
+        if (arrow == null)
+            throw new NullReferenceException(arrow.name);
+
+        _animator.Play(ArcherAssistantAnimatorController.States.TakeArrow);
+        arrow.gameObject.SetActive(false);
         _quiver.Add(arrow);
     }
 
     private void Die()
     {
-        _animator.SetTrigger(AnimatorArcherAssistantController.Params.TakeDamage);
+        _animator.SetTrigger(ArcherAssistantAnimatorController.Params.TakeDamage);
         Time.timeScale = 0;
         Died?.Invoke();
     }
