@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class ArcherAssistant : MonoBehaviour
+[RequireComponent(typeof(Quiver))]
+public abstract class ArcherAssistant : MonoBehaviour
 {
-    [SerializeField] private Quiver _quiver;
+    [SerializeField] private Ground _ground;
 
+    private Quiver _quiver;
     private Animator _animator;
-
-    public event Action Died;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _quiver = GetComponent<Quiver>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnEnable()
     {
-        if (other.TryGetComponent(out Arrow arrow))
-            if (arrow.ArrowState == ArrowStates.Killer)
-                Die();
+        _ground.ArrowLanded += OnArrowLanded;
+    }
+
+    private void OnDisable()
+    {
+        _ground.ArrowLanded -= OnArrowLanded;
     }
 
     public void GiveAllArrows(Archer target)
@@ -55,10 +59,8 @@ public class ArcherAssistant : MonoBehaviour
         _quiver.Add(arrow);
     }
 
-    private void Die()
+    protected virtual void OnArrowLanded(Arrow arrow)
     {
-        _animator.SetTrigger(ArcherAssistantAnimatorController.Params.TakeDamage);
-        Time.timeScale = 0;
-        Died?.Invoke();
+
     }
 }

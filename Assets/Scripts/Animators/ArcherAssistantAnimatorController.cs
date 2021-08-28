@@ -5,6 +5,7 @@ public static class ArcherAssistantAnimatorController
         public const string TakeDamage = nameof(TakeDamage);
         public const string TakeArrow = nameof(TakeArrow);
         public const string Speed = nameof(Speed);
+        public const string Idle = nameof(Idle);
     }
 
     public static class States

@@ -25,11 +25,11 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out ArcherAssistant archerAssistant))
+        if (other.TryGetComponent(out PlayerArcherAssistant archerAssistant))
         {
             if (ArrowState == ArrowStates.NotKiller)
             {
-                //archerAssistant.TakeArrow(this);
+                archerAssistant.TakeArrow(this);
             }
         }
     }

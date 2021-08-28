@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(EnemyArcherAssistant))]
-public class EnemyArrowCollector : MonoBehaviour
+public class EnemyArrowCollector : MonoBehaviour, ICollector
 { 
     [SerializeField] private float _speed;
     [SerializeField] private float _takeArrowRange;
@@ -23,7 +23,7 @@ public class EnemyArrowCollector : MonoBehaviour
         _archerAssistant = GetComponent<EnemyArcherAssistant>();
     }
 
-    public void Take(Arrow arrow)
+    public void Collect(Arrow arrow)
     {
         if (arrow == null)
             throw new NullReferenceException(arrow.name);
@@ -32,6 +32,7 @@ public class EnemyArrowCollector : MonoBehaviour
         {
             StopCoroutine(_coroutine);
         }
+
         _arrows.Enqueue(arrow);
 
         _coroutine = StartCoroutine(TakeArrow());
