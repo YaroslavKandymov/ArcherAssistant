@@ -6,8 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Quiver))]
 public abstract class ArcherAssistant : MonoBehaviour
 {
-    [SerializeField] private Ground _ground;
-
     private Quiver _quiver;
     private Animator _animator;
 
@@ -15,16 +13,6 @@ public abstract class ArcherAssistant : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _quiver = GetComponent<Quiver>();
-    }
-
-    private void OnEnable()
-    {
-        _ground.ArrowLanded += OnArrowLanded;
-    }
-
-    private void OnDisable()
-    {
-        _ground.ArrowLanded -= OnArrowLanded;
     }
 
     public void GiveAllArrows(Archer target)
@@ -57,10 +45,5 @@ public abstract class ArcherAssistant : MonoBehaviour
         _animator.Play(ArcherAssistantAnimatorController.States.TakeArrow);
         arrow.gameObject.SetActive(false);
         _quiver.Add(arrow);
-    }
-
-    protected virtual void OnArrowLanded(Arrow arrow)
-    {
-
     }
 }

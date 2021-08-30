@@ -3,14 +3,26 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyArrowCollector))]
 public class EnemyArcherAssistant : ArcherAssistant
 {
-    private ICollector _arrowCollector;
+    [SerializeField] private Ground _ground;
+
+    private EnemyArrowCollector _arrowCollector;
+
+    private void OnEnable()
+    {
+        _ground.ArrowLanded += OnArrowLanded;
+    }
+
+    private void OnDisable()
+    {
+        _ground.ArrowLanded -= OnArrowLanded;
+    }
 
     private void Start()
     {
         _arrowCollector = GetComponent<EnemyArrowCollector>();
     }
 
-    protected override void OnArrowLanded(Arrow arrow)
+    private void OnArrowLanded(Arrow arrow)
     {
         _arrowCollector.Collect(arrow);
     }

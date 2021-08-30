@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(ArcherAssistant))]
 [RequireComponent(typeof(Animator))]
-public class PlayerArrowCollector : MonoBehaviour, ICollector
+public class PlayerArrowCollector : MonoBehaviour
 {
     [SerializeField] private float seconds;
 

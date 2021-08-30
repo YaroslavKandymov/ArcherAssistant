@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
+    [SerializeField] private TMP_Text _text;
 
     public event Action ArrowsIncreased;
 
@@ -22,7 +24,9 @@ public class Archer : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            
+
+            if(touchPosition == transform.position)
+                _text.gameObject.SetActive(true);
         }
     }
 

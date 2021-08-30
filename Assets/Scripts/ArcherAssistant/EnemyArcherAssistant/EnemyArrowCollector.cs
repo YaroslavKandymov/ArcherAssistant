@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(EnemyArcherAssistant))]
-public class EnemyArrowCollector : MonoBehaviour, ICollector
+public class EnemyArrowCollector : MonoBehaviour
 { 
     [SerializeField] private float _speed;
     [SerializeField] private float _takeArrowRange;
