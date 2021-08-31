@@ -6,7 +6,7 @@ public class ArcherAssistantHealth : MonoBehaviour
 {
     private Animator _animator;
 
-    public event Action Died;
+    public event Action<ArcherAssistantHealth> Died;
 
     private void Start()
     {
@@ -23,6 +23,6 @@ public class ArcherAssistantHealth : MonoBehaviour
     private void Die()
     {
         _animator.SetTrigger(ArcherAssistantAnimatorController.Params.TakeDamage);
-        Died?.Invoke();
+        Died?.Invoke(this);
     }
 }

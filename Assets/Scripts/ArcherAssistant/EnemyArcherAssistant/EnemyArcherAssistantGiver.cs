@@ -1,15 +1,18 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyArcherAssistant))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Quiver))]
 public class EnemyArcherAssistantGiver : MonoBehaviour
 {
     [SerializeField] private Archer _archer;
     [SerializeField] private float _speed;
     [SerializeField] private float _transmissionDistance;
 
-    private Quiver _quiver;
     private EnemyArcherAssistant _archerAssistant;
     private Animator _animator;
+    private Quiver _quiver;
 
     private void Awake()
     {

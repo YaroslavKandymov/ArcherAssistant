@@ -45,8 +45,8 @@ public abstract class ArcherAssistant : MonoBehaviour
         if (arrow == null)
             throw new NullReferenceException(arrow.name);
 
-        //if(_quiver.ArrowsCount + 1 > _quiver.Capacity)
-          //  return;
+        if(_quiver.ArrowsCount + 1 > _quiver.Capacity)
+            return;
 
         _animator.Play(ArcherAssistantAnimatorController.States.TakeArrow);
         arrow.gameObject.SetActive(false);

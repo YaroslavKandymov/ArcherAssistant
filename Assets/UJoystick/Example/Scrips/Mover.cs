@@ -50,6 +50,9 @@ public class Mover : MonoBehaviour
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.GiveArrow))
             return;
 
+        if(_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeDamage))
+            return;
+
         if (vertical != 0 || horizontal != 0)
             _animator.Play(ArcherAssistantAnimatorController.States.RunForward);
         else
