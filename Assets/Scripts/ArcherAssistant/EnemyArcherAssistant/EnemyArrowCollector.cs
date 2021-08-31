@@ -53,7 +53,10 @@ public class EnemyArrowCollector : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, _currentArrow.transform.position,
                 _speed * Time.deltaTime);
 
-            if (Vector3.Distance(transform.position, _currentArrow.transform.position) < _takeArrowRange)
+            Vector3 offset = transform.position - _currentArrow.transform.position;
+            float sqrLength = offset.sqrMagnitude;
+
+            if (sqrLength < _takeArrowRange * _takeArrowRange)
             {
                 _archerAssistant.TakeArrow(_currentArrow);
 

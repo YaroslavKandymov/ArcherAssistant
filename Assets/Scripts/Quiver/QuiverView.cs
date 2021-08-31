@@ -18,7 +18,7 @@ public class QuiverView : MonoBehaviour
         _quiver.ArrowsCountChanged -= OnArrowCountChanged;
     }
 
-    private void OnArrowCountChanged()
+    private void OnArrowCountChanged(int count)
     {
         StartCoroutine(TakeArrow());
     }

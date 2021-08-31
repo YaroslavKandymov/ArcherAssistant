@@ -13,7 +13,7 @@ public class Quiver : ObjectPool<Arrow>
 
     public int ArrowsCount => _arrows.Count;
 
-    public event Action ArrowsCountChanged;
+    public event Action<int> ArrowsCountChanged;
     public event Action Fulled;
 
     private void Awake()
@@ -34,7 +34,7 @@ public class Quiver : ObjectPool<Arrow>
             return;
 
         _arrows.Push(arrow);
-        ArrowsCountChanged?.Invoke();
+        ArrowsCountChanged?.Invoke(_arrows.Count);
 
         if (_arrows.Count >= Capacity)
             Fulled?.Invoke();
@@ -54,7 +54,7 @@ public class Quiver : ObjectPool<Arrow>
         if (_arrows.Count > 0)
         {
             var newArrow = _arrows.Pop();
-            ArrowsCountChanged?.Invoke();
+            ArrowsCountChanged?.Invoke(_arrows.Count);
             return newArrow;
         }
 
