@@ -4,7 +4,7 @@ public abstract class Panel : MonoBehaviour
 {
     protected ISceneLoader SceneLoader;
     protected IGameCloser GameCloser;
-    protected ICloserPanel CloserPanel;
+    protected IPanelCloser PanelCloser;
     protected IPanelOpener PanelOpener;
 
     protected abstract void InitBehaviors();

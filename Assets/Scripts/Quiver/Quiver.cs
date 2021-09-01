@@ -29,13 +29,10 @@ public class Quiver : ObjectPool<Arrow>
         if (arrow == null)
             throw new NullReferenceException(arrow.name);
 
-        if(_arrows.Count + 1 > Capacity)
-            return;
-
         _arrows.Push(arrow);
         ArrowsCountChanged?.Invoke(_arrows.Count);
 
-        if (_arrows.Count >= Capacity)
+        if (_arrows.Count >= 2)
             Fulled?.Invoke();
     }
 

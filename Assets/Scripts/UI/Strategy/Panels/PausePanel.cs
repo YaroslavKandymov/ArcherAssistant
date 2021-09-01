@@ -16,6 +16,10 @@ public class PausePanel : Panel
         _canvasGroup = GetComponent<CanvasGroup>();
 
         InitBehaviors();
+
+        var buttons = new List<Button> { _continueButton, _exitButton };
+
+        PanelCloser.Close(_canvasGroup, buttons);
     }
 
     private void OnEnable()
@@ -33,7 +37,7 @@ public class PausePanel : Panel
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        CloserPanel = new ClosePanelBehavior();
+        PanelCloser = new CloseBehavior();
         GameCloser = new CloseApplicationBehavior();
     }
 
@@ -41,7 +45,7 @@ public class PausePanel : Panel
     {
         var buttons = new List<Button> { _continueButton, _exitButton };
 
-        CloserPanel.Close(_canvasGroup, buttons);
+        PanelCloser.Close(_canvasGroup, buttons);
 
         var newCanvasGroup = _gamePanel.GetComponent<CanvasGroup>();
         var newButtons = _gamePanel.GetComponentsInChildren<Button>();

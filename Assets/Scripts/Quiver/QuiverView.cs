@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuiverView : MonoBehaviour
@@ -25,6 +26,8 @@ public class QuiverView : MonoBehaviour
 
     private IEnumerator TakeArrow()
     {
+        var max = _quiverPrefabs.Max(q => q.ArrowCount);
+
         WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeChange);
 
         yield return seconds;
@@ -32,9 +35,17 @@ public class QuiverView : MonoBehaviour
         foreach (var quiverPrefab in _quiverPrefabs)
         {
             if (quiverPrefab.ArrowCount == _quiver.ArrowsCount)
+            {
                 quiverPrefab.gameObject.SetActive(true);
+            }
+            else if(_quiver.ArrowsCount > max)
+            {
+                quiverPrefab.gameObject.SetActive(true);
+            }
             else
+            {
                 quiverPrefab.gameObject.SetActive(false);
+            }
         }
     }
 }

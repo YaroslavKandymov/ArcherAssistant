@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class GamePanel : Panel
     [SerializeField] private Button _pauseButton;
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Panel _pausePanel;
+    [SerializeField] private TMP_Text _text;
 
     private CanvasGroup _canvasGroup;
 
@@ -21,17 +23,19 @@ public class GamePanel : Panel
     private void OnEnable()
     {
         _pauseButton.onClick.AddListener(OnPauseButtonClick);
+        _quiver.ArrowsCountChanged += OnArrowsCountChanged;
     }
 
     private void OnDisable()
     {
         _pauseButton.onClick.RemoveListener(OnPauseButtonClick);
+        _quiver.ArrowsCountChanged -= OnArrowsCountChanged;
     }
 
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        CloserPanel = new ClosePanelBehavior();
+        PanelCloser = new CloseBehavior();
     }
 
     private void OnPauseButtonClick()
@@ -40,11 +44,16 @@ public class GamePanel : Panel
 
         var buttons = new List<Button> {_pauseButton};
 
-        CloserPanel.Close(_canvasGroup, buttons);
+        PanelCloser.Close(_canvasGroup, buttons);
 
         var newCanvasGroup = _pausePanel.GetComponent<CanvasGroup>();
         var newButtons = _pausePanel.GetComponentsInChildren<Button>();
 
         PanelOpener.Open(newCanvasGroup, newButtons);
+    }
+
+    private void OnArrowsCountChanged(int count)
+    {
+        _text.text = count.ToString();
     }
 }

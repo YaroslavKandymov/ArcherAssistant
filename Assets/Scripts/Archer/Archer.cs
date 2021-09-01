@@ -7,9 +7,16 @@ public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
 
+    private Animator _animator;
+
     public event Action ArrowsIncreased;
 
-    private Animator _animator;
+    public Transform Transform { get; private set; }
+
+    private void Awake()
+    {
+        Transform = transform;
+    }
 
     private void Start()
     {
