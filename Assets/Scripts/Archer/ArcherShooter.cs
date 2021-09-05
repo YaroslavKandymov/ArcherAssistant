@@ -10,7 +10,6 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
-    [SerializeField] private ParticleSystem _particleSystem;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -56,7 +55,5 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.Shoot(_targets);
-        _particleSystem.transform.position = _currentArrow.transform.position;
-        _particleSystem.Play();
     }
 }
