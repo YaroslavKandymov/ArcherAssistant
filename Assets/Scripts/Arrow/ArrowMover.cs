@@ -21,29 +21,22 @@ public class ArrowMover : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _arrow = GetComponent<Arrow>();
         _particleSystem = GetComponentInChildren<ParticleSystem>(true);
+        _particleSystem.gameObject.SetActive(false);
     }
 
     public void Shoot(Transform target)
     {
         _rigidbody.constraints = RigidbodyConstraints.None;
         _arrow.ArrowState = ArrowStates.Killer;
+
         transform.LookAt(target);
+
         Vector3 delta = (target.position - transform.position).normalized;
         _rigidbody.isKinematic = false;
         _rigidbody.velocity = (delta + UnityEngine.Random.insideUnitSphere * _randomCoefficient) * _force;
+
         _particleSystem.gameObject.SetActive(true);
     }
-    
-    /*public void Shoot(Transform target)
-    {
-        _rigidbody.constraints = RigidbodyConstraints.None;
-        _arrow.ArrowState = ArrowStates.Killer;
-        transform.LookAt(target);
-        Vector3 delta = (target.position - transform.position).normalized;
-        _rigidbody.isKinematic = false;
-        _rigidbody.velocity = (delta + UnityEngine.Random.insideUnitSphere * _randomCoefficient) * _force;
-        _particleSystem.gameObject.SetActive(true);
-    }*/
 
     public void Shoot(Transform[] targets)
     {

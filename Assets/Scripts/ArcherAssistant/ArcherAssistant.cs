@@ -45,7 +45,6 @@ public abstract class ArcherAssistant : MonoBehaviour
         if (arrow == null)
             throw new NullReferenceException(arrow.name);
 
-        _animator.Play(ArcherAssistantAnimatorController.States.TakeArrow);
         arrow.gameObject.SetActive(false);
         _quiver.Add(arrow);
     }

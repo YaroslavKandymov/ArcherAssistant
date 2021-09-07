@@ -32,7 +32,7 @@ public class Quiver : ObjectPool<Arrow>
         _arrows.Push(arrow);
         ArrowsCountChanged?.Invoke(_arrows.Count);
 
-        if (_arrows.Count >= 2)
+        if (_arrows.Count >= Capacity)
             Fulled?.Invoke();
     }
 

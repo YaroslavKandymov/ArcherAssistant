@@ -40,11 +40,9 @@ public class EnemyArcherAssistantGiver : MonoBehaviour
     {
         while (true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _archer.transform.position,
-                _speed * Time.deltaTime);
             transform.LookAt(_archer.transform);
 
-            _animator.Play(ArcherAssistantAnimatorController.States.Run);
+            _animator.Play(ArcherAssistantAnimatorController.States.RunForward);
 
             if (Vector3.Distance(transform.position, _archer.transform.position) <= _transmissionDistance)
             {

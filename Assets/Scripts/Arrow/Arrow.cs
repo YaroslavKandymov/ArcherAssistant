@@ -15,7 +15,7 @@ public class Arrow : MonoBehaviour
         _arrowMover = GetComponent<ArrowMover>();
     }
 
-    public void Shoot(Transform[] targets)
+    public void Shoot(Transform targets)
     {
         if(targets == null)
             throw new NullReferenceException(targets.ToString());

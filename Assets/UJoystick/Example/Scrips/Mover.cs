@@ -5,7 +5,6 @@
 public class Mover : MonoBehaviour
 {
     [SerializeField] private bl_Joystick _joystick;
-    [SerializeField] private float _speed;
     [SerializeField] private Archer _archer;
     [SerializeField] private float _transmissionRadius;
 

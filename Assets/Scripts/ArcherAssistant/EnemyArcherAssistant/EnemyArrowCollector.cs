@@ -5,22 +5,23 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(EnemyArcherAssistant))]
+[RequireComponent(typeof(Rigidbody))]
 public class EnemyArrowCollector : MonoBehaviour
-{ 
+{
     [SerializeField] private float _speed;
     [SerializeField] private float _takeArrowRange;
-    [SerializeField] private float seconds;
 
     private EnemyArcherAssistant _archerAssistant;
     private Arrow _currentArrow;
     private readonly Queue<Arrow> _arrows = new Queue<Arrow>();
-    private Coroutine _coroutine;
     private Animator _animator;
+    private Rigidbody _rigidbody;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _archerAssistant = GetComponent<EnemyArcherAssistant>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Collect(Arrow arrow)
@@ -28,49 +29,37 @@ public class EnemyArrowCollector : MonoBehaviour
         if (arrow == null)
             throw new NullReferenceException(arrow.name);
 
-        if (_coroutine != null)
-        {
-            StopCoroutine(_coroutine);
-        }
-
         _arrows.Enqueue(arrow);
-
-        _coroutine = StartCoroutine(TakeArrow());
     }
 
-    private IEnumerator TakeArrow()
+    private void Update()
     {
-        while (true)
+        if (_arrows.Count <= 0)
         {
-            if (_arrows.Count > 0)
-            {
-                _currentArrow = _arrows.Dequeue();
+            _animator.Play(ArcherAssistantAnimatorController.States.Idle);
+            return;
+        }
 
-                _animator.Play(ArcherAssistantAnimatorController.States.Run);
-                transform.LookAt(_currentArrow.transform);
-            }
+        if (_arrows.Count > 0 && _currentArrow == null)
+        {
+            _currentArrow = _arrows.Peek();
 
-            transform.position = Vector3.MoveTowards(transform.position, _currentArrow.transform.position,
-                _speed * Time.deltaTime);
+            _animator.Play(ArcherAssistantAnimatorController.States.RunForward);
+            transform.LookAt(_currentArrow.transform);
+        }
 
-            Vector3 offset = transform.position - _currentArrow.transform.position;
-            float sqrLength = offset.sqrMagnitude;
+        Vector3 offset = transform.position - _currentArrow.transform.position;
+        float sqrLength = offset.sqrMagnitude;
 
-            if (sqrLength < _takeArrowRange * _takeArrowRange)
-            {
-                _archerAssistant.TakeArrow(_currentArrow);
+        if (sqrLength < _takeArrowRange * _takeArrowRange)
+        {
+            _archerAssistant.TakeArrow(_currentArrow);
 
-                yield return new WaitForSeconds(seconds);
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeArrow))
+                return;
 
-                if (_arrows.Count <= 0)
-                {
-                    _animator.Play(ArcherAssistantAnimatorController.States.Idle);
-                }
-
-                yield break;
-            }
-
-            yield return null;
+            _currentArrow = null;
+            _arrows.Dequeue();
         }
     }
 }

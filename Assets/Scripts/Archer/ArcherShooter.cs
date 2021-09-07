@@ -5,11 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class ArcherShooter : MonoBehaviour
 {
-    [SerializeField] private float _secondsBetweenShot;
-    [SerializeField] private Transform[] _targets;
+    [SerializeField] private Transform _target;
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
+    [SerializeField] private float _secondsBetweenShot;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -46,14 +46,12 @@ public class ArcherShooter : MonoBehaviour
 
     private IEnumerator Shoot()
     {
-        WaitForSeconds seconds = new WaitForSeconds(_secondsBeforeShot);
-
         _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
 
-        yield return seconds;
+        yield return new WaitForSeconds(_secondsBeforeShot);
 
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-        _currentArrow.Shoot(_targets);
+        _currentArrow.Shoot(_target);
     }
 }
