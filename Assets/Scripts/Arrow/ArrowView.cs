@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class ArrowView : ObjectPool<PlayerArrow>
 {
@@ -32,6 +31,7 @@ public class ArrowView : ObjectPool<PlayerArrow>
         if (_arrows.Count < count)
         {
             var addCount = count - _arrows.Count;
+
             for (int i = 0; i < addCount; i++)
             {
                 if (TryGetObject(out PlayerArrow arrow))
@@ -39,8 +39,9 @@ public class ArrowView : ObjectPool<PlayerArrow>
                     arrow.transform.position = _arrowsPlace.position;
                     arrow.transform.localEulerAngles =
                         new Vector3(Random.Range(-60, -120), Random.Range(70, 300), Random.Range(-80, 80));
-                    _arrows.Add(arrow);
+                    
                     arrow.gameObject.SetActive(true);
+                    _arrows.Add(arrow);
                 }
             }
         }
@@ -52,5 +53,7 @@ public class ArrowView : ObjectPool<PlayerArrow>
         {
             arrow.gameObject.SetActive(false);
         }
+
+        _arrows.Clear();
     }
 }

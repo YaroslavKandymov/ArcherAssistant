@@ -58,4 +58,9 @@ public class Quiver : ObjectPool<Arrow>
         Taken?.Invoke();
         return null;
     }
+
+    public void Restart()
+    {
+
+    }
 }

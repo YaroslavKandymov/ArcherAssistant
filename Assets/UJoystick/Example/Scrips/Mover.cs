@@ -54,9 +54,6 @@ public class Mover : MonoBehaviour
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.GiveArrow))
             return;
 
-        if(_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeDamage))
-            return;
-
         if (Mathf.Abs(vertical) >= 0.1f || Mathf.Abs(horizontal) >= 0.1f)
             _animator.Play(ArcherAssistantAnimatorController.States.RunForward);
         else

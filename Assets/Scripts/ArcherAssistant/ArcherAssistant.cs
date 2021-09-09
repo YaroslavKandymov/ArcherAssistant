@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Quiver))]
 public abstract class ArcherAssistant : MonoBehaviour
 {
+    [SerializeField] private Vector3 _startPosition;
+    [SerializeField] private Vector3 _startRotation;
+
     private Quiver _quiver;
     private Animator _animator;
 
@@ -13,6 +16,9 @@ public abstract class ArcherAssistant : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _quiver = GetComponent<Quiver>();
+
+        transform.position = _startPosition;
+        transform.localEulerAngles = _startRotation;
     }
 
     public void GiveAllArrows(Archer target)
@@ -47,5 +53,11 @@ public abstract class ArcherAssistant : MonoBehaviour
 
         arrow.gameObject.SetActive(false);
         _quiver.Add(arrow);
+    }
+
+    public void RestartPosition()
+    {
+        transform.position = _startPosition;
+        transform.localEulerAngles = _startRotation;
     }
 }

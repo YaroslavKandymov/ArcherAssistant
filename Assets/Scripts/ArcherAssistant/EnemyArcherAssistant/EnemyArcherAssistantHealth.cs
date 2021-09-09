@@ -15,7 +15,6 @@ public class EnemyArcherAssistantHealth : ArcherAssistantHealth
 
     protected override void Die()
     {
-        _animator.Play(ArcherAssistantAnimatorController.States.TakeDamage);
         EnemyDied?.Invoke();
     }
 }

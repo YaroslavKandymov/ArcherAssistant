@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -37,11 +36,6 @@ public class ArrowMover : MonoBehaviour
         _particleSystem.gameObject.SetActive(true);
     }
 
-    public void Shoot(Transform[] targets)
-    {
-        StartCoroutine(ManyShots(targets));
-    }
-
     public void Stop()
     {
         _arrow.ArrowState = ArrowStates.NotKiller;
@@ -49,13 +43,5 @@ public class ArrowMover : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         ArrowMissed?.Invoke(_arrow);
         _particleSystem.gameObject.SetActive(false);
-    }
-
-    private IEnumerator ManyShots(Transform[] targets)
-    {
-        foreach (var target in targets)
-            Shoot(target);
-
-        yield return new WaitForSeconds(_seconds);
     }
 }

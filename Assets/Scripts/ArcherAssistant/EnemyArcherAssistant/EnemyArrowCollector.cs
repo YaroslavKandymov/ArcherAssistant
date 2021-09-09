@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -19,14 +18,6 @@ public class EnemyArrowCollector : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _archerAssistant = GetComponent<EnemyArcherAssistant>();
-    }
-
-    public void Collect(Arrow arrow)
-    {
-        if (arrow == null)
-            throw new NullReferenceException(arrow.name);
-
-        _arrows.Enqueue(arrow);
     }
 
     private void Update()
@@ -58,5 +49,19 @@ public class EnemyArrowCollector : MonoBehaviour
             _currentArrow = null;
             _arrows.Dequeue();
         }
+    }
+
+    public void Collect(Arrow arrow)
+    {
+        if (arrow == null)
+            throw new NullReferenceException(arrow.name);
+
+        _arrows.Enqueue(arrow);
+    }
+
+    public void Restart()
+    {
+        _arrows.Clear();
+        _currentArrow = null;
     }
 }
