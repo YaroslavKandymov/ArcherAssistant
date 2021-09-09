@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Arrow))]
 public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;

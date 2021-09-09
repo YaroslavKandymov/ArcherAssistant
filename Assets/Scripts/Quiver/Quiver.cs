@@ -14,6 +14,7 @@ public class Quiver : ObjectPool<Arrow>
 
     public event Action<int> ArrowsCountChanged;
     public event Action Fulled;
+    public event Action Taken;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class Quiver : ObjectPool<Arrow>
             return newArrow;
         }
 
+        Taken?.Invoke();
         return null;
     }
 }

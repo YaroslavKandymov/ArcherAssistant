@@ -5,7 +5,6 @@ using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(EnemyArcherAssistant))]
-[RequireComponent(typeof(Rigidbody))]
 public class EnemyArrowCollector : MonoBehaviour
 {
     [SerializeField] private float _speed;
@@ -15,13 +14,11 @@ public class EnemyArrowCollector : MonoBehaviour
     private Arrow _currentArrow;
     private readonly Queue<Arrow> _arrows = new Queue<Arrow>();
     private Animator _animator;
-    private Rigidbody _rigidbody;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _archerAssistant = GetComponent<EnemyArcherAssistant>();
-        _rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Collect(Arrow arrow)

@@ -1,11 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EndGamePanel : Panel
 {
     [SerializeField] private PlayerArcherAssistantHealth _playerHealth;
     [SerializeField] private EnemyArcherAssistantHealth _enemyHealth;
+    [SerializeField] private Panel _gamePanel;
+    [SerializeField] private Panel _gameOverPanel;
+    [SerializeField] private Panel _winPanel;
+
+    private void Awake()
+    {
+        InitBehaviors();
+    }
 
     private void OnEnable()
     {
@@ -23,16 +29,21 @@ public class EndGamePanel : Panel
     {
         PanelOpener = new OpenPanelBehavior();
         PanelCloser = new CloseBehavior();
+        SceneLoader = new LoadSceneBehavior();
     }
 
     private void OnPlayerDied()
     {
         StopTime();
+        PanelCloser.Close(_gamePanel);
+        PanelOpener.Open(_gameOverPanel);
     }
 
     private void OnEnemyDied()
     {
         StopTime();
+        PanelCloser.Close(_gamePanel);
+        PanelOpener.Open(_winPanel);
     }
 
     private void StopTime()

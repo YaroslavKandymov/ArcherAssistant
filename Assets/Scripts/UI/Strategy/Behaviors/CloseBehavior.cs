@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 public class CloseBehavior : IPanelCloser
 {
-    public void Close(CanvasGroup canvasGroup, IEnumerable<Button> buttons)
+    public void Close(Panel panel)
     {
+        var canvasGroup = panel.GetComponent<CanvasGroup>();
+        var buttons = panel.GetComponentsInChildren<Button>();
+
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
 

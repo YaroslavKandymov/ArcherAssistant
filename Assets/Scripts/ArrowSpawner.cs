@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrowSpawner : ObjectPool<Arrow>
@@ -10,6 +11,7 @@ public class ArrowSpawner : ObjectPool<Arrow>
 
     private Transform[] _spawnPoints;
     private WaitForSeconds _seconds;
+    private List<Arrow> _arrows = new List<Arrow>();
 
     private void Start()
     {
@@ -25,6 +27,15 @@ public class ArrowSpawner : ObjectPool<Arrow>
         StartCoroutine(Spawn());
     }
 
+    public void Restart()
+    {
+        foreach (var arrow in _arrows)
+        {
+            arrow.gameObject.SetActive(false);
+            StartCoroutine(Spawn());
+        }
+    }
+
     private IEnumerator Spawn()
     {
         while (true)
@@ -37,6 +48,7 @@ public class ArrowSpawner : ObjectPool<Arrow>
                 arrow.transform.localEulerAngles = new Vector3(90 + Random.Range(-_randomCorner, _randomCorner), 0f,
                     90 + Random.Range(-_randomCorner, _randomCorner));
                 arrow.gameObject.SetActive(true);
+                _arrows.Add(arrow);
             }
 
             yield return _seconds;
