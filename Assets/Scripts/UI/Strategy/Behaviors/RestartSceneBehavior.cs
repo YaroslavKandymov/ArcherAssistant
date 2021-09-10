@@ -4,7 +4,6 @@ public class RestartSceneBehavior : ISceneReloader
 {
     public void Restart(ArrowSpawner spawner, ArcherAssistant[] assistants, Archer[] archers, EnemyArrowCollector collector)
     {
-        spawner.Restart();
         collector.Restart();
 
         var arrows = GameObject.FindObjectsOfType<Arrow>();
@@ -13,6 +12,8 @@ public class RestartSceneBehavior : ISceneReloader
         {
             arrow.gameObject.SetActive(false);
         }
+
+        spawner.Restart();
 
         foreach (var assistant in assistants)
         {
