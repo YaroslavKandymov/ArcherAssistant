@@ -6,6 +6,7 @@ using UnityEngine;
 public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
+    [SerializeField] private Vector3 _startRotation;
 
     private Animator _animator;
 
@@ -21,6 +22,7 @@ public class Archer : MonoBehaviour
     private void Start()
     {
         _animator = GetComponent<Animator>();
+        ResetRotation();
     }
 
     public void TakeArrows(IEnumerable<Arrow> arrows)
@@ -31,5 +33,10 @@ public class Archer : MonoBehaviour
         _quiver.Add(arrows);
         ArrowsIncreased?.Invoke();
         _animator.Play(ArcherAnimatorController.States.TakeArrow);
+    }
+
+    public void ResetRotation()
+    {
+        transform.localEulerAngles = _startRotation;
     }
 }

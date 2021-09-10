@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RestartSceneBehavior : ISceneReloader
 {
-    public void Restart(ArrowSpawner spawner, ArcherAssistant[] assistants, EnemyArrowCollector collector)
+    public void Restart(ArrowSpawner spawner, ArcherAssistant[] assistants, Archer[] archers, EnemyArrowCollector collector)
     {
         spawner.Restart();
         collector.Restart();
@@ -17,6 +17,11 @@ public class RestartSceneBehavior : ISceneReloader
         foreach (var assistant in assistants)
         {
             assistant.RestartPosition();
+        }
+
+        foreach (var archer in archers)
+        {
+            archer.ResetRotation();
         }
     }
 }

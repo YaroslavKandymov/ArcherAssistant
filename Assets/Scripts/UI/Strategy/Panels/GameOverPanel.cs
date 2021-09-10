@@ -7,9 +7,9 @@ public class GameOverPanel : Panel
     [SerializeField] private Button _exitButton;
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private ArrowSpawner _spawner;
-    [SerializeField] private PlayerArcherAssistant _playerArcherAssistant;
-    [SerializeField] private EnemyArcherAssistant _enemyArcherAssistant;
+    [SerializeField] private ArcherAssistant[] _assistants;
     [SerializeField] private EnemyArrowCollector _collector;
+    [SerializeField] private Archer[] _archers;
 
     private void Awake()
     {
@@ -44,8 +44,7 @@ public class GameOverPanel : Panel
         PanelCloser.Close(this);
         PanelOpener.Open(_gamePanel);
 
-        ArcherAssistant[] assistants = { _playerArcherAssistant, _enemyArcherAssistant};
-        Reloader.Restart(_spawner, assistants, _collector);
+        Reloader.Restart(_spawner, _assistants, _archers, _collector);
     }
 
     private void OnExitButtonClick()
