@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class ArrowSpawner : ObjectPool<Arrow>
     private WaitForSeconds _seconds;
     private List<Arrow> _arrows = new List<Arrow>();
     private Coroutine _coroutine;
+
+    public event Action<Arrow> ArrowSpawned;
 
     private void Start()
     {
@@ -48,12 +51,8 @@ public class ArrowSpawner : ObjectPool<Arrow>
     private void Start(int count)
     {
         for (int i = 0; i < count; i++)
-        {
             if (TryGetObject(out Arrow arrow))
-            {
                 PositionArrow(arrow);
-            }
-        }
     }
 
     private IEnumerator Spawn()
@@ -78,5 +77,6 @@ public class ArrowSpawner : ObjectPool<Arrow>
             90 + Random.Range(-_randomCorner, _randomCorner));
         arrow.gameObject.SetActive(true);
         _arrows.Add(arrow);
+        ArrowSpawned?.Invoke(arrow);
     }
 }

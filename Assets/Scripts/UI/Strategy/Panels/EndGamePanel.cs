@@ -3,7 +3,7 @@ using UnityEngine;
 public class EndGamePanel : Panel
 {
     [SerializeField] private PlayerArcherAssistantHealth _playerHealth;
-    [SerializeField] private EnemyArcherAssistantHealth _enemyHealth;
+    [SerializeField] private EnemyArcherAssistantHealth[] _enemyLives;
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private Panel _gameOverPanel;
     [SerializeField] private Panel _winPanel;
@@ -16,13 +16,17 @@ public class EndGamePanel : Panel
     private void OnEnable()
     {
         _playerHealth.PlayerDied += OnPlayerDied;
-        _enemyHealth.EnemyDied += OnEnemyDied;
+
+        foreach (var enemy in _enemyLives)
+            enemy.EnemyDied += OnEnemyDied;
     }
 
     private void OnDisable()
     {
         _playerHealth.PlayerDied -= OnPlayerDied;
-        _enemyHealth.EnemyDied -= OnEnemyDied;
+
+        foreach (var enemy in _enemyLives)
+            enemy.EnemyDied -= OnEnemyDied;
     }
 
     protected override void InitBehaviors()
@@ -41,6 +45,10 @@ public class EndGamePanel : Panel
 
     private void OnEnemyDied()
     {
+        foreach (var enemy in _enemyLives)
+            if(enemy.IsDied == false)
+                return;
+
         StopTime();
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_winPanel);

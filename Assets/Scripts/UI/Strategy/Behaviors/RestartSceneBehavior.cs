@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RestartSceneBehavior : ISceneReloader
 {
-    public void Restart(ArrowSpawner spawner, IEnumerable<ArcherAssistant> assistants, IEnumerable<Archer> archers, EnemyArrowCollector collector,
+    public void Restart(ArrowSpawner spawner, IEnumerable<ArcherAssistant> assistants, IEnumerable<Archer> archers, EnemyAssistantArrowCollector collector,
         IEnumerable<Quiver> quivers)
     {
         collector.Restart();

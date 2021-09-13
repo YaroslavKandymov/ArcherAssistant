@@ -13,6 +13,7 @@ public static class ArcherAssistantAnimatorController
         public const string TakeArrow = nameof(TakeArrow);
         public const string Run = nameof(Run);
         public const string GiveArrow = nameof(GiveArrow);
-        public const string RunForward = nameof(RunForward);
+        public const string RunForward = nameof(RunForward);   
+        public const string TakeDamage = nameof(TakeDamage);
     }
 }

@@ -8,7 +8,7 @@ public class GameOverPanel : Panel
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private ArrowSpawner _spawner;
     [SerializeField] private ArcherAssistant[] _assistants;
-    [SerializeField] private EnemyArrowCollector _collector;
+    [SerializeField] private EnemyAssistantArrowCollector _collector;
     [SerializeField] private Archer[] _archers;
     [SerializeField] private Quiver[] _quivers;
 
