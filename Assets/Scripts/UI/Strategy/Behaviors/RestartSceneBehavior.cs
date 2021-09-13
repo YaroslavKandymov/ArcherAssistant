@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RestartSceneBehavior : ISceneReloader
 {
-    public void Restart(ArrowSpawner spawner, ArcherAssistant[] assistants, Archer[] archers, EnemyArrowCollector collector)
+    public void Restart(ArrowSpawner spawner, IEnumerable<ArcherAssistant> assistants, IEnumerable<Archer> archers, EnemyArrowCollector collector,
+        IEnumerable<Quiver> quivers)
     {
         collector.Restart();
 
@@ -23,6 +25,11 @@ public class RestartSceneBehavior : ISceneReloader
         foreach (var archer in archers)
         {
             archer.ResetRotation();
+        }
+
+        foreach (var quiver in quivers)
+        {
+            quiver.Restart();
         }
     }
 }

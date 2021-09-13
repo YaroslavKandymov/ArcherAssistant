@@ -61,6 +61,11 @@ public class Quiver : ObjectPool<Arrow>
 
     public void Restart()
     {
+        _arrows.Clear();
+        Taken?.Invoke();
 
+        foreach (var arrow in Pool)
+            if (ArrowsCount != _startArrowsCount)
+                Add(arrow);
     }
 }
