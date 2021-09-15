@@ -1,5 +1,5 @@
 public enum ArrowStates 
 {
-    Killer,
-    NotKiller
+    EnemyKiller,
+    PlayerKiller
 }

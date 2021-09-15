@@ -27,7 +27,7 @@ public class Arrow : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerArcherAssistant archerAssistant))
         {
-            if (ArrowState == ArrowStates.NotKiller)
+            if (ArrowState == ArrowStates.EnemyKiller)
             {
                 archerAssistant.TakeArrow(this);
             }

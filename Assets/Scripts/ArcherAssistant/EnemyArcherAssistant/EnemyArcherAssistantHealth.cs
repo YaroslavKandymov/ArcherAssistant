@@ -9,11 +9,29 @@ public class EnemyArcherAssistantHealth : ArcherAssistantHealth
 
     private Animator _animator;
 
+    public bool IsDied { get; private set; }
+
     public event Action EnemyDied;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (IsDied == true)
+            return;
+
+        if (other.TryGetComponent(out Arrow arrow))
+        {
+            if (arrow.ArrowState == ArrowStates.EnemyKiller)
+            {
+                IsDied = true;
+
+                Die();
+            }
+        }
     }
 
     protected override void Die()

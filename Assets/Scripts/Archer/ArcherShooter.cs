@@ -10,6 +10,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
     [SerializeField] private float _secondsBetweenShot;
+    [SerializeField] private ArrowStates _arrowState;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -50,6 +51,7 @@ public class ArcherShooter : MonoBehaviour
 
         yield return new WaitForSeconds(_secondsBeforeShot);
 
+        _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.Shoot(_target);

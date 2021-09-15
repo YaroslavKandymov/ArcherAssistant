@@ -7,7 +7,6 @@ using UnityEngine;
 public class EnemyArcherAssistantGiver : MonoBehaviour
 {
     [SerializeField] private Archer _archer;
-    [SerializeField] private float _speed;
     [SerializeField] private float _transmissionDistance;
 
     private EnemyArcherAssistant _archerAssistant;

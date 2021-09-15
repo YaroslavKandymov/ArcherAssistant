@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class ArrowTorque : MonoBehaviour
 {
-    [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private float _velocityMultiplier;
     [SerializeField] private float _angularVelocityMultiplier;
+
+    private Rigidbody _rigidbody;
+
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
     private void FixedUpdate()
     {
