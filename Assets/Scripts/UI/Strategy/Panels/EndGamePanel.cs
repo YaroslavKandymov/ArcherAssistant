@@ -15,18 +15,18 @@ public class EndGamePanel : Panel
 
     private void OnEnable()
     {
-        _playerHealth.PlayerDied += OnPlayerDied;
+        _playerHealth.Died += OnPlayerDied;
 
         foreach (var enemy in _enemyLives)
-            enemy.EnemyDied += OnEnemyDied;
+            enemy.Died += OnEnemyDied;
     }
 
     private void OnDisable()
     {
-        _playerHealth.PlayerDied -= OnPlayerDied;
+        _playerHealth.Died -= OnPlayerDied;
 
         foreach (var enemy in _enemyLives)
-            enemy.EnemyDied -= OnEnemyDied;
+            enemy.Died -= OnEnemyDied;
     }
 
     protected override void InitBehaviors()

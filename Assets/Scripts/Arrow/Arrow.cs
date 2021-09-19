@@ -9,10 +9,12 @@ public class Arrow : MonoBehaviour
     private ArrowMover _arrowMover;
 
     public ArrowStates ArrowState;
+    public Transform Transform { get; private set; }
 
     private void Awake()
     {
         _arrowMover = GetComponent<ArrowMover>();
+        Transform = GetComponent<Transform>();
     }
 
     public void Shoot(Transform targets)

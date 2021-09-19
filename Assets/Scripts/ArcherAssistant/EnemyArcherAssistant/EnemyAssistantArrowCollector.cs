@@ -6,8 +6,7 @@ public class EnemyAssistantArrowCollector : MonoBehaviour
 {
     [SerializeField] private EnemyMover[] _movers;
     [SerializeField] private Ground _ground;
-    [SerializeField] private ArrowSpawner _spawner;
-    [SerializeField] private EnemyAssistantArrowCollector _assistantArrowCollector;
+    [SerializeField] private ArrowsSpawner _spawner;
 
     private readonly Queue<Arrow> _arrows = new Queue<Arrow>();
 
@@ -23,24 +22,28 @@ public class EnemyAssistantArrowCollector : MonoBehaviour
         _spawner.ArrowSpawned -= OnArrowSpawned;
     }
 
-    private void Update()
+    /*private void Update()
     {
         if(_arrows.Count <= 0)
             return;
 
-        Collect();
-    }
+        foreach (var mover in _movers)
+        {
+            if (mover.CurrentArrow != null)
+            {
+                continue;
+            }
+            else if (mover.gameObject.activeSelf == true)
+            {
+                if (_arrows.Count > 0)
+                {
+                    var arrow = _arrows.Dequeue();
 
-    private void OnArrowLanded(Arrow arrow)
-    {
-        _assistantArrowCollector.Add(arrow);
-    }
-
-    private void OnArrowSpawned(Arrow arrow)
-    {
-        _assistantArrowCollector.Add(arrow);
-    }
-
+                    mover.Init(arrow);
+                }
+            }
+        }
+    }*/
 
     public void Add(Arrow arrow)
     {
@@ -55,17 +58,37 @@ public class EnemyAssistantArrowCollector : MonoBehaviour
         _arrows.Clear();
     }
 
-    private void Collect()
+    private void OnArrowLanded(Arrow arrow)
     {
-        for (int i = 0; i < _movers.Length; i++)
+        Add(arrow);
+        SpreadArrows();
+    }
+
+    private void OnArrowSpawned(Arrow arrow)
+    {
+        Add(arrow);
+        SpreadArrows();
+    }
+
+    private void SpreadArrows()
+    {
+        if (_arrows.Count <= 0)
+            return;
+
+        foreach (var mover in _movers)
         {
-            if (_movers[i].CurrentArrow != null)
+            if (mover.CurrentArrow != null)
             {
                 continue;
             }
-            else
+            else if (mover.gameObject.activeSelf == true)
             {
-                _movers[i].Init(_arrows.Dequeue());
+                if (_arrows.Count > 0)
+                {
+                    var arrow = _arrows.Dequeue();
+
+                    mover.Init(arrow);
+                }
             }
         }
     }

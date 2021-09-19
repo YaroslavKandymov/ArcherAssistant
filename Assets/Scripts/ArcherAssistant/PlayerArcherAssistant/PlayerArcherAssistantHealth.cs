@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerArcherAssistantHealth : ArcherAssistantHealth
 {
-    public event Action PlayerDied;
+    public event Action Died;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +14,6 @@ public class PlayerArcherAssistantHealth : ArcherAssistantHealth
 
     protected override void Die()
     {
-        PlayerDied?.Invoke();
+        Died?.Invoke();
     }
 }

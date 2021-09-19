@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -26,7 +25,8 @@ public abstract class ArcherAssistant : MonoBehaviour
         if(target == null)
             throw new NullReferenceException(target.name);
 
-        List<Arrow> arrows = new List<Arrow>();
+        if(_quiver.ArrowsCount <= 0)
+            return;
 
         while (true)
         {
@@ -35,13 +35,8 @@ public abstract class ArcherAssistant : MonoBehaviour
             if(newArrow == null)
                 break;
 
-            arrows.Add(newArrow);
+            target.TakeArrow(newArrow);
         }
-
-        if(arrows.Count <= 0)
-            return;
-
-        target.TakeArrows(arrows);
 
         _animator.Play(ArcherAssistantAnimatorController.States.GiveArrow);
     }
@@ -55,7 +50,7 @@ public abstract class ArcherAssistant : MonoBehaviour
         _quiver.Add(arrow);
     }
 
-    public void RestartPosition()
+    public void Restart()
     {
         transform.position = _startPosition;
         transform.localEulerAngles = _startRotation;

@@ -29,6 +29,15 @@ public class Archer : MonoBehaviour
         _quiver.Add(arrows);
         ArrowsIncreased?.Invoke();
     }
+    
+    public void TakeArrow(Arrow arrow)
+    {
+        if(arrow == null)
+            throw new NullReferenceException(arrow.ToString());
+
+        _quiver.Add(arrow);
+        ArrowsIncreased?.Invoke();
+    }
 
     public void ResetRotation()
     {

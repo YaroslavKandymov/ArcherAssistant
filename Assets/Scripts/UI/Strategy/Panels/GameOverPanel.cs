@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,11 +7,13 @@ public class GameOverPanel : Panel
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _exitButton;
     [SerializeField] private Panel _gamePanel;
-    [SerializeField] private ArrowSpawner[] _spawners;
+    [SerializeField] private ArrowsSpawner[] _spawners;
     [SerializeField] private ArcherAssistant[] _assistants;
     [SerializeField] private EnemyAssistantArrowCollector _collector;
     [SerializeField] private Archer[] _archers;
     [SerializeField] private Quiver[] _quivers;
+
+    public event Action SceneRestarted;
 
     private void Awake()
     {
@@ -45,7 +48,9 @@ public class GameOverPanel : Panel
         PanelCloser.Close(this);
         PanelOpener.Open(_gamePanel);
 
-        Reloader.Restart(_spawners, _assistants, _archers, _collector, _quivers);
+        Reloader.Restart(_assistants, _archers, _collector, _quivers);
+
+        SceneRestarted?.Invoke();
     }
 
     private void OnExitButtonClick()
