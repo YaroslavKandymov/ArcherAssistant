@@ -45,12 +45,12 @@ public class EnemyMover : MonoBehaviour
 
     private void Update()
     {
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeDamage))
+            return;
+
         if (_quiverFulled == true)
         {
-            transform.LookAt(_archer.transform);
-
-            _animator.Play(ArcherAssistantAnimatorController.States.Run);
-            _transform.position = Vector3.MoveTowards(_transform.position, _archer.transform.position, _speed * Time.deltaTime);
+            Move(_archer.Transform.position);
 
             if (EnoughDistance(transform, _archer.transform, _transmissionDistance))
             {
@@ -66,13 +66,10 @@ public class EnemyMover : MonoBehaviour
                 return;
             }
 
-            _animator.Play(ArcherAssistantAnimatorController.States.Run);
-
             var target = _currentArrow.Transform.position;
-            target.y = -0.1f;
-            _transform.position = Vector3.MoveTowards(_transform.position, target, _speed * Time.deltaTime);
+            target.y = 1.4f;
 
-            transform.LookAt(target);
+            Move(target);
 
             if (EnoughDistance(transform, _currentArrow.transform, _takeArrowRange))
             {
@@ -98,5 +95,14 @@ public class EnemyMover : MonoBehaviour
         float sqrLength = offset.sqrMagnitude;
 
         return sqrLength < distance * distance;
+    }
+
+    private void Move(Vector3 target)
+    {
+        _animator.Play(ArcherAssistantAnimatorController.States.Run);
+
+        _transform.position = Vector3.MoveTowards(_transform.position, target, _speed * Time.deltaTime);
+
+        transform.LookAt(target);
     }
 }

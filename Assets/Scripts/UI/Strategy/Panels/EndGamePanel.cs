@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EndGamePanel : Panel
@@ -7,6 +8,7 @@ public class EndGamePanel : Panel
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private Panel _gameOverPanel;
     [SerializeField] private Panel _winPanel;
+    [SerializeField] private float _seconds;
 
     private void Awake()
     {
@@ -38,7 +40,7 @@ public class EndGamePanel : Panel
 
     private void OnPlayerDied()
     {
-        StopTime();
+        StartCoroutine(StopTime(0));
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_gameOverPanel);
     }
@@ -49,13 +51,15 @@ public class EndGamePanel : Panel
             if(enemy.IsDied == false)
                 return;
 
-        StopTime();
+        StartCoroutine(StopTime(_seconds));
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_winPanel);
     }
 
-    private void StopTime()
+    private IEnumerator StopTime(float seconds)
     {
+        yield return new WaitForSeconds(_seconds);
+
         Time.timeScale = 0;
     }
 }
