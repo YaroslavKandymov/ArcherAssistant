@@ -22,29 +22,6 @@ public class EnemyAssistantArrowCollector : MonoBehaviour
         _spawner.ArrowSpawned -= OnArrowSpawned;
     }
 
-    /*private void Update()
-    {
-        if(_arrows.Count <= 0)
-            return;
-
-        foreach (var mover in _movers)
-        {
-            if (mover.CurrentArrow != null)
-            {
-                continue;
-            }
-            else if (mover.gameObject.activeSelf == true)
-            {
-                if (_arrows.Count > 0)
-                {
-                    var arrow = _arrows.Dequeue();
-
-                    mover.Init(arrow);
-                }
-            }
-        }
-    }*/
-
     public void Add(Arrow arrow)
     {
         if (arrow == null)
