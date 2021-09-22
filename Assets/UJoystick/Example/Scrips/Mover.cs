@@ -34,6 +34,11 @@ public class Mover : MonoBehaviour
 
         if (vertical != 0 && horizontal != 0)
             transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+
+        }
         
         PlayAnimations(vertical, horizontal);
        

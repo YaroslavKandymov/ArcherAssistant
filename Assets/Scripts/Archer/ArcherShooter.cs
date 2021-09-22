@@ -51,6 +51,9 @@ public class ArcherShooter : MonoBehaviour
 
         yield return new WaitForSeconds(_secondsBeforeShot);
 
+        if (_currentArrow == null)
+            yield break;
+
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
