@@ -35,11 +35,6 @@ public class Mover : MonoBehaviour
         if (vertical != 0 && horizontal != 0)
             transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-
-        }
-        
         PlayAnimations(vertical, horizontal);
        
         Vector3 offset = _archer.Transform.position - _transform.position;
@@ -51,12 +46,20 @@ public class Mover : MonoBehaviour
         }
     }
 
+    public void Fall()
+    {
+        _animator.Play(ArcherAssistantAnimatorController.States.Fall);
+    }
+
     private void PlayAnimations(float vertical, float horizontal)
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeArrow))
             return;
 
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.GiveArrow))
+            return;
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.Fall))
             return;
 
         if (Mathf.Abs(vertical) >= 0.1f || Mathf.Abs(horizontal) >= 0.1f)
