@@ -33,7 +33,8 @@ public class Mover : MonoBehaviour
         angle = flipRot ? -angle : angle;
 
         if (vertical != 0 && horizontal != 0)
-            transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.Fall) == false)
+                transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
 
         PlayAnimations(vertical, horizontal);
        
