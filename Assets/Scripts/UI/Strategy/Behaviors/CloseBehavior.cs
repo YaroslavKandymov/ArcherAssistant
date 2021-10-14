@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class CloseBehavior : IPanelCloser
 {
-    public void Close(Panel panel)
+    public void Close(Panel panel, bool continuer = false)
     {
         var canvasGroup = panel.GetComponent<CanvasGroup>();
         var buttons = panel.GetComponentsInChildren<Button>();
@@ -14,5 +14,8 @@ public class CloseBehavior : IPanelCloser
 
         foreach (var button in buttons)
             button.interactable = false;
+
+        if (continuer == true)
+            Time.timeScale = 1;
     }
 }

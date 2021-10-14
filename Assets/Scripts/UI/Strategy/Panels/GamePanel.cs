@@ -33,10 +33,8 @@ public class GamePanel : Panel
 
     private void OnPauseButtonClick()
     {
-        Time.timeScale = 0;
-
         PanelCloser.Close(this);
 
-        PanelOpener.Open(_pausePanel);
+        PanelOpener.Open(_pausePanel, true);
     }
 }

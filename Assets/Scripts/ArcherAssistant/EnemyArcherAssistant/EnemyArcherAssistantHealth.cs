@@ -6,7 +6,8 @@ using UnityEngine;
 public class EnemyArcherAssistantHealth : ArcherAssistantHealth
 {
     [SerializeField] private float _secondsBeforeDeath;
-    [SerializeField] private GameOverPanel[] _panels;
+    [SerializeField] private LosePanel[] _panels;
+    [SerializeField] private ParticleSystem _deathEffect;
 
     private Animator _animator;
 
@@ -53,6 +54,9 @@ public class EnemyArcherAssistantHealth : ArcherAssistantHealth
     private IEnumerator PlayDeath()
     {
         _animator.Play(ArcherAssistantAnimatorController.States.TakeDamage);
+
+        var newDeathEffect = Instantiate(_deathEffect, transform.position, Quaternion.identity);
+        _deathEffect.Play();
 
         yield return new WaitForSeconds(_secondsBeforeDeath);
 

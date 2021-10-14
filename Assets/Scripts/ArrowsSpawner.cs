@@ -19,6 +19,8 @@ public class ArrowsSpawner : MonoBehaviour
 
     private void Start()
     {
+        
+
         _spawnPoints = GetComponentsInChildren<Transform>();
 
         _seconds = new WaitForSeconds(_secondsBetweenSpawn);

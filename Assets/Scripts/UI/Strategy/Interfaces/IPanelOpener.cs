@@ -4,6 +4,6 @@ using UnityEngine.UI;
 
 public interface IPanelOpener
 {
-    void Open(Panel panel);
+    void Open(Panel panel, bool timeStopper = false);
 }
 

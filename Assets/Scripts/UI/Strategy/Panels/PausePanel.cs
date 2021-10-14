@@ -12,7 +12,7 @@ public class PausePanel : Panel
     {
         InitBehaviors();
 
-        PanelCloser.Close(this);
+        PanelCloser.Close(this, true);
     }
 
     private void OnEnable()
@@ -36,11 +36,9 @@ public class PausePanel : Panel
 
     private void OnContinueButtonClick()
     {
-        PanelCloser.Close(this);
+        PanelCloser.Close(this, true);
 
         PanelOpener.Open(_gamePanel);
-
-        Time.timeScale = 1;
     }
 
     private void OnExitButtonClick()

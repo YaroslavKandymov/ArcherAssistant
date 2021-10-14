@@ -6,7 +6,7 @@ public class EndGamePanel : Panel
     [SerializeField] private PlayerArcherAssistantHealth _playerHealth;
     [SerializeField] private EnemyArcherAssistantHealth[] _enemyLives;
     [SerializeField] private Panel _gamePanel;
-    [SerializeField] private Panel _gameOverPanel;
+    [SerializeField] private Panel _losePanel;
     [SerializeField] private Panel _winPanel;
     [SerializeField] private float _seconds;
 
@@ -40,9 +40,8 @@ public class EndGamePanel : Panel
 
     private void OnPlayerDied()
     {
-        StartCoroutine(StopTime(0));
         PanelCloser.Close(_gamePanel);
-        PanelOpener.Open(_gameOverPanel);
+        PanelOpener.Open(_losePanel, true);
     }
 
     private void OnEnemyDied()
@@ -51,15 +50,14 @@ public class EndGamePanel : Panel
             if(enemy.IsDied == false)
                 return;
 
-        StartCoroutine(StopTime(_seconds));
+        StartCoroutine(OpenWinPanel(_seconds));
         PanelCloser.Close(_gamePanel);
-        PanelOpener.Open(_winPanel);
     }
 
-    private IEnumerator StopTime(float seconds)
+    private IEnumerator OpenWinPanel(float seconds)
     {
         yield return new WaitForSeconds(_seconds);
 
-        Time.timeScale = 0;
+        PanelOpener.Open(_winPanel, true);
     }
 }
