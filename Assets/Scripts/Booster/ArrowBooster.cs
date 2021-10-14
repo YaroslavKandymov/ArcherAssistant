@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class ArrowBooster : MonoBehaviour
 {
     [SerializeField] private int _coefficient;
     [SerializeField] private Arrow _arrowTemplate;
+
+    public event Action<ArrowBooster> Taken;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,7 +24,7 @@ public class ArrowBooster : MonoBehaviour
                 quiver.Add(newArrow);
             }
 
-            gameObject.SetActive(false);
+            Taken?.Invoke(this);
         }
     }
 }
