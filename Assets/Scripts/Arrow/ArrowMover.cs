@@ -18,12 +18,22 @@ public class ArrowMover : MonoBehaviour
         _particleSystem.gameObject.SetActive(false);
     }
 
-    public void Shoot(Transform target)
+    public void UntargetShoot(Transform target)
     {
         transform.LookAt(target);
 
         Vector3 delta = (target.position - transform.position).normalized;
         Vector3 velocity = (delta + Random.insideUnitSphere * _randomCoefficient) * _force;
+
+        SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
+    }
+
+    public void TargetShoot(Transform target)
+    {
+        transform.LookAt(target);
+
+        Vector3 delta = (target.position - transform.position).normalized;
+        Vector3 velocity = delta * _force * 2;
 
         SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
     }

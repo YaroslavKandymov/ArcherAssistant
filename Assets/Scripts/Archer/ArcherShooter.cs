@@ -11,6 +11,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private float _secondsBeforeShot;
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState;
+    [SerializeField] private EnemyRay _ray;
 
     private Arrow _currentArrow;
     private float _lastShootTime;
@@ -29,14 +30,15 @@ public class ArcherShooter : MonoBehaviour
         {
             _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
             _currentArrow = _quiver.TryGetArrow();
+            _ray.SwitchRay(true);
 
             if (_currentArrow == null)
             {
                 ArrowsEnded?.Invoke();
             }
-            else
+            else 
             {
-                StartCoroutine(Shoot());
+                StartCoroutine(TargetShoot());
             }
 
             _lastShootTime = _secondsBetweenShot;
@@ -45,7 +47,7 @@ public class ArcherShooter : MonoBehaviour
         _lastShootTime -= Time.deltaTime;
     }
 
-    private IEnumerator Shoot()
+    private IEnumerator TargetShoot()
     {
         _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
 
@@ -54,9 +56,10 @@ public class ArcherShooter : MonoBehaviour
         if (_currentArrow == null)
             yield break;
 
+        _ray.SwitchRay(false);
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-        _currentArrow.Shoot(_target);
+        _currentArrow.Shoot(_target, true);
     }
 }
