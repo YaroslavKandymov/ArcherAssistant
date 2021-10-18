@@ -1,5 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(ArcherAssistant))]
@@ -8,7 +9,7 @@ using UnityEngine;
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField] private float _takeArrowRange;
-    [SerializeField] private Archer _archer;
+    [SerializeField] private List<Archer> _archers;
     [SerializeField] private float _transmissionDistance;
     [SerializeField] private float _speed;
 
@@ -18,6 +19,8 @@ public class EnemyMover : MonoBehaviour
     private ArcherAssistant _assistant;
     private Transform _transform;
     private bool _quiverFulled = false;
+    private Archer _closestArcher;
+    private Vector3 _offset = new Vector3();
 
     public Arrow CurrentArrow => _currentArrow;
 
@@ -50,11 +53,20 @@ public class EnemyMover : MonoBehaviour
 
         if (_quiverFulled == true)
         {
-            Move(_archer.Transform.position);
-
-            if (EnoughDistance(transform, _archer.transform, _transmissionDistance))
+            if (_archers[0] > _archers[1])
             {
-                _assistant.GiveAllArrows(_archer);
+                _closestArcher = _archers[1];
+            }
+            else
+            {
+                _closestArcher = _archers[0];
+            }
+
+            MoveTo(_closestArcher.Transform.position);
+
+            if(_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
+            {
+                _assistant.GiveAllArrows(_closestArcher);
                 _quiverFulled = false;
             }
         }
@@ -69,9 +81,9 @@ public class EnemyMover : MonoBehaviour
             var target = _currentArrow.Transform.position;
             target.y = 1.4f;
 
-            Move(target);
+            MoveTo(target);
 
-            if (EnoughDistance(transform, _currentArrow.transform, _takeArrowRange))
+            if (_offset.SqrDistance(transform, _currentArrow.transform, _takeArrowRange))
             {
                 _assistant.TakeArrow(_currentArrow);
                 _currentArrow = null;
@@ -89,15 +101,7 @@ public class EnemyMover : MonoBehaviour
         _quiverFulled = true;
     }
 
-    private bool EnoughDistance(Transform self, Transform target, float distance)
-    {
-        Vector3 offset = self.position - target.transform.position;
-        float sqrLength = offset.sqrMagnitude;
-
-        return sqrLength < distance * distance;
-    }
-
-    private void Move(Vector3 target)
+    private void MoveTo(Vector3 target)
     {
         _animator.Play(ArcherAssistantAnimatorController.States.Run);
 

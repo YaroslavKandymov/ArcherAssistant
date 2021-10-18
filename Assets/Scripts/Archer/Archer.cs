@@ -43,4 +43,20 @@ public class Archer : MonoBehaviour
     {
         transform.localEulerAngles = _startRotation;
     }
+
+    public static Archer operator >(Archer firstArcher, Archer secondArcher)
+    {
+        if (firstArcher._quiver.ArrowsCount > secondArcher._quiver.ArrowsCount)
+            return firstArcher;
+        else
+            return secondArcher;
+    }
+
+    public static Archer operator <(Archer firstArcher, Archer secondArcher)
+    {
+        if (firstArcher._quiver.ArrowsCount < secondArcher._quiver.ArrowsCount)
+            return secondArcher;
+        else
+            return firstArcher;
+    }
 }

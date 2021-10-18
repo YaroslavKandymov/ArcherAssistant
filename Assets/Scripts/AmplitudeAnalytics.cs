@@ -4,4 +4,8 @@ using UnityEngine;
 
 public class AmplitudeAnalytics : MonoBehaviour
 {
+    public void Init()
+    {
+        
+    }
 }

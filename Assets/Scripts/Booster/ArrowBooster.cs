@@ -7,6 +7,7 @@ public class ArrowBooster : MonoBehaviour
     [SerializeField] private Arrow _arrowTemplate;
 
     public event Action<ArrowBooster> Taken;
+    public event Action<int> ArrowCountIncreased;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,6 +25,7 @@ public class ArrowBooster : MonoBehaviour
                 quiver.Add(newArrow);
             }
 
+            ArrowCountIncreased?.Invoke(count);
             Taken?.Invoke(this);
         }
     }

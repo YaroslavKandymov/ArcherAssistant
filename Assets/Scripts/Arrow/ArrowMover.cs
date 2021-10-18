@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,29 +17,29 @@ public class ArrowMover : MonoBehaviour
         _particleSystem.gameObject.SetActive(false);
     }
 
-    public void UntargetShoot(Transform target)
+    public void UntargetShot(Transform target)
     {
-        transform.LookAt(target);
-
-        Vector3 delta = (target.position - transform.position).normalized;
-        Vector3 velocity = (delta + Random.insideUnitSphere * _randomCoefficient) * _force;
-
-        SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
+        Shot(target, Random.insideUnitSphere * _randomCoefficient);
     }
 
-    public void TargetShoot(Transform target)
+    public void TargetShot(Transform target)
     {
-        transform.LookAt(target);
-
-        Vector3 delta = (target.position - transform.position).normalized;
-        Vector3 velocity = delta * _force * 2;
-
-        SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
+        Shot(target, Vector3.zero);
     }
 
     public void Stop()
     {
         SetArrowValues(RigidbodyConstraints.FreezeAll, Vector3.zero, false, false);
+    }
+
+    private void Shot(Transform target, Vector3 spread)
+    {
+        transform.LookAt(target);
+
+        Vector3 delta = (target.position - transform.position).normalized;
+        Vector3 velocity = (delta + spread) * _force;
+
+        SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
     }
 
     private void SetArrowValues(RigidbodyConstraints constraints, Vector3 velocity, bool kinematic, bool particleSystemActivity)

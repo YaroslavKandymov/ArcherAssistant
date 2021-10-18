@@ -12,6 +12,7 @@ public class PlayerMover : MonoBehaviour
     private bool flipRot = true;
     private ArcherAssistant _archerAssistant;
     private Transform _transform;
+    private Vector3 _offset = new Vector3();
 
     private void Awake()
     {
@@ -37,11 +38,8 @@ public class PlayerMover : MonoBehaviour
                 transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
 
         PlayAnimations(vertical, horizontal);
-       
-        Vector3 offset = _archer.Transform.position - _transform.position;
-        float sqrLength = offset.sqrMagnitude;
 
-        if (sqrLength < _transmissionRadius * _transmissionRadius)
+        if (_offset.SqrDistance(transform, _archer.Transform, _transmissionRadius))
         {
             _archerAssistant.GiveAllArrows(_archer);
         }

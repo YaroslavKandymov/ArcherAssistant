@@ -8,7 +8,6 @@ public class EndGamePanel : Panel
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private Panel _losePanel;
     [SerializeField] private Panel _winPanel;
-    [SerializeField] private float _seconds;
 
     private void Awake()
     {
@@ -50,14 +49,7 @@ public class EndGamePanel : Panel
             if(enemy.IsDied == false)
                 return;
 
-        StartCoroutine(OpenWinPanel(_seconds));
         PanelCloser.Close(_gamePanel);
-    }
-
-    private IEnumerator OpenWinPanel(float seconds)
-    {
-        yield return new WaitForSeconds(_seconds);
-
         PanelOpener.Open(_winPanel, true);
     }
 }
