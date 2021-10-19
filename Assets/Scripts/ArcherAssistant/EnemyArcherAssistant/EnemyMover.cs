@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -51,50 +52,24 @@ public class EnemyMover : MonoBehaviour
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.TakeDamage))
             return;
 
-        if (_quiverFulled == true)
+        if(_quiverFulled == true)
+            return;
+
+        if (_currentArrow == null)
         {
-            if (_archers.Count > 1)
-            {
-                if (_archers[0] > _archers[1])
-                {
-                    _closestArcher = _archers[1];
-                }
-                else
-                {
-                    _closestArcher = _archers[0];
-                }
-            }
-            else
-            {
-                _closestArcher = _archers[0];
-            }
-
-            MoveTo(_closestArcher.Transform.position);
-
-            if(_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
-            {
-                _assistant.GiveAllArrows(_closestArcher);
-                _quiverFulled = false;
-            }
+            _animator.Play(ArcherAssistantAnimatorController.States.Idle);
+            return;
         }
-        else
+
+        var target = _currentArrow.Transform.position;
+        target.y = 1.4f;
+
+        MoveTo(target);
+
+        if (_offset.SqrDistance(transform, _currentArrow.transform, _takeArrowRange))
         {
-            if (_currentArrow == null)
-            {
-                _animator.Play(ArcherAssistantAnimatorController.States.Idle);
-                return;
-            }
-
-            var target = _currentArrow.Transform.position;
-            target.y = 1.4f;
-
-            MoveTo(target);
-
-            if (_offset.SqrDistance(transform, _currentArrow.transform, _takeArrowRange))
-            {
-                _assistant.TakeArrow(_currentArrow);
-                _currentArrow = null;
-            }
+            _assistant.TakeArrow(_currentArrow);
+            _currentArrow = null;
         }
     }
 
@@ -106,6 +81,23 @@ public class EnemyMover : MonoBehaviour
     private void OnFulled()
     {
         _quiverFulled = true;
+
+        _closestArcher = _archers.OrderBy(a => a.GetComponent<Quiver>().ArrowsCount).FirstOrDefault();
+
+        StartCoroutine(MoveToArcher(_closestArcher));
+    }
+
+    private IEnumerator MoveToArcher(Archer closestArcher)
+    {
+        MoveTo(closestArcher.transform.position);
+
+        if (_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
+        {
+            _assistant.GiveAllArrows(_closestArcher);
+            _quiverFulled = false;
+        }
+
+        yield return null;
     }
 
     private void MoveTo(Vector3 target)

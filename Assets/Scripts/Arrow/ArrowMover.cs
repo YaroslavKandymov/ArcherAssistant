@@ -9,6 +9,9 @@ public class ArrowMover : MonoBehaviour
 
     private Rigidbody _rigidbody;
     private ParticleSystem _particleSystem;
+    private Vector3 _velocity;
+
+    public Vector3 Velocity => _velocity;
 
     private void Awake()
     {
@@ -37,9 +40,9 @@ public class ArrowMover : MonoBehaviour
         transform.LookAt(target);
 
         Vector3 delta = (target.position - transform.position).normalized;
-        Vector3 velocity = (delta + spread) * _force;
+        _velocity = (delta + spread) * _force;
 
-        SetArrowValues(RigidbodyConstraints.None, velocity, false, true);
+        SetArrowValues(RigidbodyConstraints.None, _velocity, false, true);
     }
 
     private void SetArrowValues(RigidbodyConstraints constraints, Vector3 velocity, bool kinematic, bool particleSystemActivity)
