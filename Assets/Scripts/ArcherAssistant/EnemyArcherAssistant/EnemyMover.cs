@@ -53,9 +53,16 @@ public class EnemyMover : MonoBehaviour
 
         if (_quiverFulled == true)
         {
-            if (_archers[0] > _archers[1])
+            if (_archers.Count > 1)
             {
-                _closestArcher = _archers[1];
+                if (_archers[0] > _archers[1])
+                {
+                    _closestArcher = _archers[1];
+                }
+                else
+                {
+                    _closestArcher = _archers[0];
+                }
             }
             else
             {
