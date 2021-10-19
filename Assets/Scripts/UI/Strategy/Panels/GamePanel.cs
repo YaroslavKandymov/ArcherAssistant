@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class GamePanel : Panel
 {
     [SerializeField] private Button _pauseButton;
-    [SerializeField] private Quiver _quiver;
     [SerializeField] private Panel _pausePanel;
 
     private void Awake()
