@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,8 @@ public class LosePanel : Panel
     [SerializeField] private ArcherAssistant[] _assistants;
     [SerializeField] private EnemyAssistantArrowCollector _collector;
     [SerializeField] private Archer[] _archers;
-    [SerializeField] private Quiver[] _quivers;
+    
+    private List<Quiver> _quivers = new List<Quiver>();
 
     public event Action SceneRestarted;
 
@@ -19,6 +21,12 @@ public class LosePanel : Panel
     {
         InitBehaviors();
         PanelCloser.Close(this);
+
+        foreach (var archer in _archers)
+            _quivers.Add(archer.GetComponent<Quiver>());
+
+        foreach (var assistant in _assistants)
+            _quivers.Add(assistant.GetComponent<Quiver>());
     }
 
     private void OnEnable()

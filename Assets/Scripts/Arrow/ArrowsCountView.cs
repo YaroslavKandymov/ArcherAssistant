@@ -6,9 +6,9 @@ public class ArrowsCountView : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Canvas _canvas;
-    [SerializeField] private TMP_Text _text;
     [SerializeField] private float _secondsBeforeDisappear;
 
+    private TMP_Text _text;
     private WaitForSeconds _seconds;
     private int _currentArrowsCount;
     private Coroutine _coroutine;
@@ -25,6 +25,7 @@ public class ArrowsCountView : MonoBehaviour
 
     private void Start()
     {
+        _text = _canvas.GetComponentInChildren<TMP_Text>();
         _canvas.gameObject.SetActive(false);
         _seconds = new WaitForSeconds(_secondsBeforeDisappear);
         _currentArrowsCount = _quiver.ArrowsCount;

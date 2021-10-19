@@ -7,8 +7,8 @@ public class ArrowsBoosterCountView : MonoBehaviour
     [SerializeField] private ArrowBooster[] _boosters;
     [SerializeField] private float _secondsBeforeDisappear;
     [SerializeField] private Canvas _canvas;
-    [SerializeField] private TMP_Text _text;
-
+    
+    private TMP_Text _text;
     private WaitForSeconds _seconds;
 
     private void OnEnable()
@@ -29,6 +29,7 @@ public class ArrowsBoosterCountView : MonoBehaviour
 
     private void Start()
     {
+        _text = _canvas.GetComponentInChildren<TMP_Text>();
         _seconds = new WaitForSeconds(_secondsBeforeDisappear);
     }
 
