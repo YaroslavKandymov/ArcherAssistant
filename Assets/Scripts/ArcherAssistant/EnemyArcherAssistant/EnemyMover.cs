@@ -89,15 +89,18 @@ public class EnemyMover : MonoBehaviour
 
     private IEnumerator MoveToArcher(Archer closestArcher)
     {
-        MoveTo(closestArcher.transform.position);
-
-        if (_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
+        while (true)
         {
-            _assistant.GiveAllArrows(_closestArcher);
-            _quiverFulled = false;
-        }
+            MoveTo(closestArcher.transform.position);
 
-        yield return null;
+            if (_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
+            {
+                _assistant.GiveAllArrows(_closestArcher);
+                _quiverFulled = false;
+            }
+
+            yield return null;
+        }
     }
 
     private void MoveTo(Vector3 target)

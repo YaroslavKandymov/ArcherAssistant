@@ -76,7 +76,7 @@ public class ArcherShooter : MonoBehaviour
 
     private IEnumerator UntargetShot()
     {
-        _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
+        _animator.SetTrigger(ArcherAnimatorController.States.Shot);
 
         yield return new WaitForSeconds(_secondsBeforeShot);
 
@@ -91,7 +91,7 @@ public class ArcherShooter : MonoBehaviour
     
     private IEnumerator TargetShot()
     {
-        _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
+        _animator.SetTrigger(ArcherAnimatorController.States.Shot);
 
         yield return new WaitForSeconds(_secondsBeforeShot);
 
