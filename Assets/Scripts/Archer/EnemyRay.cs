@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyRay : MonoBehaviour
 {
     [SerializeField] private Transform _startPosition;
-    [SerializeField] private PlayerArcherAssistant _target;
+    [SerializeField] private Transform _target;
 
     private LineRenderer _lineRenderer;
 

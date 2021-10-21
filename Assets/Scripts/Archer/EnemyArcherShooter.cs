@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,7 +6,8 @@ public class EnemyArcherShooter : MonoBehaviour
 {
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private Transform _targetPoint;
-    [SerializeField] private float _secondsBeforeShot;
+    [SerializeField] private float _getArrowSeconds;
+    [SerializeField] private float _secondsBeforeRelease;
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState; 
     
@@ -16,21 +16,25 @@ public class EnemyArcherShooter : MonoBehaviour
     private float _lastShootTime;
     private Animator _animator;
     private Quiver _quiver;
+    private WaitForSeconds _timeToGetArrow;
+    private WaitForSeconds _timeBeforeRelease;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _quiver = GetComponent<Quiver>();
         _ray = GetComponentInChildren<EnemyRay>();
+        _timeToGetArrow = new WaitForSeconds(_getArrowSeconds);
+        _timeBeforeRelease = new WaitForSeconds(_secondsBeforeRelease);
     }
 
     private void Update()
     {
         if (_lastShootTime <= 0)
         {
-            _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
+            _ray.gameObject.SetActive(false);
+            _animator.SetTrigger(EnemyArcherAnimatorController.Params.GetArrow);
             _currentArrow = _quiver.TryGetArrow();
-            _ray.gameObject.SetActive(true);
 
             if (_currentArrow == null)
             {
@@ -49,12 +53,17 @@ public class EnemyArcherShooter : MonoBehaviour
 
     private IEnumerator TargetShot()
     {
-        _animator.SetTrigger(ArcherAnimatorController.Params.Shot);
-
-        yield return new WaitForSeconds(_secondsBeforeShot);
+        yield return _timeToGetArrow;
 
         if (_currentArrow == null)
             yield break;
+
+        _animator.SetTrigger(EnemyArcherAnimatorController.States.Hold);
+        _ray.gameObject.SetActive(true);
+
+        yield return _timeBeforeRelease;
+
+        _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
 
         _ray.gameObject.SetActive(false);
 
