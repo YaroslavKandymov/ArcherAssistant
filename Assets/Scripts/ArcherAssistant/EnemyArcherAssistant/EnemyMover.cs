@@ -95,7 +95,6 @@ public class EnemyMover : MonoBehaviour
 
             if (_offset.SqrDistance(transform, _closestArcher.transform, _transmissionDistance))
             {
-                Debug.Log("Вошел");
                 _assistant.GiveAllArrows(_closestArcher);
                 _quiverFulled = false;
                 yield break;
