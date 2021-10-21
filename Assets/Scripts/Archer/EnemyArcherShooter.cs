@@ -32,7 +32,6 @@ public class EnemyArcherShooter : MonoBehaviour
     {
         if (_lastShootTime <= 0)
         {
-            _ray.gameObject.SetActive(false);
             _animator.SetTrigger(EnemyArcherAnimatorController.Params.GetArrow);
             _currentArrow = _quiver.TryGetArrow();
 
@@ -59,13 +58,11 @@ public class EnemyArcherShooter : MonoBehaviour
             yield break;
 
         _animator.SetTrigger(EnemyArcherAnimatorController.States.Hold);
-        _ray.gameObject.SetActive(true);
+        _ray.Activate();
 
         yield return _timeBeforeRelease;
 
         _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
-
-        _ray.gameObject.SetActive(false);
 
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
