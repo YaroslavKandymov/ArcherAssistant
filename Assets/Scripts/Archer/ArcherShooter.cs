@@ -64,7 +64,9 @@ public class ArcherShooter : MonoBehaviour
             }
             else if(_realtime >= _secondsBeforeShot)
             {
-                StopCoroutine(_coroutine);
+                if(_coroutine != null)
+                    StopCoroutine(_coroutine);
+
                 StartCoroutine(TargetShot());
             }
 

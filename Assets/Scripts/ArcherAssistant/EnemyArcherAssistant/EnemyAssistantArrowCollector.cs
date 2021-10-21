@@ -37,7 +37,6 @@ public class EnemyAssistantArrowCollector : MonoBehaviour
 
     private void OnArrowLanded(Arrow arrow)
     {
-        Add(arrow);
         SpreadArrows();
     }
 

@@ -35,10 +35,13 @@ public class ArrowsBoosterCountView : MonoBehaviour
 
     private void OnArrowCountIncreased(int count)
     {
-        _canvas.gameObject.SetActive(true);
-        _text.text = "+" + count;
+        if (count > 0)
+        {
+            _canvas.gameObject.SetActive(true);
+            _text.text = "+" + count;
 
-        StartCoroutine(TurnOffCanvas());
+            StartCoroutine(TurnOffCanvas());
+        }
     }
 
     private IEnumerator TurnOffCanvas()
