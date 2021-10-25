@@ -62,11 +62,11 @@ public class EnemyArcherShooter : MonoBehaviour
 
         yield return _timeBeforeRelease;
 
-        _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
-
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.TargetShot(_targetPoint);
+
+        _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
     }
 }

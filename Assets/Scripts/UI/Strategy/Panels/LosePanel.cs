@@ -10,7 +10,6 @@ public class LosePanel : Panel
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private ArrowsSpawner[] _spawners;
     [SerializeField] private ArcherAssistant[] _assistants;
-    [SerializeField] private EnemyAssistantArrowCollector _collector;
     [SerializeField] private Archer[] _archers;
     
     private List<Quiver> _quivers = new List<Quiver>();
@@ -54,7 +53,7 @@ public class LosePanel : Panel
         PanelCloser.Close(this, true);
         PanelOpener.Open(_gamePanel, false);
 
-        Reloader.Restart(_assistants, _archers, _collector, _quivers);
+        Reloader.Restart(_assistants, _archers, _quivers);
 
         SceneRestarted?.Invoke();
     }

@@ -37,8 +37,7 @@ public class ArrowView : ObjectPool<PlayerArrow>
                 if (TryGetObject(out PlayerArrow arrow))
                 {
                     arrow.transform.position = _arrowsPlace.position;
-                    arrow.transform.localEulerAngles =
-                        new Vector3(Random.Range(-60, -120), Random.Range(70, 300), Random.Range(-80, 80));
+                    arrow.transform.localEulerAngles = new Vector3(0, 90, 0);
                     
                     arrow.gameObject.SetActive(true);
                     _arrows.Add(arrow);

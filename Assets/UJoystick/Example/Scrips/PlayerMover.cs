@@ -9,7 +9,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _transmissionRadius;
 
     private Animator _animator;
-    private bool flipRot = true;
+    private bool _flipRotation = true;
     private ArcherAssistant _archerAssistant;
     private Transform _transform;
     private Vector3 _offset = new Vector3();
@@ -31,7 +31,7 @@ public class PlayerMover : MonoBehaviour
         float horizontal = _joystick.Horizontal;
 
         float angle = Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg;
-        angle = flipRot ? -angle : angle;
+        angle = _flipRotation ? -angle : angle;
 
         if (vertical != 0 && horizontal != 0)
             if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.Fall) == false)
@@ -39,7 +39,7 @@ public class PlayerMover : MonoBehaviour
 
         PlayAnimations(vertical, horizontal);
 
-        if (_offset.SqrDistance(transform, _archer.Transform, _transmissionRadius))
+        if (_offset.SqrDistance(_transform, _archer.Transform, _transmissionRadius))
         {
             _archerAssistant.GiveAllArrows(_archer);
         }

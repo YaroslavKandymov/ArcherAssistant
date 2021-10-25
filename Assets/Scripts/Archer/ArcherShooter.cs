@@ -6,33 +6,32 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class ArcherShooter : MonoBehaviour
 {
-    [SerializeField] private Transform _randomTargetPoint;
-    [SerializeField] private Transform[] _targets;
+    [SerializeField] private EnemyArcherHealth[] _targets;
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _secondsBeforeShot;
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState;
-    [SerializeField] private float _secondsBeforeTargetShot;
     [SerializeField] private LosePanel _panel;
 
+    private Transform _currentEnemy;
     private Arrow _currentArrow;
     private float _lastShootTime;
     private Animator _animator;
-    private float _realtime;
-    private Queue<Transform> _newTargets = new Queue<Transform>();
-    private Coroutine _coroutine;
+    private Queue<EnemyArcherHealth> _enemies = new Queue<EnemyArcherHealth>();
 
     public event Action ArrowsEnded;
 
     private void OnEnable()
     {
-        _panel.SceneRestarted += OnSceneRestarted;
+        foreach (var target in _targets)
+            target.Died += OnDied;
     }
 
     private void OnDisable()
     {
-        _panel.SceneRestarted -= OnSceneRestarted;
+        foreach (var target in _targets)
+            target.Died -= OnDied;
     }
 
     private void Start()
@@ -40,15 +39,13 @@ public class ArcherShooter : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         foreach (var target in _targets)
-        {
-            _newTargets.Enqueue(target);
-        }
+            _enemies.Enqueue(target);
+
+        _currentEnemy = GetTargetPoint();
     }
 
     private void Update()
     {
-        _realtime += Time.deltaTime;
-
         if (_lastShootTime <= 0)
         {
             _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
@@ -58,15 +55,8 @@ public class ArcherShooter : MonoBehaviour
             {
                 ArrowsEnded?.Invoke();
             }
-            else if(_realtime < _secondsBeforeTargetShot)
+            else
             {
-                _coroutine = StartCoroutine(UntargetShot());
-            }
-            else if(_realtime >= _secondsBeforeShot)
-            {
-                if(_coroutine != null)
-                    StopCoroutine(_coroutine);
-
                 StartCoroutine(TargetShot());
             }
 
@@ -76,21 +66,6 @@ public class ArcherShooter : MonoBehaviour
         _lastShootTime -= Time.deltaTime;
     }
 
-    private IEnumerator UntargetShot()
-    {
-        _animator.SetTrigger(ArcherAnimatorController.States.Shot);
-
-        yield return new WaitForSeconds(_secondsBeforeShot);
-
-        if (_currentArrow == null)
-            yield break;
-
-        _currentArrow.ArrowState = _arrowState;
-        _currentArrow.transform.position = _shootPoint.position;
-        _currentArrow.gameObject.SetActive(true);
-        _currentArrow.UntargetShot(_randomTargetPoint);
-    }
-    
     private IEnumerator TargetShot()
     {
         _animator.SetTrigger(ArcherAnimatorController.States.Shot);
@@ -103,24 +78,17 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-        _currentArrow.TargetShot(GetTarget());
+        _currentArrow.TargetShot(_currentEnemy);
     }
 
-    private Transform GetTarget()
+    private void OnDied()
     {
-        var newTarget = _newTargets.Peek();
-
-        if (newTarget.gameObject.activeSelf == false)
-        {
-            _newTargets.Dequeue();
-            newTarget = _newTargets.Peek();
-        }
-
-        return newTarget;
+        if(_enemies.Count > 0) 
+            _currentEnemy = GetTargetPoint();
     }
 
-    private void OnSceneRestarted()
+    private Transform GetTargetPoint()
     {
-        _realtime = 0;
+        return _enemies.Dequeue().GetComponentInChildren<TargetPoint>().transform;
     }
 }

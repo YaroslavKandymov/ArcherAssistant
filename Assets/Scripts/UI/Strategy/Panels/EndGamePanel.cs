@@ -4,7 +4,7 @@ using UnityEngine;
 public class EndGamePanel : Panel
 {
     [SerializeField] private PlayerArcherAssistantHealth _playerHealth;
-    [SerializeField] private EnemyArcherAssistantHealth[] _enemyLives;
+    [SerializeField] private EnemyArcherHealth[] _enemyLives;
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private Panel _losePanel;
     [SerializeField] private Panel _winPanel;

@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class RestartSceneBehavior : ISceneReloader
 {
-    public void Restart(IEnumerable<ArcherAssistant> assistants, IEnumerable<Archer> archers, EnemyAssistantArrowCollector collector,
+    public void Restart(IEnumerable<ArcherAssistant> assistants, IEnumerable<Archer> archers,
         IEnumerable<Quiver> quivers)
     {
-        collector.Restart();
-
         var arrows = GameObject.FindObjectsOfType<Arrow>();
 
         foreach (var arrow in arrows)

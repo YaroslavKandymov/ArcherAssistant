@@ -3,24 +3,25 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class EnemyArcherAssistantHealth : ArcherAssistantHealth
+public class EnemyArcherHealth : ArcherAssistantHealth
 {
     [SerializeField] private float _secondsBeforeDeath;
-    [SerializeField] private LosePanel[] _panels;
+    [SerializeField] private LosePanel _panel;
     [SerializeField] private ParticleSystem _deathEffect;
+    [SerializeField] private int _maxHitCount;
 
     private Animator _animator;
+    private int _hitCount;
 
     public bool IsDied { get; private set; }
+    public int MaxHitCount => _maxHitCount;
 
     public event Action Died;
+    public event Action Hit;
 
     private void OnEnable()
     {
-        foreach (var panel in _panels)
-        {
-            panel.SceneRestarted += OnSceneRestarted;
-        }
+        _panel.SceneRestarted += OnSceneRestarted;
     }
 
     private void Start()
@@ -37,9 +38,12 @@ public class EnemyArcherAssistantHealth : ArcherAssistantHealth
         {
             if (arrow.ArrowState == ArrowStates.EnemyKiller)
             {
-                IsDied = true;
+                arrow.gameObject.SetActive(false);
+                _hitCount++;
+                Hit?.Invoke();
 
-                Die();
+                if(_hitCount >= _maxHitCount) 
+                    Die();
             }
         }
     }
@@ -68,9 +72,7 @@ public class EnemyArcherAssistantHealth : ArcherAssistantHealth
         IsDied = false;
         gameObject.SetActive(true);
 
-        foreach (var panel in _panels)
-        {
-            panel.SceneRestarted -= OnSceneRestarted;
-        }
+        _panel.SceneRestarted -= OnSceneRestarted;
+        
     }
 }
