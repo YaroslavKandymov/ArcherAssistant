@@ -3,13 +3,12 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ArrowsSpawner : MonoBehaviour
+public class ArrowsSpawner : ObjectPool<Arrow>
 {
     [SerializeField] private Arrow _arrowTemplate;
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private float _secondsBetweenSpawn;
     [SerializeField] private float _randomCorner;
-    [SerializeField] private Transform _spawner;
     [SerializeField] private int _startArrowsCount;
 
     private Transform[] _spawnPoints;
@@ -19,7 +18,7 @@ public class ArrowsSpawner : MonoBehaviour
 
     private void Start()
     {
-        
+        Initialize(_arrowTemplate);
 
         _spawnPoints = GetComponentsInChildren<Transform>();
 
@@ -55,15 +54,17 @@ public class ArrowsSpawner : MonoBehaviour
 
     private void PositionArrow()
     {
-        var arrow = Instantiate(_arrowTemplate, _spawner);
-        arrow.ArrowState = _arrowState;
-        var randomPoint = Random.Range(0, _spawnPoints.Length);
-        arrow.transform.position = _spawnPoints[randomPoint].transform.position;
-        arrow.transform.localEulerAngles = new Vector3(90 + Random.Range(-_randomCorner, _randomCorner), 0f,
-            90 + Random.Range(-_randomCorner, _randomCorner));
+        if (TryGetObject(out Arrow arrow))
+        {
+            arrow.ArrowState = _arrowState;
+            var randomPoint = Random.Range(0, _spawnPoints.Length);
+            arrow.transform.position = _spawnPoints[randomPoint].transform.position;
+            arrow.transform.localEulerAngles = new Vector3(90 + Random.Range(-_randomCorner, _randomCorner), 0f,
+                90 + Random.Range(-_randomCorner, _randomCorner));
 
-        gameObject.SetActive(true);
+            arrow.gameObject.SetActive(true);
 
-        ArrowSpawned?.Invoke(arrow);
+            ArrowSpawned?.Invoke(arrow);
+        }
     }
 }

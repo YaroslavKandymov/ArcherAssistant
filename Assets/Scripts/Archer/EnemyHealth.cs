@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [SerializeField] private LosePanel _losePanel;
     private EnemyArcherHealth[] _healths;
+    private int _allEnemiesHealths;
     private int _allEnemiesMaxHealths;
 
-    public int AllEnemiesMaxHealth => _allEnemiesMaxHealths;
+    public int AllEnemiesHealth => _allEnemiesHealths;
 
-    public event Action ArcherHit;
+    public event Action ArcherHealthChanged;
 
     private void Awake()
     {
@@ -16,23 +18,34 @@ public class EnemyHealth : MonoBehaviour
 
         foreach (var health in _healths)
             _allEnemiesMaxHealths += health.MaxHitCount;
+
+        _allEnemiesHealths = _allEnemiesMaxHealths;
     }
 
     private void OnEnable()
     {
+        _losePanel.SceneRestarted += OnSceneRestarted;
+
         foreach (var health in _healths)
             health.Hit += OnHit;
     }
 
     private void OnDisable()
     {
+        _losePanel.SceneRestarted -= OnSceneRestarted;
+
         foreach (var health in _healths)
             health.Hit -= OnHit;
     }
 
     private void OnHit()
     {
-        _allEnemiesMaxHealths--;
-        ArcherHit?.Invoke();
+        _allEnemiesHealths--;
+        ArcherHealthChanged?.Invoke();
+    }
+
+    private void OnSceneRestarted()
+    {
+        _allEnemiesHealths = _allEnemiesMaxHealths;
     }
 }

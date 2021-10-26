@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class EndGamePanel : Panel
@@ -43,7 +42,7 @@ public class EndGamePanel : Panel
         PanelOpener.Open(_losePanel, true);
     }
 
-    private void OnEnemyDied()
+    private void OnEnemyDied(EnemyArcherHealth archer)
     {
         foreach (var enemy in _enemyLives)
             if(enemy.IsDied == false)

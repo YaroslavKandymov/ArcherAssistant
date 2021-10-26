@@ -19,17 +19,22 @@ public class ArcherShooter : MonoBehaviour
     private float _lastShootTime;
     private Animator _animator;
     private Queue<EnemyArcherHealth> _enemies = new Queue<EnemyArcherHealth>();
+    private List<EnemyArcherHealth> _killedEnemies = new List<EnemyArcherHealth>();
 
     public event Action ArrowsEnded;
 
     private void OnEnable()
     {
+        _panel.SceneRestarted += OnSceneRestarted;
+
         foreach (var target in _targets)
             target.Died += OnDied;
     }
 
     private void OnDisable()
     {
+        _panel.SceneRestarted -= OnSceneRestarted;
+
         foreach (var target in _targets)
             target.Died -= OnDied;
     }
@@ -81,14 +86,31 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.TargetShot(_currentEnemy);
     }
 
-    private void OnDied()
+    private void OnDied(EnemyArcherHealth enemy)
     {
+        _killedEnemies.Add(enemy);
+
         if(_enemies.Count > 0) 
             _currentEnemy = GetTargetPoint();
     }
 
     private Transform GetTargetPoint()
     {
-        return _enemies.Dequeue().GetComponentInChildren<TargetPoint>().transform;
+        var enemy = _enemies.Dequeue();
+
+        return enemy.GetComponentInChildren<TargetPoint>().transform;
+    }
+
+    private void OnSceneRestarted()
+    {
+        if (_killedEnemies.Count > 0)
+        {
+            for (int i = 0; i < _killedEnemies.Count; i++)
+            {
+                _enemies.Enqueue(_killedEnemies[i]);
+            }
+
+            _killedEnemies.Clear();
+        }
     }
 }

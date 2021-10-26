@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class EnemyArcherHealth : ArcherAssistantHealth
+public class EnemyArcherHealth : MonoBehaviour
 {
     [SerializeField] private float _secondsBeforeDeath;
     [SerializeField] private LosePanel _panel;
@@ -16,7 +16,7 @@ public class EnemyArcherHealth : ArcherAssistantHealth
     public bool IsDied { get; private set; }
     public int MaxHitCount => _maxHitCount;
 
-    public event Action Died;
+    public event Action<EnemyArcherHealth> Died;
     public event Action Hit;
 
     private void OnEnable()
@@ -27,6 +27,7 @@ public class EnemyArcherHealth : ArcherAssistantHealth
     private void Start()
     {
         _animator = GetComponent<Animator>();
+        _deathEffect.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -48,22 +49,23 @@ public class EnemyArcherHealth : ArcherAssistantHealth
         }
     }
 
-    protected override void Die()
+    private void Die()
     {
         StartCoroutine(PlayDeath());
 
-        Died?.Invoke();
+        IsDied = true;
+        Died?.Invoke(this);
     }
 
     private IEnumerator PlayDeath()
     {
         _animator.Play(ArcherAssistantAnimatorController.States.TakeDamage);
-
-        var newDeathEffect = Instantiate(_deathEffect, transform.position, Quaternion.identity);
+        _deathEffect.gameObject.SetActive(true);
         _deathEffect.Play();
 
         yield return new WaitForSeconds(_secondsBeforeDeath);
 
+        _deathEffect.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
@@ -72,7 +74,6 @@ public class EnemyArcherHealth : ArcherAssistantHealth
         IsDied = false;
         gameObject.SetActive(true);
 
-        _panel.SceneRestarted -= OnSceneRestarted;
-        
+        _hitCount = 0;
     }
 }
