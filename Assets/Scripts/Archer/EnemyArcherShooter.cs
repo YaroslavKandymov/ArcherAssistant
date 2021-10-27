@@ -30,6 +30,14 @@ public class EnemyArcherShooter : MonoBehaviour
 
     private void Update()
     {
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName(EnemyArcherAnimatorController.States.TakeDamage))
+        {
+            return;
+        }
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName(EnemyArcherAnimatorController.States.Death))
+            return;
+
         if (_lastShootTime <= 0)
         {
             _animator.SetTrigger(EnemyArcherAnimatorController.Params.GetArrow);

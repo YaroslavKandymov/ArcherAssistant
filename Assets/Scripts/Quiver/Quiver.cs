@@ -50,7 +50,6 @@ public class Quiver : ObjectPool<Arrow>
         if (_arrows.Count > 0)
         {
             var newArrow = _arrows.Pop();
-            ArrowsCountChanged?.Invoke(_arrows.Count);
             return newArrow;
         }
 

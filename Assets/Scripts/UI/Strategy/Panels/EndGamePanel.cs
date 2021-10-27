@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EndGamePanel : Panel
@@ -7,6 +8,7 @@ public class EndGamePanel : Panel
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private Panel _losePanel;
     [SerializeField] private Panel _winPanel;
+    [SerializeField] private float _seconds;
 
     private void Awake()
     {
@@ -45,8 +47,17 @@ public class EndGamePanel : Panel
     private void OnEnemyDied(EnemyArcherHealth archer)
     {
         foreach (var enemy in _enemyLives)
-            if(enemy.IsDied == false)
+            if (enemy.IsDied == false)
                 return;
+
+        _playerHealth.GetComponent<CapsuleCollider>().enabled = false;
+
+        StartCoroutine(OpenWinPanel());
+    }
+
+    private IEnumerator OpenWinPanel()
+    {
+        yield return new WaitForSeconds(_seconds);
 
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_winPanel, true);

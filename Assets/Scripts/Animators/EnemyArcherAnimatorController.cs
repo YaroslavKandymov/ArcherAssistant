@@ -15,5 +15,7 @@ public static class EnemyArcherAnimatorController
         public const string Hold = nameof(Hold);
         public const string Release = nameof(Release);
         public const string TakeArrow = nameof(TakeArrow);
+        public const string TakeDamage = nameof(TakeDamage);
+        public const string Death = nameof(Death);
     }
 }
