@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +12,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private LosePanel _panel;
+    [SerializeField] private int _missShotNumbers;
 
     private Transform _currentEnemy;
     private Arrow _currentArrow;
@@ -20,8 +20,7 @@ public class ArcherShooter : MonoBehaviour
     private Animator _animator;
     private Queue<EnemyArcherHealth> _enemies = new Queue<EnemyArcherHealth>();
     private List<EnemyArcherHealth> _killedEnemies = new List<EnemyArcherHealth>();
-
-    public event Action ArrowsEnded;
+    private float _shotCounter;
 
     private void OnEnable()
     {
@@ -53,37 +52,52 @@ public class ArcherShooter : MonoBehaviour
     {
         if (_lastShootTime <= 0)
         {
-            _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
             _currentArrow = _quiver.TryGetArrow();
 
             if (_currentArrow == null)
             {
-                ArrowsEnded?.Invoke();
+                _animator.Play(ArcherAnimatorController.States.Idle);
+                return;
             }
             else
             {
-                StartCoroutine(TargetShot());
-            }
+                _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
+                _shotCounter++;
 
-            _lastShootTime = _secondsBetweenShot;
+                if ((_shotCounter %= _missShotNumbers) == 0)
+                {
+                    StartCoroutine(TargetShot(false));
+                }
+                else
+                {
+                    StartCoroutine(TargetShot(true));
+                }
+
+                _lastShootTime = _secondsBetweenShot;
+            }
         }
 
         _lastShootTime -= Time.deltaTime;
     }
 
-    private IEnumerator TargetShot()
+    private IEnumerator TargetShot(bool correct)
     {
         _animator.SetTrigger(ArcherAnimatorController.States.Shot);
 
         yield return new WaitForSeconds(_secondsBeforeShot);
 
-        if (_currentArrow == null)
-            yield break;
-
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-        _currentArrow.TargetShot(_currentEnemy);
+
+        if (correct)
+        {
+            _currentArrow.TargetShot(_currentEnemy);
+        }
+        else
+        {
+            _currentArrow.UntargetShot(_currentEnemy);
+        }
     }
 
     private void OnDied(EnemyArcherHealth enemy)

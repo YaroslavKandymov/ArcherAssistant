@@ -6,6 +6,7 @@ public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;
     [SerializeField] private float _randomCoefficient;
+    [SerializeField] private float _spread;
 
     private Rigidbody _rigidbody;
     private ParticleSystem _particleSystem;
@@ -22,7 +23,7 @@ public class ArrowMover : MonoBehaviour
 
     public void UntargetShot(Transform target)
     {
-        Shot(target, Random.insideUnitSphere * _randomCoefficient);
+        Shot(target, new Vector3(0, Random.Range(-_spread, _spread), 0));
     }
 
     public void TargetShot(Transform target)
@@ -40,7 +41,7 @@ public class ArrowMover : MonoBehaviour
         transform.LookAt(target);
 
         Vector3 delta = (target.position - transform.position).normalized;
-        _velocity = (delta + spread) * _force;
+        _velocity = delta* _force + spread;
 
         SetArrowValues(RigidbodyConstraints.None, _velocity, false, true);
     }

@@ -20,7 +20,7 @@ public class RestartSceneBehavior : ISceneReloader
 
         foreach (var archer in archers)
         {
-            archer.ResetRotation();
+            archer.ResetTransform();
         }
 
         foreach (var quiver in quivers)

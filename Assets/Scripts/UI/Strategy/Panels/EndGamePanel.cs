@@ -34,7 +34,7 @@ public class EndGamePanel : Panel
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        PanelCloser = new CloseBehavior();
+        PanelCloser = new ClosePanelBehavior();
         SceneLoader = new LoadSceneBehavior();
     }
 

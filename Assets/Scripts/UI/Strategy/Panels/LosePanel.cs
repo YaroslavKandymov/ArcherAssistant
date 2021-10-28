@@ -44,7 +44,7 @@ public class LosePanel : Panel
     {
         GameCloser = new CloseApplicationBehavior();
         PanelOpener = new OpenPanelBehavior();
-        PanelCloser = new CloseBehavior();
+        PanelCloser = new ClosePanelBehavior();
         Reloader = new RestartSceneBehavior();
     }
 

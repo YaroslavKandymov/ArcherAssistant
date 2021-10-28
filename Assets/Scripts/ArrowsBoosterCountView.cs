@@ -6,7 +6,7 @@ public class ArrowsBoosterCountView : MonoBehaviour
 {
     [SerializeField] private ArrowBooster[] _boosters;
     [SerializeField] private float _secondsBeforeDisappear;
-    [SerializeField] private Canvas _canvas;
+    [SerializeField] private CanvasGroup _canvas;
     
     private TMP_Text _text;
     private WaitForSeconds _seconds;

@@ -30,7 +30,7 @@ public class PausePanel : Panel
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        PanelCloser = new CloseBehavior();
+        PanelCloser = new ClosePanelBehavior();
         GameCloser = new CloseApplicationBehavior();
     }
 

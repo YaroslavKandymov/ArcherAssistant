@@ -29,7 +29,7 @@ public class WinPanel : Panel
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        PanelCloser = new CloseBehavior();
+        PanelCloser = new ClosePanelBehavior();
         GameCloser = new CloseApplicationBehavior();
         SceneLoader = new LoadSceneBehavior();
     }

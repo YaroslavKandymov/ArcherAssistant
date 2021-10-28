@@ -6,6 +6,7 @@ public class Archer : MonoBehaviour
 {
     [SerializeField] private Quiver _quiver;
     [SerializeField] private Vector3 _startRotation;
+    [SerializeField] private Vector3 _startPosition;
 
     public event Action ArrowsIncreased;
 
@@ -18,7 +19,7 @@ public class Archer : MonoBehaviour
 
     private void Start()
     {
-        ResetRotation();
+        ResetTransform();
     }
 
     public void TakeArrows(IEnumerable<Arrow> arrows)
@@ -39,9 +40,10 @@ public class Archer : MonoBehaviour
         ArrowsIncreased?.Invoke();
     }
 
-    public void ResetRotation()
+    public void ResetTransform()
     {
         transform.localEulerAngles = _startRotation;
+        transform.position = _startPosition;
     }
 
     public static Archer operator >(Archer firstArcher, Archer secondArcher)

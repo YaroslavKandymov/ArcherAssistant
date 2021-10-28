@@ -27,7 +27,7 @@ public class GamePanel : Panel
     protected override void InitBehaviors()
     {
         PanelOpener = new OpenPanelBehavior();
-        PanelCloser = new CloseBehavior();
+        PanelCloser = new ClosePanelBehavior();
     }
 
     private void OnPauseButtonClick()

@@ -14,6 +14,7 @@ public class Quiver : ObjectPool<Arrow>
     public event Action<int> ArrowsCountChanged;
     public event Action Fulled;
     public event Action Taken;
+    public event Action ArrowsOver;
 
     private void Awake()
     {
@@ -22,6 +23,8 @@ public class Quiver : ObjectPool<Arrow>
         foreach (var arrow in Pool)
             if (ArrowsCount != _startArrowsCount)
                 Add(arrow);
+
+        ArrowsCountChanged?.Invoke(_arrows.Count);
     }
 
     public void Add(Arrow arrow)
@@ -50,7 +53,12 @@ public class Quiver : ObjectPool<Arrow>
         if (_arrows.Count > 0)
         {
             var newArrow = _arrows.Pop();
+            ArrowsCountChanged?.Invoke(_arrows.Count);
             return newArrow;
+        }
+        else
+        {
+            ArrowsOver?.Invoke();
         }
 
         Taken?.Invoke();
@@ -65,5 +73,7 @@ public class Quiver : ObjectPool<Arrow>
         foreach (var arrow in Pool)
             if (ArrowsCount != _startArrowsCount)
                 Add(arrow);
+
+        ArrowsCountChanged?.Invoke(_arrows.Count);
     }
 }
