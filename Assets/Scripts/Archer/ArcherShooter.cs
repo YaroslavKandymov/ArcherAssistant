@@ -12,7 +12,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private LosePanel _panel;
-    [SerializeField] private int _missShotNumbers;
+    [SerializeField] private int _perfectShotNumbers;
 
     private Transform _currentEnemy;
     private Arrow _currentArrow;
@@ -64,13 +64,13 @@ public class ArcherShooter : MonoBehaviour
                 _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
                 _shotCounter++;
 
-                if ((_shotCounter %= _missShotNumbers) == 0)
+                if ((_shotCounter %= _perfectShotNumbers) == 0)
                 {
-                    StartCoroutine(TargetShot(false));
+                    StartCoroutine(TargetShot(true));
                 }
                 else
                 {
-                    StartCoroutine(TargetShot(true));
+                    StartCoroutine(TargetShot(false));
                 }
 
                 _lastShootTime = _secondsBetweenShot;

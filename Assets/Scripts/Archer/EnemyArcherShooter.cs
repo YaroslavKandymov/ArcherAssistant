@@ -26,6 +26,7 @@ public class EnemyArcherShooter : MonoBehaviour
         _ray = GetComponentInChildren<EnemyRay>();
         _timeToGetArrow = new WaitForSeconds(_getArrowSeconds);
         _timeBeforeRelease = new WaitForSeconds(_secondsBeforeRelease);
+        _lastShootTime = Random.Range(0.5f, 2.5f);
     }
 
     private void Update()
@@ -52,7 +53,7 @@ public class EnemyArcherShooter : MonoBehaviour
                 StartCoroutine(TargetShot());
             }
 
-            _lastShootTime = _secondsBetweenShot + Random.Range(-0.5f, 0.5f);
+            _lastShootTime = _secondsBetweenShot + Random.Range(-0.5f, 2.5f);
         }
 
         _lastShootTime -= Time.deltaTime;

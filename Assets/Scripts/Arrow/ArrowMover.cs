@@ -6,13 +6,11 @@ public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;
     [SerializeField] private float _randomCoefficient;
-    [SerializeField] private float _spread;
+    [SerializeField] private int _spread;
 
     private Rigidbody _rigidbody;
     private ParticleSystem _particleSystem;
     private Vector3 _velocity;
-
-    public Vector3 Velocity => _velocity;
 
     private void Awake()
     {
@@ -23,7 +21,11 @@ public class ArrowMover : MonoBehaviour
 
     public void UntargetShot(Transform target)
     {
-        Shot(target, new Vector3(0, Random.Range(-_spread, _spread), 0));
+        int[] targetPoints = {-_spread, _spread};
+
+        var number = targetPoints[Random.Range(0, targetPoints.Length)];
+
+        Shot(target, new Vector3(0, number, 0));
     }
 
     public void TargetShot(Transform target)
@@ -41,7 +43,7 @@ public class ArrowMover : MonoBehaviour
         transform.LookAt(target);
 
         Vector3 delta = (target.position - transform.position).normalized;
-        _velocity = delta* _force + spread;
+        _velocity = delta * _force + spread;
 
         SetArrowValues(RigidbodyConstraints.None, _velocity, false, true);
     }
