@@ -13,7 +13,6 @@ public class PlayerArrowsCountView : MonoBehaviour
     private WaitForSeconds _seconds;
     private int _currentArrowsCount;
     private Coroutine _coroutine;
-    private bool _isWorking;
 
     private void OnEnable()
     {
@@ -42,26 +41,23 @@ public class PlayerArrowsCountView : MonoBehaviour
         _text = _canvasGroup.GetComponentInChildren<TMP_Text>();
         _canvasGroup.alpha = 0;
         _seconds = new WaitForSeconds(_secondsBeforeDisappear);
-        _currentArrowsCount = _quiver.ArrowsCount;
     }
 
     private void OnArrowsCountChanged(int count)
     {
         int difference = count - _currentArrowsCount;
 
-        if (_isWorking)
-        {
-            difference ++;
-            StopCoroutine(_coroutine);
-        }
-
         if (difference > 0)
         {
             _text.text = "+" + difference;
 
-            if (_isWorking == false)
+            if (_coroutine == null)
             {
                 _currentArrowsCount = _quiver.ArrowsCount;
+            }
+            else
+            {
+                StopCoroutine(_coroutine);
             }
 
             _coroutine = StartCoroutine(TurnOffCanvas());
@@ -70,7 +66,7 @@ public class PlayerArrowsCountView : MonoBehaviour
 
     private void OnArrowCountIncreased(int count)
     {
-        if (_isWorking)
+        if (_coroutine == null)
         {
             StopCoroutine(_coroutine);
         }
@@ -83,18 +79,17 @@ public class PlayerArrowsCountView : MonoBehaviour
 
     private void OnTaken()
     {
-        _canvasGroup.alpha = 0;
         _text.text = "";
+        _currentArrowsCount = 0;
     }
 
     private IEnumerator TurnOffCanvas()
     {
         _canvasGroup.alpha = 1;
-        _isWorking = true;
 
         yield return _seconds;
 
+        _currentArrowsCount = _quiver.ArrowsCount;
         _canvasGroup.alpha = 0;
-        _isWorking = false;
     }
 }
