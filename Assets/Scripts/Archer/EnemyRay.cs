@@ -17,6 +17,7 @@ public class EnemyRay : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         _offSeconds = new WaitForSeconds(_secondsBeforeOff);
         _onSeconds = new WaitForSeconds(_secondsBeforeOn);
+        _lineRenderer.enabled = false;
     }
 
     private void Update()
