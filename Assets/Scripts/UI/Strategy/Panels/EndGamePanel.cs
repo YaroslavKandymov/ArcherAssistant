@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class EndGamePanel : Panel
     [SerializeField] private Panel _losePanel;
     [SerializeField] private Panel _winPanel;
     [SerializeField] private float _seconds;
+
+    public event Action LevelComplete;
+    public event Action LevelLost;
 
     private void Awake()
     {
@@ -40,6 +44,8 @@ public class EndGamePanel : Panel
 
     private void OnPlayerDied()
     {
+        LevelLost?.Invoke();
+
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_losePanel, true);
     }
@@ -49,6 +55,8 @@ public class EndGamePanel : Panel
         foreach (var enemy in _enemyLives)
             if (enemy.IsDied == false)
                 return;
+
+        LevelComplete?.Invoke();
 
         _playerHealth.GetComponent<CapsuleCollider>().enabled = false;
 

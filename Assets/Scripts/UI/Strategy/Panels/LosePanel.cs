@@ -14,7 +14,7 @@ public class LosePanel : Panel
     
     private List<Quiver> _quivers = new List<Quiver>();
 
-    public event Action SceneRestarted;
+    public event Action LevelRestarted;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class LosePanel : Panel
 
         Reloader.Restart(_assistants, _archers, _quivers);
 
-        SceneRestarted?.Invoke();
+        LevelRestarted?.Invoke();
     }
 
     private void OnExitButtonClick()

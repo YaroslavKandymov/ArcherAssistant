@@ -75,7 +75,7 @@ public class EnemyArcherShooter : MonoBehaviour
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-        _currentArrow.TargetShot(_targetPoint);
+        _currentArrow.TargetShot(_targetPoint, true);
 
         _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
     }
