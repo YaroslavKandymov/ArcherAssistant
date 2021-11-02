@@ -12,6 +12,7 @@ public class GamePanel : Panel
     private void Awake()
     {
         InitBehaviors();
+        PanelCloser.Close(this);
     }
 
     private void OnEnable()

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class StartPanel : Panel
 {
     [SerializeField] private Button _startButton;
+    [SerializeField] private GamePanel _gamePanel;
 
     public event Action LevelStarted;
 
@@ -37,6 +38,7 @@ public class StartPanel : Panel
     private void OnStartButtonClick()
     {
         PanelCloser.Close(this, true);
+        PanelOpener.Open(_gamePanel);
 
         LevelStarted?.Invoke();
     }
