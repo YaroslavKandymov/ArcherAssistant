@@ -24,7 +24,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnEnable()
     {
-        _losePanel.SceneRestarted += OnSceneRestarted;
+        _losePanel.LevelRestarted += OnLevelRestarted;
 
         foreach (var health in _healths)
             health.Hit += OnHit;
@@ -32,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnDisable()
     {
-        _losePanel.SceneRestarted -= OnSceneRestarted;
+        _losePanel.LevelRestarted -= OnLevelRestarted;
 
         foreach (var health in _healths)
             health.Hit -= OnHit;
@@ -44,7 +44,7 @@ public class EnemyHealth : MonoBehaviour
         ArcherHealthChanged?.Invoke();
     }
 
-    private void OnSceneRestarted()
+    private void OnLevelRestarted()
     {
         _allEnemiesHealths = _allEnemiesMaxHealths;
     }

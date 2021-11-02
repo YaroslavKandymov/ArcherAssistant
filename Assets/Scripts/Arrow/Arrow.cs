@@ -17,21 +17,19 @@ public class Arrow : MonoBehaviour
         Transform = GetComponent<Transform>();
     }
 
-    public void TargetShot(Transform target)
+    public void TargetShot(Transform target, bool inTarget)
     {
         if (target == null)
             throw new NullReferenceException(target.ToString());
 
-        _arrowMover.TargetShot(target);
-    }
-
-    public void UntargetShot(Transform target)
-    {
-        if(target == null)
-            throw new NullReferenceException(target.ToString());
-
-        _arrowMover.UntargetShot(target);
-        
+        if (inTarget)
+        {
+            _arrowMover.TargetShot(target);
+        }
+        else
+        {
+            _arrowMover.UntargetShot(target);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -26,7 +26,7 @@ public class EnemyArcherHealth : MonoBehaviour
 
     private void OnEnable()
     {
-        _panel.SceneRestarted += OnSceneRestarted;
+        _panel.LevelRestarted += OnLevelRestarted;
     }
 
     private void Start()
@@ -103,7 +103,7 @@ public class EnemyArcherHealth : MonoBehaviour
         transform.DOMoveY(0, 1f);
     }
 
-    private void OnSceneRestarted()
+    private void OnLevelRestarted()
     {
         IsDied = false;
         gameObject.SetActive(true);

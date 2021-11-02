@@ -1,10 +1,12 @@
-using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StartPanel : Panel
 {
     [SerializeField] private Button _startButton;
+
+    public event Action LevelStarted;
 
     private void Awake()
     {
@@ -35,5 +37,7 @@ public class StartPanel : Panel
     private void OnStartButtonClick()
     {
         PanelCloser.Close(this, true);
+
+        LevelStarted?.Invoke();
     }
 }

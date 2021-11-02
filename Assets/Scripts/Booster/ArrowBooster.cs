@@ -11,11 +11,10 @@ public class ArrowBooster : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out PlayerArcherAssistant player))
+        if (other.TryGetComponent(out Quiver quiver))
         {
-            var quiver = player.GetComponent<Quiver>();
             var newArrowsCount = quiver.ArrowsCount * _coefficient;
-            var count = newArrowsCount / _coefficient;
+            var count = newArrowsCount - newArrowsCount / _coefficient;
 
             for (int i = 0; i < count; i++)
             {

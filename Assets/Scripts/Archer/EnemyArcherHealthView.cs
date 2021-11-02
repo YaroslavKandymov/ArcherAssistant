@@ -14,13 +14,13 @@ public class EnemyArcherHealthView : MonoBehaviour
     private void OnEnable()
     {
         _health.ArcherHealthChanged += OnArcherHealthChanged;
-        _losePanel.SceneRestarted += OnSceneRestarted;
+        _losePanel.LevelRestarted += OnLevelRestarted;
     }
 
     private void OnDisable()
     {
         _health.ArcherHealthChanged += OnArcherHealthChanged;
-        _losePanel.SceneRestarted -= OnSceneRestarted;
+        _losePanel.LevelRestarted -= OnLevelRestarted;
     }
 
     private void Start()
@@ -35,7 +35,7 @@ public class EnemyArcherHealthView : MonoBehaviour
         _slider.DOValue(_slider.value - 1, _duration).SetEase(Ease.Linear);
     }
 
-    private void OnSceneRestarted()
+    private void OnLevelRestarted()
     {
         _slider.DOValue(_slider.maxValue, _duration).SetEase(Ease.Linear);
     }

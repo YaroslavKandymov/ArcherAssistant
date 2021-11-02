@@ -24,7 +24,7 @@ public class ArcherShooter : MonoBehaviour
 
     private void OnEnable()
     {
-        _panel.SceneRestarted += OnSceneRestarted;
+        _panel.LevelRestarted += OnLevelRestarted;
 
         foreach (var target in _targets)
             target.Died += OnDied;
@@ -32,7 +32,7 @@ public class ArcherShooter : MonoBehaviour
 
     private void OnDisable()
     {
-        _panel.SceneRestarted -= OnSceneRestarted;
+        _panel.LevelRestarted -= OnLevelRestarted;
 
         foreach (var target in _targets)
             target.Died -= OnDied;
@@ -64,14 +64,7 @@ public class ArcherShooter : MonoBehaviour
                 _animator.SetTrigger(ArcherAnimatorController.Params.GetArrow);
                 _shotCounter++;
 
-                if ((_shotCounter %= _perfectShotNumbers) == 0)
-                {
-                    StartCoroutine(TargetShot(true));
-                }
-                else
-                {
-                    StartCoroutine(TargetShot(false));
-                }
+                StartCoroutine((_shotCounter %= _perfectShotNumbers) == 0 ? Shot(true) : Shot(false));
 
                 _lastShootTime = _secondsBetweenShot;
             }
@@ -80,7 +73,7 @@ public class ArcherShooter : MonoBehaviour
         _lastShootTime -= Time.deltaTime;
     }
 
-    private IEnumerator TargetShot(bool correct)
+    private IEnumerator Shot(bool target)
     {
         _animator.SetTrigger(ArcherAnimatorController.States.Shot);
 
@@ -89,15 +82,7 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.ArrowState = _arrowState;
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
-
-        if (correct)
-        {
-            _currentArrow.TargetShot(_currentEnemy);
-        }
-        else
-        {
-            _currentArrow.UntargetShot(_currentEnemy);
-        }
+        _currentArrow.TargetShot(_currentEnemy, target);
     }
 
     private void OnDied(EnemyArcherHealth enemy)
@@ -115,7 +100,7 @@ public class ArcherShooter : MonoBehaviour
         return enemy.GetComponentInChildren<TargetPoint>().transform;
     }
 
-    private void OnSceneRestarted()
+    private void OnLevelRestarted()
     {
         if (_killedEnemies.Count > 0)
         {
