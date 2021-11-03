@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public interface IPanelOpener
+﻿public interface IPanelOpener
 {
     void Open(Panel panel, bool timeStopper = false);
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +15,8 @@ public class OpenPanelBehavior : IPanelOpener
             button.interactable = true;
 
         if (timeStopper == true)
+        {
             Time.timeScale = 0;
+        }
     }
 }

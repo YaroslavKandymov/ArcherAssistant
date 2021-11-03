@@ -46,19 +46,11 @@ public class Archer : MonoBehaviour
         transform.position = _startPosition;
     }
 
-    public static Archer operator >(Archer firstArcher, Archer secondArcher)
+    private void OnTriggerEnter(Collider other)
     {
-        if (firstArcher._quiver.ArrowsCount > secondArcher._quiver.ArrowsCount)
-            return firstArcher;
-        else
-            return secondArcher;
-    }
-
-    public static Archer operator <(Archer firstArcher, Archer secondArcher)
-    {
-        if (firstArcher._quiver.ArrowsCount < secondArcher._quiver.ArrowsCount)
-            return secondArcher;
-        else
-            return firstArcher;
+        if (other.TryGetComponent(out PlayerArcherAssistant archerAssistant))
+        {
+            archerAssistant.GiveAllArrows(this);
+        }
     }
 }

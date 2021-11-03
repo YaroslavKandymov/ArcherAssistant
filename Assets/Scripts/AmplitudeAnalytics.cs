@@ -10,8 +10,6 @@ public class AmplitudeAnalytics : MonoBehaviour
 
     [SerializeField] private Level _level;
 
-    private Dictionary<string, object> dictionary = new Dictionary<string, object>();
-
     private string _regDay
     {
         get { return PlayerPrefs.GetString(SAVED_REG_DAY, DateTime.Today.ToString("dd/MM/yy")); }
@@ -64,8 +62,6 @@ public class AmplitudeAnalytics : MonoBehaviour
         }
 
         SetStartedProperties();
-
-        FireEvent("game_start", dictionary);
     }
 
     private void SetStartedProperties()
@@ -73,28 +69,32 @@ public class AmplitudeAnalytics : MonoBehaviour
         _sessionID = _sessionID + 1;
         Amplitude.Instance.setUserProperty("session_id", _sessionID);
 
+        Dictionary<string, object> dictionary = new Dictionary<string, object>();
+        dictionary.Add("count", _sessionID);
+        FireEvent("game_start", dictionary);
+
         int daysAfter = DateTime.Today.Subtract(DateTime.Parse(_regDayFull)).Days;
         Amplitude.Instance.setUserProperty("days_after", daysAfter);
     }
 
-    private void OnStarted()
+    private void OnStarted(Dictionary<string, object> dictionary)
     {
-        FireEvent("level_start", new Dictionary<string, object>());
+        FireEvent("level_start", dictionary);
     }
 
-    private void OnComplete()
+    private void OnComplete(Dictionary<string, object> dictionary)
     {
-        FireEvent("level_complete", new Dictionary<string, object>());
+        FireEvent("level_complete", dictionary);
     }
 
-    private void OnlLost()
+    private void OnlLost(Dictionary<string, object> dictionary)
     {
-        FireEvent("fail", new Dictionary<string, object>());
+        FireEvent("fail", dictionary);
     }
 
-    private void OnRestarted()
+    private void OnRestarted(Dictionary<string, object> dictionary)
     {
-        FireEvent("restart", new Dictionary<string, object>());
+        FireEvent("restart", dictionary);
     }
 
     private void FireEvent(string eventName, Dictionary<string, object> dictionary)

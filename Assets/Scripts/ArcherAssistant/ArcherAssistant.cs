@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Quiver))]
 public abstract class ArcherAssistant : MonoBehaviour
 {
@@ -9,11 +8,12 @@ public abstract class ArcherAssistant : MonoBehaviour
     [SerializeField] private Vector3 _startRotation;
 
     private Quiver _quiver;
-    private Animator _animator;
+
+    public event Action<Arrow> ArrowTaken;
+    public event Action ArrowGiven;
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
         _quiver = GetComponent<Quiver>();
 
         transform.position = _startPosition;
@@ -28,25 +28,22 @@ public abstract class ArcherAssistant : MonoBehaviour
         if(_quiver.ArrowsCount <= 0)
             return;
 
-        while (true)
+        for (int i = 0; i < _quiver.ArrowsCount; i++)
         {
-            Arrow newArrow = _quiver.TryGetArrow();
+            var arrow = _quiver.TryGetArrow();
 
-            if(newArrow == null)
-                break;
-
-            target.TakeArrow(newArrow);
+            target.TakeArrow(arrow);
         }
 
-        _animator.Play(ArcherAssistantAnimatorController.States.GiveArrow);
+        ArrowGiven?.Invoke();
     }
 
     public void TakeArrow(Arrow arrow)
     {
         if (arrow == null)
-            throw new NullReferenceException(arrow.name);
+            return;
 
-        arrow.gameObject.SetActive(false);
+        ArrowTaken?.Invoke(arrow);
         _quiver.Add(arrow);
     }
 

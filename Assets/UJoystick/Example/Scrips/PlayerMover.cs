@@ -5,24 +5,13 @@
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private bl_Joystick _joystick;
-    [SerializeField] private Archer _archer;
-    [SerializeField] private float _transmissionRadius;
 
     private Animator _animator;
     private bool _flipRotation = true;
-    private ArcherAssistant _archerAssistant;
-    private Transform _transform;
-    private Vector3 _offset = new Vector3();
-
-    private void Awake()
-    {
-        _transform = transform;
-    }
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
-        _archerAssistant = GetComponent<ArcherAssistant>();
     }
 
     private void Update()
@@ -38,11 +27,6 @@ public class PlayerMover : MonoBehaviour
                 transform.rotation = Quaternion.Euler(new Vector3(0, -angle, 0));
 
         PlayAnimations(vertical, horizontal);
-
-        if (_offset.SqrDistance(_transform, _archer.Transform, _transmissionRadius))
-        {
-            _archerAssistant.GiveAllArrows(_archer);
-        }
     }
 
     public void Fall()

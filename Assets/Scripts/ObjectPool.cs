@@ -28,6 +28,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     protected bool TryGetObject(out T result)
     {
         result = _pool.FirstOrDefault(p => p.gameObject.activeSelf == false);
+        _pool.Remove(result);
 
         return result != null;
     }

@@ -44,10 +44,10 @@ public class EndGamePanel : Panel
 
     private void OnPlayerDied()
     {
-        LevelLost?.Invoke();
-
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_losePanel, true);
+
+        LevelLost?.Invoke();
     }
 
     private void OnEnemyDied(EnemyArcherHealth archer)
@@ -55,8 +55,6 @@ public class EndGamePanel : Panel
         foreach (var enemy in _enemyLives)
             if (enemy.IsDied == false)
                 return;
-
-        LevelComplete?.Invoke();
 
         _playerHealth.GetComponent<CapsuleCollider>().enabled = false;
 
@@ -69,5 +67,7 @@ public class EndGamePanel : Panel
 
         PanelCloser.Close(_gamePanel);
         PanelOpener.Open(_winPanel, true);
+
+        LevelComplete?.Invoke();
     }
 }

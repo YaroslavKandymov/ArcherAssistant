@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour
@@ -9,12 +11,15 @@ public class Level : MonoBehaviour
     [SerializeField] private LosePanel _losePanel;
     [SerializeField] private AmplitudeAnalytics _amplitudeAnalytics;
 
+    private float _time;
+    private Coroutine _coroutine;
+
     public int LevelNumber => _levelNumber;
 
-    public event Action Started;
-    public event Action Complete;
-    public event Action Lost;
-    public event Action Restarted;
+    public event Action<Dictionary<string, object>> Started;
+    public event Action<Dictionary<string, object>> Complete;
+    public event Action<Dictionary<string, object>> Lost;
+    public event Action<Dictionary<string, object>> Restarted;
 
     private void Awake()
     {
@@ -40,21 +45,65 @@ public class Level : MonoBehaviour
 
     private void OnLevelStarted()
     {
-        Started?.Invoke();
+        Dictionary<string, object> startDictionary = new Dictionary<string, object>
+        {
+            { "level", _levelNumber}
+        };
+
+        _time = 0;
+        _coroutine = StartCoroutine(CalculateGameTime());
+
+        Started?.Invoke(startDictionary);
     }
 
     private void OnLevelComplete()
     {
-        Complete?.Invoke();
+        StopCoroutine(_coroutine);
+
+        Dictionary<string, object> dictionary = new Dictionary<string, object>
+        {
+            { "level", _levelNumber},
+            { "time_spent", _time}
+        };
+
+        Complete?.Invoke(dictionary);
     }
 
     private void OnLevelLost()
     {
-        Lost?.Invoke();
+        Dictionary<string, object> lostDictionary = new Dictionary<string, object>
+        {
+            { "level", _levelNumber},
+            { "reason", "death"},
+            { "time_spent", _time}
+        };
+
+        Debug.Log(_time);
+
+        StopCoroutine(_coroutine);
+        Lost?.Invoke(lostDictionary);
     }
 
     private void OnLevelRestarted()
     {
-        Restarted?.Invoke();
+        Dictionary<string, object> dictionary = new Dictionary<string, object>
+        {
+            { "level", _levelNumber}
+        };
+
+        _time = 0;
+        _coroutine = StartCoroutine(CalculateGameTime());
+
+        Restarted?.Invoke(dictionary);
+    }
+
+    private IEnumerator CalculateGameTime()
+    {
+        while (true)
+        {
+            _time += Time.deltaTime;
+
+            yield return null;
+        }
     }
 }

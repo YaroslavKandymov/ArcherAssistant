@@ -12,8 +12,5 @@ public class PlayerArcherAssistantHealth : ArcherAssistantHealth
                 Die();
     }
 
-    protected override void Die()
-    {
-        Died?.Invoke();
-    }
+    protected override void Die() => Died?.Invoke();
 }

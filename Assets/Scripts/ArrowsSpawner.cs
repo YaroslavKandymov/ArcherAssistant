@@ -63,8 +63,6 @@ public class ArrowsSpawner : ObjectPool<Arrow>
                 90 + Random.Range(-_randomCorner, _randomCorner));
 
             arrow.gameObject.SetActive(true);
-
-            ArrowSpawned?.Invoke(arrow);
         }
     }
 }

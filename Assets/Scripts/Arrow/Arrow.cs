@@ -4,9 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(ArrowMover))]
 public class Arrow : MonoBehaviour
 {
-    [SerializeField] private float _collectRange;
-
     private ArrowMover _arrowMover;
+    private Collider _collider;
 
     public ArrowStates ArrowState;
     public Transform Transform { get; private set; }
@@ -15,6 +14,7 @@ public class Arrow : MonoBehaviour
     {
         _arrowMover = GetComponent<ArrowMover>();
         Transform = GetComponent<Transform>();
+        _collider = GetComponent<Collider>();
     }
 
     public void TargetShot(Transform target, bool inTarget)
