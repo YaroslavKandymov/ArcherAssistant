@@ -78,8 +78,6 @@ public class Level : MonoBehaviour
             { "time_spent", _time}
         };
 
-        Debug.Log(_time);
-
         StopCoroutine(_coroutine);
         Lost?.Invoke(lostDictionary);
     }

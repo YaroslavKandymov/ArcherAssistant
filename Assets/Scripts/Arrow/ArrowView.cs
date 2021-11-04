@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowView : ObjectPool<PlayerArrow>
+public class ArrowView : ObjectPool<Arrow>
 {
     [SerializeField] private Quiver _quiver;
-    [SerializeField] private PlayerArrow _arrowTemplate;
+    [SerializeField] private Arrow _arrowTemplate;
     [SerializeField] private Transform _arrowsPlace;
     [SerializeField] private ParticleSystem _particleSystem;
     [SerializeField] private float _seconds;
     [SerializeField] private float _arrowVerticalOffset;
 
-    private readonly List<PlayerArrow> _arrows = new List<PlayerArrow>();
+    private readonly List<Arrow> _arrows = new List<Arrow>();
     private WaitForSeconds _secondsBeforeDisableParticleSystem;
     private Coroutine _coroutine;
-    private PlayerArrow _oldArrow;
+    private Arrow _oldArrow;
 
     private void OnEnable()
     {
@@ -43,7 +43,7 @@ public class ArrowView : ObjectPool<PlayerArrow>
 
             for (int i = 0; i < addCount; i++)
             {
-                if (TryGetObject(out PlayerArrow arrow))
+                if (TryGetObject(out Arrow arrow))
                 {
                     if (_oldArrow == null)
                     {

@@ -12,13 +12,21 @@ public class PlayerCollector : MonoBehaviour
     [SerializeField] private Vector3 _targetScale;
     [SerializeField] private float _giveDelay;
     [SerializeField] private Transform _target;
+    [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private float _secondsToPlayParticle;
 
     private ArcherAssistant _archerAssistant;
     private readonly Stack<Arrow> _arrows = new Stack<Arrow>();
+    private WaitForSeconds _playParticleTime;
+    private Coroutine _coroutine;
+
+    public event Action ArrowsGiven;
 
     private void Awake()
     {
         _archerAssistant = GetComponent<ArcherAssistant>();
+        _particleSystem.gameObject.SetActive(false);
+        _playParticleTime = new WaitForSeconds(_secondsToPlayParticle);
     }
 
     private void OnEnable()
@@ -43,8 +51,10 @@ public class PlayerCollector : MonoBehaviour
 
     private void OnArrowTaken(Arrow arrow)
     {
-        if(_arrows.Contains(arrow))
-            return;
+        if(_coroutine != null)
+            StopCoroutine(_coroutine);
+
+        _coroutine = StartCoroutine(PlayParticle());
 
         arrow.transform.parent = _arrowsPlace.transform;
 
@@ -79,15 +89,21 @@ public class PlayerCollector : MonoBehaviour
 
             yield return new WaitForSeconds(_giveDelay);
 
-            arrow.transform.DOMove(target.position, _duration / 2).OnComplete(() => arrow.gameObject.SetActive(false));
-            arrow.Transform.parent = target;
+            arrow.Transform.parent = null;
+            arrow.transform.DOMove(target.position, _duration).OnComplete(() => arrow.gameObject.SetActive(false));
         }
+
+        ArrowsGiven?.Invoke();
     }
 
-    private IEnumerator TurnOffArrow(Arrow arrow)
+    private IEnumerator PlayParticle()
     {
-        yield return new WaitForSeconds(_duration);
+        _particleSystem.gameObject.SetActive(true);
+        _particleSystem.Play();
 
-        arrow.gameObject.SetActive(false);
+        yield return _playParticleTime;
+
+        _particleSystem.Stop();
+        _particleSystem.gameObject.SetActive(false);
     }
 }

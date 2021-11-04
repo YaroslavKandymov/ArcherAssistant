@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -5,12 +6,14 @@ using Random = UnityEngine.Random;
 public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;
-    [SerializeField] private float _randomCoefficient;
     [SerializeField] private int _spread;
 
     private Rigidbody _rigidbody;
     private ParticleSystem _particleSystem;
     private Vector3 _velocity;
+
+    public event Action Shoted;
+    public event Action Stopped;
 
     private void Awake()
     {
@@ -36,6 +39,8 @@ public class ArrowMover : MonoBehaviour
     public void Stop()
     {
         SetArrowValues(RigidbodyConstraints.FreezeAll, Vector3.zero, false, false);
+
+        Stopped?.Invoke();
     }
 
     private void Shot(Transform target, Vector3 spread)
@@ -46,6 +51,8 @@ public class ArrowMover : MonoBehaviour
         _velocity = delta * _force + spread;
 
         SetArrowValues(RigidbodyConstraints.None, _velocity, false, true);
+
+        Shoted?.Invoke();
     }
 
     private void SetArrowValues(RigidbodyConstraints constraints, Vector3 velocity, bool kinematic, bool particleSystemActivity)

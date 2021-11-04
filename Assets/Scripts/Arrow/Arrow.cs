@@ -17,6 +17,18 @@ public class Arrow : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
+    private void OnEnable()
+    {
+        _arrowMover.Shoted += OnShoted;
+        _arrowMover.Stopped += OnStopped;
+    }
+
+    private void OnDisable()
+    {
+        _arrowMover.Shoted -= OnShoted;
+        _arrowMover.Stopped -= OnStopped;
+    }
+
     public void TargetShot(Transform target, bool inTarget)
     {
         if (target == null)
@@ -32,12 +44,28 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    private void OnShoted()
+    {
+        ActivateCollider(true);
+    }
+
+    private void OnStopped()
+    {
+        ActivateCollider(true);
+    }
+
+    private void ActivateCollider(bool breaker)
+    {
+        _collider.enabled = breaker;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out PlayerArcherAssistant archerAssistant))
         {
             if (ArrowState == ArrowStates.EnemyKiller)
             {
+                ActivateCollider(false);
                 archerAssistant.TakeArrow(this);
             }
         }

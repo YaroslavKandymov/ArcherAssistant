@@ -13,6 +13,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private LosePanel _panel;
     [SerializeField] private int _perfectShotNumbers;
+    [SerializeField] private PlayerCollector _playerCollector;
 
     private Transform _currentEnemy;
     private Arrow _currentArrow;
@@ -21,10 +22,12 @@ public class ArcherShooter : MonoBehaviour
     private Queue<EnemyArcherHealth> _enemies = new Queue<EnemyArcherHealth>();
     private List<EnemyArcherHealth> _killedEnemies = new List<EnemyArcherHealth>();
     private float _shotCounter;
+    private bool _canShoot = false;
 
     private void OnEnable()
     {
         _panel.LevelRestarted += OnLevelRestarted;
+        _playerCollector.ArrowsGiven += OnArrowsGiven;
 
         foreach (var target in _targets)
             target.Died += OnDied;
@@ -33,6 +36,7 @@ public class ArcherShooter : MonoBehaviour
     private void OnDisable()
     {
         _panel.LevelRestarted -= OnLevelRestarted;
+        _playerCollector.ArrowsGiven -= OnArrowsGiven;
 
         foreach (var target in _targets)
             target.Died -= OnDied;
@@ -50,6 +54,9 @@ public class ArcherShooter : MonoBehaviour
 
     private void Update()
     {
+        if(_canShoot == false)
+            return;
+
         if (_lastShootTime <= 0)
         {
             _currentArrow = _quiver.TryGetArrow();
@@ -57,6 +64,8 @@ public class ArcherShooter : MonoBehaviour
             if (_currentArrow == null)
             {
                 _animator.Play(ArcherAnimatorController.States.Idle);
+                _canShoot = false;
+
                 return;
             }
             else
@@ -83,6 +92,11 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.TargetShot(_currentEnemy, target);
+    }
+
+    private void OnArrowsGiven()
+    {
+        _canShoot = true;
     }
 
     private void OnDied(EnemyArcherHealth enemy)

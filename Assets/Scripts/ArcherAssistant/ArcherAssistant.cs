@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Quiver))]
@@ -28,12 +29,16 @@ public abstract class ArcherAssistant : MonoBehaviour
         if(_quiver.ArrowsCount <= 0)
             return;
 
-        for (int i = 0; i < _quiver.ArrowsCount; i++)
-        {
-            var arrow = _quiver.TryGetArrow();
+        List<Arrow> arrows = new List<Arrow>();
 
-            target.TakeArrow(arrow);
+        while(_quiver.ArrowsCount > 0)
+        { 
+            var arrow = _quiver.TryGetArrow();
+            arrows.Add(arrow);
         }
+
+        target.TakeArrows(arrows);
+        arrows.Clear();
 
         ArrowGiven?.Invoke();
     }

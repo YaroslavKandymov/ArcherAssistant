@@ -14,8 +14,6 @@ public class ArrowsSpawner : ObjectPool<Arrow>
     private Transform[] _spawnPoints;
     private WaitForSeconds _seconds;
 
-    public event Action<Arrow> ArrowSpawned;
-
     private void Start()
     {
         Initialize(_arrowTemplate);
