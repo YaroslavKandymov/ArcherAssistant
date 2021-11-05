@@ -1,9 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(ArrowMover))]
 public class Arrow : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private float _seconds;
+    [SerializeField] private Vector3 _startScale;
+
     private ArrowMover _arrowMover;
     private Collider _collider;
 
@@ -44,6 +49,11 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    public void PlayDisappearEffect()
+    {
+        StartCoroutine(PlayEffect());
+    }
+
     private void OnShoted()
     {
         ActivateCollider(true);
@@ -57,6 +67,18 @@ public class Arrow : MonoBehaviour
     private void ActivateCollider(bool breaker)
     {
         _collider.enabled = breaker;
+    }
+
+    private IEnumerator PlayEffect()
+    {
+        _particleSystem.transform.parent = null;
+        _particleSystem.gameObject.SetActive(true);
+        _particleSystem.Play();
+
+        yield return new WaitForSeconds(_seconds);
+
+        _particleSystem.Stop();
+        _particleSystem.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)

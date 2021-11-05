@@ -45,12 +45,4 @@ public class Archer : MonoBehaviour
         transform.localEulerAngles = _startRotation;
         transform.position = _startPosition;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out PlayerArcherAssistant archerAssistant))
-        {
-            archerAssistant.GiveAllArrows(this);
-        }
-    }
 }

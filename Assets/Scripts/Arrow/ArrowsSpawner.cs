@@ -11,14 +11,14 @@ public class ArrowsSpawner : ObjectPool<Arrow>
     [SerializeField] private float _randomCorner;
     [SerializeField] private int _startArrowsCount;
 
-    private Transform[] _spawnPoints;
+    private SpawnPoint[] _spawnPoints;
     private WaitForSeconds _seconds;
 
     private void Start()
     {
         Initialize(_arrowTemplate);
 
-        _spawnPoints = GetComponentsInChildren<Transform>();
+        _spawnPoints = GetComponentsInChildren<SpawnPoint>();
 
         _seconds = new WaitForSeconds(_secondsBetweenSpawn);
 
@@ -56,9 +56,10 @@ public class ArrowsSpawner : ObjectPool<Arrow>
         {
             arrow.ArrowState = _arrowState;
             var randomPoint = Random.Range(0, _spawnPoints.Length);
-            arrow.transform.position = _spawnPoints[randomPoint].transform.position;
-            arrow.transform.localEulerAngles = new Vector3(90 + Random.Range(-_randomCorner, _randomCorner), 0f,
+            arrow.Transform.position = _spawnPoints[randomPoint].Transform.position;
+            arrow.Transform.localEulerAngles = new Vector3(90 + Random.Range(-_randomCorner, _randomCorner), 0f,
                 90 + Random.Range(-_randomCorner, _randomCorner));
+            arrow.Transform.parent = _spawnPoints[randomPoint].Transform;
 
             arrow.gameObject.SetActive(true);
         }

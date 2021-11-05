@@ -6,6 +6,8 @@ public class ArrowBooster : MonoBehaviour
     [SerializeField] private int _coefficient;
     [SerializeField] private Arrow _arrowTemplate;
 
+    public int Coefficient => _coefficient;
+
     public event Action<ArrowBooster> Taken;
     public event Action<int> ArrowCountIncreased;
 

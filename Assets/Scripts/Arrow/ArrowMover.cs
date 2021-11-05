@@ -7,9 +7,9 @@ public class ArrowMover : MonoBehaviour
 {
     [SerializeField] private float _force;
     [SerializeField] private int _spread;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     private Rigidbody _rigidbody;
-    private ParticleSystem _particleSystem;
     private Vector3 _velocity;
 
     public event Action Shoted;

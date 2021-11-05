@@ -66,6 +66,11 @@ public class Quiver : ObjectPool<Arrow>
         return null;
     }
 
+    public void Clear()
+    {
+        _arrows.Clear();
+    }
+
     public void Restart()
     {
         _arrows.Clear();
