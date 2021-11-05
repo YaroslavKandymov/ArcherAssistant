@@ -19,7 +19,6 @@ public class ArrowBooster : MonoBehaviour
             for (int i = 0; i < count; i++)
             {
                 var newArrow = Instantiate(_arrowTemplate, transform.position, Quaternion.identity);
-                newArrow.gameObject.SetActive(false);
 
                 quiver.Add(newArrow);
             }
