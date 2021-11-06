@@ -14,11 +14,11 @@ public class ArcherArrowsCountViewPanel : Panel
     [SerializeField] private float _nextScaleCoefficient;
     [SerializeField] private float _idleTime;
     [SerializeField] private float _increaseTime;
-    [SerializeField] private Ease _ease = Ease.Linear;
 
     private Tween _tween;
     private float _time;
     private int _oldArrowsCount;
+    private Coroutine _coroutine;
 
     private void Awake()
     {
@@ -54,13 +54,19 @@ public class ArcherArrowsCountViewPanel : Panel
             if(count < _oldArrowsCount)
                 return;
 
-            _oldArrowsCount = count;
-            _tween.Kill();
-            _scaleObject.transform.localScale = _startScale;
-            _time = 0;
+            if (_tween.active == true)
+            {
+                _scaleObject.transform.localScale = _startScale;
+                _tween.Kill();
+            }
 
-            StartCoroutine(IncreaseNumberScale());
-            
+            _oldArrowsCount = count;
+
+            if (_coroutine == null)
+            {
+                _scaleObject.DOScale(_scaleObject.transform.localScale * _nextScaleCoefficient, _increaseTime);
+                _coroutine = StartCoroutine(IncreaseNumberScale());
+            }
         }
     }
 
@@ -73,13 +79,16 @@ public class ArcherArrowsCountViewPanel : Panel
     {
         while (true)
         {
-            _tween = _scaleObject.DOScale(_scaleObject.transform.localScale * _nextScaleCoefficient, _increaseTime).SetEase(_ease);
             _time += Time.deltaTime;
 
             if (_time > _idleTime)
             {
                 _tween.Kill();
+
                 _scaleObject.DOScale(_startScale, _duration);
+                _oldArrowsCount = 0;
+                _coroutine = null;
+
                 yield break;
             }
 

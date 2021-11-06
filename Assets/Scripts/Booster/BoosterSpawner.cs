@@ -1,9 +1,13 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BoosterSpawner : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private float _seconds;
+    [SerializeField] private float _particleHeight;
+
+    private WaitForSeconds _time;
     private BoosterLifetime[] _boosters;
     private float _lastSpawnTime;
     private float _existedTime;
@@ -11,6 +15,8 @@ public class BoosterSpawner : MonoBehaviour
     private void Awake()
     {
         _boosters = GetComponentsInChildren<BoosterLifetime>();
+        _time = new WaitForSeconds(_seconds);
+        _particleSystem.gameObject.SetActive(false);
 
         foreach (var booster in _boosters)
         {
@@ -44,6 +50,8 @@ public class BoosterSpawner : MonoBehaviour
 
     private void OnTaken(ArrowBooster booster)
     {
+        _particleSystem.gameObject.transform.position = new Vector3(booster.transform.position.x, booster.transform.position.y + _particleHeight, booster.transform.position.z);
+        StartCoroutine(PlayParticle());
         booster.gameObject.SetActive(false);
         _existedTime = 0;
         _lastSpawnTime = booster.GetComponent<BoosterLifetime>().SpawnInterval;
@@ -82,5 +90,16 @@ public class BoosterSpawner : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private IEnumerator PlayParticle()
+    {
+        _particleSystem.gameObject.SetActive(true);
+        _particleSystem.Play();
+
+        yield return _time;
+
+        _particleSystem.Stop();
+        _particleSystem.gameObject.SetActive(false);
     }
 }

@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class ArrowBooster : MonoBehaviour
+public class ArrowBooster : ObjectPool<Arrow>
 {
     [SerializeField] private int _coefficient;
     [SerializeField] private Arrow _arrowTemplate;
@@ -10,6 +11,11 @@ public class ArrowBooster : MonoBehaviour
 
     public event Action<ArrowBooster> Taken;
     public event Action<int> ArrowCountIncreased;
+
+    private void Awake()
+    {
+        Initialize(_arrowTemplate);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,9 +26,13 @@ public class ArrowBooster : MonoBehaviour
 
             for (int i = 0; i < count; i++)
             {
-                var newArrow = Instantiate(_arrowTemplate, transform.position, Quaternion.identity);
+                if (TryGetObject(out Arrow arrow))
+                {
+                    arrow.Transform.position = transform.position;
+                    arrow.gameObject.SetActive(true);
 
-                quiver.Add(newArrow);
+                    quiver.Add(arrow);
+                }
             }
 
             ArrowCountIncreased?.Invoke(count);
