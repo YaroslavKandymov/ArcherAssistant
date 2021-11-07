@@ -5,7 +5,7 @@ public class ParticleSystemPlayer : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private float _playTime;
-    [SerializeField] private PlayerArrowCollector _collector;
+    [SerializeField] private PlayerArrowsGiver _playerArrowsGiver;
 
     private ParticleSystem _particleSystem;
     private WaitForSeconds _time;
@@ -13,12 +13,12 @@ public class ParticleSystemPlayer : MonoBehaviour
 
     private void OnEnable()
     {
-        _collector.ArrowGiven += OnArrowGiven;
+        _playerArrowsGiver.ArrowGiven += OnArrowGiven;
     }
 
     private void OnDisable()
     {
-        _collector.ArrowGiven -= OnArrowGiven;
+        _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
     }
 
     private void Start()

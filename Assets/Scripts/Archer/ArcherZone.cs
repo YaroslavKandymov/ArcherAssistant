@@ -8,7 +8,15 @@ public class ArcherZone : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerArcherAssistant player))
         {
-            player.GiveAllArrows(_archer);
+            player.GiveArrows(_archer);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out PlayerArcherAssistant player))
+        {
+            player.StopGiveArrows();
         }
     }
 }

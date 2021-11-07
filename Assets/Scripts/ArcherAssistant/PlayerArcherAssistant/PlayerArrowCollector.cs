@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+[RequireComponent(typeof(ArcherAssistant))]
+[RequireComponent(typeof(PlayerArrowsGiver))]
 public class PlayerArrowCollector : MonoBehaviour
 {
     [SerializeField] private float _duration;
@@ -11,8 +13,6 @@ public class PlayerArrowCollector : MonoBehaviour
     [SerializeField] private float _arrowVerticalOffset;
     [SerializeField] private float _arrowHorizontalOffset;
     [SerializeField] private Vector3 _targetScale;
-    [SerializeField] private float _giveDelay;
-    [SerializeField] private Transform _target;
     [SerializeField] private ParticleSystem _takeArrowParticleSystem;
     [SerializeField] private float _secondsToPlayParticle;
 
@@ -20,28 +20,28 @@ public class PlayerArrowCollector : MonoBehaviour
     private readonly Stack<Arrow> _arrows = new Stack<Arrow>();
     private WaitForSeconds _playParticleTime;
     private Coroutine _coroutine;
+    private PlayerArrowsGiver _playerArrowsGiver;
 
-    public event Action AllArrowsGiven;
     public event Action<Vector3> ArrowDeparted;
-    public event Action<Arrow> ArrowGiven;
 
     private void Awake()
     {
         _archerAssistant = GetComponent<ArcherAssistant>();
         _takeArrowParticleSystem.gameObject.SetActive(false);
         _playParticleTime = new WaitForSeconds(_secondsToPlayParticle);
+        _playerArrowsGiver = GetComponent<PlayerArrowsGiver>();
     }
 
     private void OnEnable()
     {
         _archerAssistant.ArrowTaken += OnArrowTaken;
-        _archerAssistant.ArrowsTransferStarted += OnArrowsTransferStarted;
+        _playerArrowsGiver.ArrowGiven += OnArrowGiven;
     }
 
     private void OnDisable()
     {
         _archerAssistant.ArrowTaken -= OnArrowTaken;
-        _archerAssistant.ArrowsTransferStarted -= OnArrowsTransferStarted;
+        _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
     }
 
     private void Update()
@@ -54,7 +54,10 @@ public class PlayerArrowCollector : MonoBehaviour
 
     private void OnArrowTaken(Arrow arrow)
     {
-        if(_coroutine != null)
+        _playerArrowsGiver.AddArrow(arrow);
+        _arrows.Push(arrow);
+
+        if (_coroutine != null)
             StopCoroutine(_coroutine);
 
         _coroutine = StartCoroutine(PlayParticle(_takeArrowParticleSystem));
@@ -75,32 +78,6 @@ public class PlayerArrowCollector : MonoBehaviour
 
         arrow.transform.DOLocalRotate(new Vector3(0, 90, 90), _duration);
         arrow.transform.DOScale(_targetScale, _duration);
-   
-        _arrows.Push(arrow);
-    }
-
-    private void OnArrowsTransferStarted()
-    {
-        StartCoroutine(GiveArrow(_target));
-    }
-
-    private IEnumerator GiveArrow(Transform target)
-    {
-        while (_arrows.Count > 0)
-        {
-            var arrow = _arrows.Pop();
-
-            yield return new WaitForSeconds(_giveDelay);
-
-            arrow.Transform.parent = null;
-            arrow.transform.DOMove(target.position, _duration).OnComplete(() =>
-            {
-                arrow.gameObject.SetActive(false);
-                ArrowGiven?.Invoke(arrow);
-            });
-        }
-
-        AllArrowsGiven?.Invoke();
     }
 
     private IEnumerator PlayParticle(ParticleSystem particleSystem)
@@ -114,4 +91,8 @@ public class PlayerArrowCollector : MonoBehaviour
         particleSystem.gameObject.SetActive(false);
     }
 
+    private void OnArrowGiven(Arrow arrow)
+    {
+        _arrows.Pop();
+    }
 }

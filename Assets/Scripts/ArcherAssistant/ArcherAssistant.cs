@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Quiver))]
+[RequireComponent(typeof(PlayerArrowsGiver))]
 public abstract class ArcherAssistant : MonoBehaviour
 {
     [SerializeField] private Vector3 _startPosition;
@@ -10,15 +10,16 @@ public abstract class ArcherAssistant : MonoBehaviour
     [SerializeField] private Archer _archer;
 
     private Quiver _quiver;
-    private PlayerArrowCollector _playerArrowCollector;
+    private PlayerArrowsGiver _playerArrowsGiver;
 
     public event Action<Arrow> ArrowTaken;
     public event Action ArrowsTransferStarted;
+    public event Action ArrowsTransferStopped;
 
     private void Awake()
     {
         _quiver = GetComponent<Quiver>();
-        _playerArrowCollector = GetComponent<PlayerArrowCollector>();
+        _playerArrowsGiver = GetComponent<PlayerArrowsGiver>();
 
         transform.position = _startPosition;
         transform.localEulerAngles = _startRotation;
@@ -26,17 +27,17 @@ public abstract class ArcherAssistant : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerArrowCollector.ArrowGiven += OnArrowGiven;
-        _playerArrowCollector.AllArrowsGiven += OnAllArrowsGiven;
+        _playerArrowsGiver.ArrowGiven += OnArrowGiven;
+        _playerArrowsGiver.AllArrowsGiven += OnAllArrowsGiven;
     }
 
     private void OnDisable()
     {
-        _playerArrowCollector.ArrowGiven -= OnArrowGiven;
-        _playerArrowCollector.AllArrowsGiven -= OnAllArrowsGiven;
+        _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
+        _playerArrowsGiver.AllArrowsGiven -= OnAllArrowsGiven;
     }
 
-    public void GiveAllArrows(Archer target)
+    public void GiveArrows(Archer target)
     {
         if(target == null)
             throw new NullReferenceException(target.name);
@@ -45,6 +46,11 @@ public abstract class ArcherAssistant : MonoBehaviour
             return;
 
         ArrowsTransferStarted?.Invoke();
+    }
+
+    public void StopGiveArrows()
+    {
+        ArrowsTransferStopped?.Invoke();
     }
 
     public void TakeArrow(Arrow arrow)
