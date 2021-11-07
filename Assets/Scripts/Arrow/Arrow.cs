@@ -49,11 +49,6 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    public void PlayDisappearEffect()
-    {
-        StartCoroutine(PlayEffect());
-    }
-
     private void OnShoted()
     {
         ActivateCollider(true);
@@ -67,18 +62,6 @@ public class Arrow : MonoBehaviour
     private void ActivateCollider(bool breaker)
     {
         _collider.enabled = breaker;
-    }
-
-    private IEnumerator PlayEffect()
-    {
-        _particleSystem.transform.parent = null;
-        _particleSystem.gameObject.SetActive(true);
-        _particleSystem.Play();
-
-        yield return new WaitForSeconds(_seconds);
-
-        _particleSystem.Stop();
-        _particleSystem.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)

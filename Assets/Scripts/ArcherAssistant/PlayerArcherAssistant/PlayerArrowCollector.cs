@@ -89,7 +89,6 @@ public class PlayerArrowCollector : MonoBehaviour
         while (_arrows.Count > 0)
         {
             var arrow = _arrows.Pop();
-            arrow.PlayDisappearEffect();
 
             yield return new WaitForSeconds(_giveDelay);
 
