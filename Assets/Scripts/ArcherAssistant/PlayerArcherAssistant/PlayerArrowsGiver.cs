@@ -46,6 +46,9 @@ public class PlayerArrowsGiver : MonoBehaviour
 
     private void OnArrowsTransferStopped()
     {
+        if(_giveArrowsCoroutine == null)
+            return;
+
         StopCoroutine(_giveArrowsCoroutine);
     }
 
