@@ -8,9 +8,9 @@ public class EnemyRay : MonoBehaviour
     [SerializeField] private float _secondsBeforeOn;
     [SerializeField] private float _secondsBeforeOff;
 
-    private LineRenderer _lineRenderer;
     private WaitForSeconds _onSeconds;
     private WaitForSeconds _offSeconds;
+    private LineRenderer _lineRenderer;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class EnemyRay : MonoBehaviour
     private void FixedUpdate()
     {
         _lineRenderer.SetPosition(0, _startPosition.position);
-        _lineRenderer.SetPosition(1, _target.transform.position);
+        _lineRenderer.SetPosition(1, _target.position);
     }
 
     public void Activate()

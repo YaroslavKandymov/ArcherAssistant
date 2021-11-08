@@ -11,8 +11,8 @@ public class EnemyArcherShooter : MonoBehaviour
     [SerializeField] private float _secondsBetweenShot;
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private float _startDelay;
+    [SerializeField] private EnemyRay _ray;
 
-    private EnemyRay _ray;
     private Arrow _currentArrow;
     private float _lastShootTime;
     private Animator _animator;
@@ -24,7 +24,6 @@ public class EnemyArcherShooter : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _quiver = GetComponent<Quiver>();
-        _ray = GetComponentInChildren<EnemyRay>();
         _timeToGetArrow = new WaitForSeconds(_getArrowSeconds);
         _timeBeforeRelease = new WaitForSeconds(_secondsBeforeRelease);
         _lastShootTime = _startDelay + Random.Range(0.5f, 2.5f);

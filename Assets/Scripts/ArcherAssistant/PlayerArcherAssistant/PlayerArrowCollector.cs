@@ -21,11 +21,13 @@ public class PlayerArrowCollector : MonoBehaviour
     private WaitForSeconds _playParticleTime;
     private Coroutine _coroutine;
     private PlayerArrowsGiver _playerArrowsGiver;
+    private Sequence _sequence;
 
     public event Action<Vector3> ArrowDeparted;
 
     private void Awake()
     {
+        _sequence = DOTween.Sequence();
         _archerAssistant = GetComponent<ArcherAssistant>();
         _takeArrowParticleSystem.gameObject.SetActive(false);
         _playParticleTime = new WaitForSeconds(_secondsToPlayParticle);
@@ -58,7 +60,7 @@ public class PlayerArrowCollector : MonoBehaviour
     {
         _playerArrowsGiver.AddArrow(arrow);
         _arrows.Push(arrow);
-        
+
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
@@ -89,9 +91,8 @@ public class PlayerArrowCollector : MonoBehaviour
 
     private void OnMaxArrowsCountReached(Arrow arrow)
     {
-        Vector3 defaultPosition = arrow.Transform.position;
-
-        arrow.Transform.DOMoveY(5, _duration * 2).SetEase(Ease.InBounce).OnComplete(() => arrow.Transform.position = defaultPosition);
+        arrow.Transform.DOLocalMoveY(5, _duration).OnComplete(() => arrow.Transform.DOLocalMove(Vector3.zero, _duration));
+        arrow.transform.DORotate(new Vector3(arrow.Transform.rotation.y + 360, arrow.Transform.rotation.y, arrow.Transform.rotation.z), _duration).SetRelative();
     }
 
     private IEnumerator PlayParticle(ParticleSystem particleSystem)
@@ -104,4 +105,4 @@ public class PlayerArrowCollector : MonoBehaviour
         particleSystem.Stop();
         particleSystem.gameObject.SetActive(false);
     }
-    }
+}
