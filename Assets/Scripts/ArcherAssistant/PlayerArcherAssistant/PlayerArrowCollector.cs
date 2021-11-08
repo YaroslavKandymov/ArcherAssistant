@@ -35,12 +35,14 @@ public class PlayerArrowCollector : MonoBehaviour
     private void OnEnable()
     {
         _archerAssistant.ArrowTaken += OnArrowTaken;
+        _archerAssistant.MaxArrowsCountReached += OnMaxArrowsCountReached;
         _playerArrowsGiver.ArrowGiven += OnArrowGiven;
     }
 
     private void OnDisable()
     {
         _archerAssistant.ArrowTaken -= OnArrowTaken;
+        _archerAssistant.MaxArrowsCountReached -= OnMaxArrowsCountReached;
         _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
     }
 
@@ -48,7 +50,7 @@ public class PlayerArrowCollector : MonoBehaviour
     {
         foreach (var arrow in _arrows)
         {
-            arrow.transform.DOLocalRotate(new Vector3(0, 90, 90), _duration);
+            arrow.Transform.DOLocalRotate(new Vector3(0, 90, 90), _duration);
         }
     }
 
@@ -62,7 +64,7 @@ public class PlayerArrowCollector : MonoBehaviour
 
         _coroutine = StartCoroutine(PlayParticle(_takeArrowParticleSystem));
 
-        arrow.transform.parent = _arrowsPlace.transform;
+        arrow.Transform.parent = _arrowsPlace.transform;
 
         if (_arrows.Count <= 0)
         {
@@ -73,11 +75,23 @@ public class PlayerArrowCollector : MonoBehaviour
             Vector3 placementPosition = new Vector3(0,
                 _arrows.Count * _arrowVerticalOffset, _arrows.Count * _arrowHorizontalOffset);
 
-            arrow.transform.DOLocalMove(placementPosition, _duration);
+            arrow.Transform.DOLocalMove(placementPosition, _duration);
         }
 
-        arrow.transform.DOLocalRotate(new Vector3(0, 90, 90), _duration);
-        arrow.transform.DOScale(_targetScale, _duration);
+        arrow.Transform.DOLocalRotate(new Vector3(0, 90, 90), _duration);
+        arrow.Transform.DOScale(_targetScale, _duration);
+    }
+
+    private void OnArrowGiven(Arrow arrow)
+    {
+        _arrows.Pop();
+    }
+
+    private void OnMaxArrowsCountReached(Arrow arrow)
+    {
+        Vector3 defaultPosition = arrow.Transform.position;
+
+        arrow.Transform.DOMoveY(5, _duration * 2).SetEase(Ease.InBounce).OnComplete(() => arrow.Transform.position = defaultPosition);
     }
 
     private IEnumerator PlayParticle(ParticleSystem particleSystem)
@@ -90,9 +104,4 @@ public class PlayerArrowCollector : MonoBehaviour
         particleSystem.Stop();
         particleSystem.gameObject.SetActive(false);
     }
-
-    private void OnArrowGiven(Arrow arrow)
-    {
-        _arrows.Pop();
     }
-}

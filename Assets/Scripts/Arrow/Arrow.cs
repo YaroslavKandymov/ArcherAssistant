@@ -70,7 +70,6 @@ public class Arrow : MonoBehaviour
         {
             if (ArrowState == ArrowStates.EnemyKiller)
             {
-                ActivateCollider(false);
                 archerAssistant.TakeArrow(this);
             }
         }

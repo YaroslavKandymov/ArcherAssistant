@@ -20,6 +20,10 @@ public class ArrowBooster : ObjectPool<Arrow>
         {
             var quiver = player.GetComponent<Quiver>();
             var newArrowsCount = quiver.ArrowsCount * _coefficient;
+
+            if(newArrowsCount > player.MaxArrowsCount)
+                return;
+
             var count = newArrowsCount - newArrowsCount / _coefficient;
 
             for (int i = 0; i < count; i++)

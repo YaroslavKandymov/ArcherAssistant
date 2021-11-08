@@ -13,11 +13,18 @@ public class PlayerArrowsCountView : MonoBehaviour
     private WaitForSeconds _seconds;
     private int _currentArrowsCount;
     private Coroutine _coroutine;
+    private ArcherAssistant _archerAssistant;
+
+    private void Awake()
+    {
+        _archerAssistant = GetComponent<ArcherAssistant>();
+    }
 
     private void OnEnable()
     {
         _quiver.ArrowsCountChanged += OnArrowsCountChanged;
         _quiver.Taken += OnTaken;
+        _archerAssistant.MaxArrowsCountReached += OnMaxArrowsCountReached;
 
         foreach (var booster in _boosters)
         {
@@ -86,11 +93,22 @@ public class PlayerArrowsCountView : MonoBehaviour
     private IEnumerator TurnOffCanvas()
     {
         _canvasGroup.alpha = 1;
-        //_currentArrowsCount = _quiver.ArrowsCount;
+        _currentArrowsCount = _quiver.ArrowsCount;
 
         yield return _seconds;
 
         _canvasGroup.alpha = 0;
         _coroutine = null;
+    }
+
+    private void OnMaxArrowsCountReached(Arrow arrow)
+    {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _text.text = "Max arrows";
+        _coroutine = StartCoroutine(TurnOffCanvas());
     }
 }

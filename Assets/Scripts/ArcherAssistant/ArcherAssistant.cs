@@ -8,13 +8,17 @@ public abstract class ArcherAssistant : MonoBehaviour
     [SerializeField] private Vector3 _startPosition;
     [SerializeField] private Vector3 _startRotation;
     [SerializeField] private Archer _archer;
+    [SerializeField] private int _maxArrowsCount;
 
     private Quiver _quiver;
     private PlayerArrowsGiver _playerArrowsGiver;
 
+    public int MaxArrowsCount => _maxArrowsCount;
+
     public event Action<Arrow> ArrowTaken;
     public event Action ArrowsTransferStarted;
     public event Action ArrowsTransferStopped;
+    public event Action<Arrow> MaxArrowsCountReached;
 
     private void Awake()
     {
@@ -28,13 +32,11 @@ public abstract class ArcherAssistant : MonoBehaviour
     private void OnEnable()
     {
         _playerArrowsGiver.ArrowGiven += OnArrowGiven;
-        _playerArrowsGiver.AllArrowsGiven += OnAllArrowsGiven;
     }
 
     private void OnDisable()
     {
         _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
-        _playerArrowsGiver.AllArrowsGiven -= OnAllArrowsGiven;
     }
 
     public void GiveArrows(Archer target)
@@ -58,6 +60,13 @@ public abstract class ArcherAssistant : MonoBehaviour
         if (arrow == null)
             return;
 
+        if (_quiver.ArrowsCount + 1 >= _maxArrowsCount)
+        {
+            MaxArrowsCountReached?.Invoke(arrow);
+            return;
+        }
+
+        arrow.ActivateCollider(false);
         ArrowTaken?.Invoke(arrow);
         _quiver.Add(arrow);
     }
@@ -70,11 +79,7 @@ public abstract class ArcherAssistant : MonoBehaviour
 
     private void OnArrowGiven(Arrow arrow)
     {
+        _quiver.TryGetArrow();
         _archer.TakeArrow(arrow);
-    }
-
-    private void OnAllArrowsGiven()
-    {
-        _quiver.Clear();
     }
 }
