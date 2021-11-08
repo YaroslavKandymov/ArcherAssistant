@@ -66,7 +66,7 @@ public class PlayerArrowsCountView : MonoBehaviour
 
     private void OnArrowCountIncreased(int count)
     {
-        if (_coroutine == null)
+        if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
@@ -86,10 +86,11 @@ public class PlayerArrowsCountView : MonoBehaviour
     private IEnumerator TurnOffCanvas()
     {
         _canvasGroup.alpha = 1;
+        //_currentArrowsCount = _quiver.ArrowsCount;
 
         yield return _seconds;
 
-        _currentArrowsCount = _quiver.ArrowsCount;
         _canvasGroup.alpha = 0;
+        _coroutine = null;
     }
 }

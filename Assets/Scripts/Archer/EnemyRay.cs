@@ -20,9 +20,8 @@ public class EnemyRay : MonoBehaviour
         _lineRenderer.enabled = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Vector3 delta = (_target.transform.position - transform.position).normalized;
         _lineRenderer.SetPosition(0, _startPosition.position);
         _lineRenderer.SetPosition(1, _target.transform.position);
     }

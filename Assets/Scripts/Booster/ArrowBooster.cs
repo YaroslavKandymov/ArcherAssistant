@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class ArrowBooster : ObjectPool<Arrow>
 {
     [SerializeField] private int _coefficient;
     [SerializeField] private Arrow _arrowTemplate;
-
-    public int Coefficient => _coefficient;
 
     public event Action<ArrowBooster> Taken;
     public event Action<int> ArrowCountIncreased;
@@ -19,8 +16,9 @@ public class ArrowBooster : ObjectPool<Arrow>
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Quiver quiver))
+        if (other.TryGetComponent(out ArcherAssistant player))
         {
+            var quiver = player.GetComponent<Quiver>();
             var newArrowsCount = quiver.ArrowsCount * _coefficient;
             var count = newArrowsCount - newArrowsCount / _coefficient;
 
@@ -28,10 +26,11 @@ public class ArrowBooster : ObjectPool<Arrow>
             {
                 if (TryGetObject(out Arrow arrow))
                 {
+                    arrow.ActivateCollider(false);
                     arrow.Transform.position = transform.position;
                     arrow.gameObject.SetActive(true);
 
-                    quiver.Add(arrow);
+                    player.TakeArrow(arrow);
                 }
             }
 

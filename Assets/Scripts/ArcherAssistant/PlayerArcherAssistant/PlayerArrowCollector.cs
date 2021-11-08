@@ -56,7 +56,7 @@ public class PlayerArrowCollector : MonoBehaviour
     {
         _playerArrowsGiver.AddArrow(arrow);
         _arrows.Push(arrow);
-
+        
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 

@@ -59,7 +59,7 @@ public class Arrow : MonoBehaviour
         ActivateCollider(true);
     }
 
-    private void ActivateCollider(bool breaker)
+    public void ActivateCollider(bool breaker)
     {
         _collider.enabled = breaker;
     }
