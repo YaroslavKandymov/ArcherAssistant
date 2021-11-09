@@ -13,7 +13,7 @@ public class ArcherShooter : MonoBehaviour
     [SerializeField] private ArrowStates _arrowState;
     [SerializeField] private LosePanel _panel;
     [SerializeField] private int _perfectShotNumbers;
-    [SerializeField] private PlayerArrowsGiver _playerArrowGiver;
+    [SerializeField] private ArcherAssistant _player;
 
     private Transform _currentEnemy;
     private Arrow _currentArrow;
@@ -27,7 +27,7 @@ public class ArcherShooter : MonoBehaviour
     private void OnEnable()
     {
         _panel.LevelRestarted += OnLevelRestarted;
-        _playerArrowGiver.AllArrowsGiven += OnAllArrowsGiven;
+        _player.ArrowsTransferStopped += OnArcherTransferStopped;
 
         foreach (var target in _targets)
             target.Died += OnDied;
@@ -36,7 +36,7 @@ public class ArcherShooter : MonoBehaviour
     private void OnDisable()
     {
         _panel.LevelRestarted -= OnLevelRestarted;
-        _playerArrowGiver.AllArrowsGiven -= OnAllArrowsGiven;
+        _player.ArrowsTransferStopped -= OnArcherTransferStopped;
 
         foreach (var target in _targets)
             target.Died -= OnDied;
@@ -64,7 +64,6 @@ public class ArcherShooter : MonoBehaviour
             if (_currentArrow == null)
             {
                 _animator.Play(ArcherAnimatorController.States.Idle);
-                _canShoot = false;
 
                 return;
             }
@@ -94,7 +93,7 @@ public class ArcherShooter : MonoBehaviour
         _currentArrow.TargetShot(_currentEnemy, target);
     }
 
-    private void OnAllArrowsGiven()
+    private void OnArcherTransferStopped()
     {
         _canShoot = true;
     }
