@@ -1,14 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LosePanel : Panel
 {
+    [SerializeField] private float _duration;
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _exitButton;
     [SerializeField] private Panel _gamePanel;
-    [SerializeField] private ArrowsSpawner[] _spawners;
     [SerializeField] private ArcherAssistant[] _assistants;
     [SerializeField] private Archer[] _archers;
     
@@ -50,16 +52,26 @@ public class LosePanel : Panel
 
     private void OnRestartButtonClick()
     {
-        PanelCloser.Close(this, true);
+        _restartButton.transform.DOScale(_restartButton.transform.localScale * 0.8f, _duration);
+        PanelCloser.Close(this, true, _duration);
+
+        StartCoroutine(OpenGamePanel());
+    }
+
+    private void OnExitButtonClick()
+    {
+        _exitButton.transform.DOScale(_exitButton.transform.localScale * 0.8f, _duration);
+        GameCloser.Close();
+    }
+
+    private IEnumerator OpenGamePanel()
+    {
+        yield return new WaitForSeconds(_duration);
+
         PanelOpener.Open(_gamePanel, false);
 
         Reloader.Restart(_assistants, _archers, _quivers);
 
         LevelRestarted?.Invoke();
-    }
-
-    private void OnExitButtonClick()
-    {
-        GameCloser.Close();
     }
 }

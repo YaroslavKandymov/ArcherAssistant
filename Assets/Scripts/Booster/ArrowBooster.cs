@@ -7,6 +7,7 @@ public class ArrowBooster : ObjectPool<Arrow>
     [SerializeField] private Arrow _arrowTemplate;
 
     private int _spawnArrowsCount;
+    private Vector3 _position;
 
     public event Action<ArrowBooster> Taken;
     public event Action MaxArrowsCountReached;
@@ -14,6 +15,7 @@ public class ArrowBooster : ObjectPool<Arrow>
     private void Awake()
     {
         Initialize(_arrowTemplate);
+        _position = GetComponent<Transform>().position;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,7 +40,7 @@ public class ArrowBooster : ObjectPool<Arrow>
                 if (TryGetObject(out Arrow arrow))
                 {
                     arrow.ActivateCollider(false);
-                    arrow.Transform.position = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
+                    arrow.Transform.position = new Vector3(_position.x, _position.y - 2, _position.z);
                     arrow.gameObject.SetActive(true);
 
                     player.TakeArrow(arrow);

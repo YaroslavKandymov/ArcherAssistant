@@ -1,15 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class ClosePanelBehavior : IPanelCloser
 {
-    public void Close(Panel panel, bool continuer = false)
+    public void Close(Panel panel, bool continuer = false, float duration = 0)
     {
         var canvasGroup = panel.GetComponent<CanvasGroup>();
         var buttons = panel.GetComponentsInChildren<Button>();
 
-        canvasGroup.alpha = 0;
+        canvasGroup.DOFade(0, duration);
         canvasGroup.blocksRaycasts = false;
 
         foreach (var button in buttons)

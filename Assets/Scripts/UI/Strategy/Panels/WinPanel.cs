@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +9,7 @@ public class WinPanel : Panel
     [SerializeField] private Button _exitGameButton;
     [SerializeField] private Panel _startPanel;
     [SerializeField] private string _sceneName;
+    [SerializeField] private float _duration;
 
     private void Awake()
     {
@@ -36,13 +39,24 @@ public class WinPanel : Panel
 
     private void OnNextLevelButtonClick()
     {
-        PanelCloser.Close(this);
-        SceneLoader.Load(_sceneName);
-        PanelOpener.Open(_startPanel, true);
+        _nextLevelButton.transform.DOScale(_nextLevelButton.transform.localScale * 0.8f, _duration);
+
+        PanelCloser.Close(this, false, _duration);
+
+        StartCoroutine(LoadNextLevel());
     }
 
     private void OnExitGameButtonClick()
     {
+        _exitGameButton.transform.DOScale(_exitGameButton.transform.localScale * 0.8f, _duration);
         GameCloser.Close();
+    }
+
+    private IEnumerator LoadNextLevel()
+    {
+        yield return new WaitForSeconds(_duration);
+
+        SceneLoader.Load(_sceneName);
+        PanelOpener.Open(_startPanel, true);
     }
 }
