@@ -1,19 +1,17 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerArrowsCountView : MonoBehaviour
 {
-    [SerializeField] private Quiver _quiver;
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private float _secondsBeforeDisappear;
     [SerializeField] private ArrowBooster[] _boosters;
 
     private TMP_Text _text;
     private WaitForSeconds _seconds;
-    private int _currentArrowsCount;
     private Coroutine _coroutine;
-    private Coroutine _coroutineBooster;
     private Coroutine _coroutineMax;
     private ArcherAssistant _archerAssistant;
 
@@ -24,24 +22,21 @@ public class PlayerArrowsCountView : MonoBehaviour
 
     private void OnEnable()
     {
-        _quiver.ArrowsCountChanged += OnArrowsCountChanged;
-        _quiver.Taken += OnTaken;
         _archerAssistant.MaxArrowsCountReached += OnMaxArrowsCountReached;
 
         foreach (var booster in _boosters)
         {
-            booster.ArrowCountIncreased += OnArrowCountIncreased;
+            booster.MaxArrowsCountReached += OnMaxArrowsCountReached;
         }
     }
 
     private void OnDisable()
     {
-        _quiver.ArrowsCountChanged -= OnArrowsCountChanged;
-        _quiver.Taken -= OnTaken;
+        _archerAssistant.MaxArrowsCountReached -= OnMaxArrowsCountReached;
 
         foreach (var booster in _boosters)
         {
-            booster.ArrowCountIncreased -= OnArrowCountIncreased;
+            booster.MaxArrowsCountReached -= OnMaxArrowsCountReached;
         }
     }
 
@@ -52,46 +47,6 @@ public class PlayerArrowsCountView : MonoBehaviour
         _seconds = new WaitForSeconds(_secondsBeforeDisappear);
     }
 
-    private void OnArrowsCountChanged(int count)
-    {
-        int difference = count - _currentArrowsCount;
-
-        if (difference > 0)
-        {
-            _text.text = "+" + difference;
-
-            if (_coroutine == null)
-            {
-                _currentArrowsCount = _quiver.ArrowsCount;
-            }
-            else
-            {
-                StopCoroutine(_coroutine);
-            }
-
-            _coroutine = StartCoroutine(TurnOffCanvas());
-        }
-    }
-
-    private void OnArrowCountIncreased(int count)
-    {
-        if (_coroutineBooster != null)
-        {
-            StopCoroutine(_coroutineBooster);
-        }
-
-        _text.text = "+" + count;
-        _currentArrowsCount = _quiver.ArrowsCount;
-
-        _coroutineBooster = StartCoroutine(TurnOffCanvas());
-    }
-
-    private void OnTaken()
-    {
-        _text.text = "";
-        _currentArrowsCount = 0;
-    }
-
     private IEnumerator TurnOffCanvas()
     {
         _canvasGroup.alpha = 1;
@@ -99,6 +54,17 @@ public class PlayerArrowsCountView : MonoBehaviour
         yield return _seconds;
 
         _canvasGroup.alpha = 0;
+    }
+
+    private void OnMaxArrowsCountReached()
+    {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _text.text = "Max arrows";
+        _coroutine = StartCoroutine(TurnOffCanvas());
     }
 
     private void OnMaxArrowsCountReached(Arrow arrow)

@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private LosePanel _losePanel;
+
     private EnemyArcherHealth[] _healths;
     private int _allEnemiesHealths;
     private int _allEnemiesMaxHealths;

@@ -8,6 +8,7 @@ public class ArrowBooster : ObjectPool<Arrow>
 
     public event Action<ArrowBooster> Taken;
     public event Action<int> ArrowCountIncreased;
+    public event Action MaxArrowsCountReached;
 
     private void Awake()
     {
@@ -21,8 +22,11 @@ public class ArrowBooster : ObjectPool<Arrow>
             var quiver = player.GetComponent<Quiver>();
             var newArrowsCount = quiver.ArrowsCount * _coefficient;
 
-            if(newArrowsCount > player.MaxArrowsCount)
+            if (newArrowsCount > player.MaxArrowsCount)
+            {
+                MaxArrowsCountReached?.Invoke();
                 return;
+            }
 
             var count = newArrowsCount - newArrowsCount / _coefficient;
 

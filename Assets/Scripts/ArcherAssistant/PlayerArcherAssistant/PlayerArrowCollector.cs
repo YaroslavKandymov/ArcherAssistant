@@ -15,19 +15,18 @@ public class PlayerArrowCollector : MonoBehaviour
     [SerializeField] private Vector3 _targetScale;
     [SerializeField] private ParticleSystem _takeArrowParticleSystem;
     [SerializeField] private float _secondsToPlayParticle;
+    [SerializeField] private LosePanel _panel;
 
     private ArcherAssistant _archerAssistant;
     private readonly Stack<Arrow> _arrows = new Stack<Arrow>();
     private WaitForSeconds _playParticleTime;
     private Coroutine _coroutine;
     private PlayerArrowsGiver _playerArrowsGiver;
-    private Sequence _sequence;
 
     public event Action<Vector3> ArrowDeparted;
 
     private void Awake()
     {
-        _sequence = DOTween.Sequence();
         _archerAssistant = GetComponent<ArcherAssistant>();
         _takeArrowParticleSystem.gameObject.SetActive(false);
         _playParticleTime = new WaitForSeconds(_secondsToPlayParticle);
@@ -39,6 +38,7 @@ public class PlayerArrowCollector : MonoBehaviour
         _archerAssistant.ArrowTaken += OnArrowTaken;
         _archerAssistant.MaxArrowsCountReached += OnMaxArrowsCountReached;
         _playerArrowsGiver.ArrowGiven += OnArrowGiven;
+        _panel.LevelRestarted += OnLevelRestarted;
     }
 
     private void OnDisable()
@@ -46,6 +46,7 @@ public class PlayerArrowCollector : MonoBehaviour
         _archerAssistant.ArrowTaken -= OnArrowTaken;
         _archerAssistant.MaxArrowsCountReached -= OnMaxArrowsCountReached;
         _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
+        _panel.LevelRestarted -= OnLevelRestarted;
     }
 
     private void Update()
@@ -104,5 +105,14 @@ public class PlayerArrowCollector : MonoBehaviour
 
         particleSystem.Stop();
         particleSystem.gameObject.SetActive(false);
+    }
+
+    private void OnLevelRestarted()
+    {
+        while (_arrows.Count > 0)
+        {
+            var arrow = _arrows.Pop();
+            Destroy(arrow);
+        }
     }
 }

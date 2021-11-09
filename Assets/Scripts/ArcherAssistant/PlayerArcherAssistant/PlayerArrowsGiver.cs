@@ -70,4 +70,12 @@ public class PlayerArrowsGiver : MonoBehaviour
 
         AllArrowsGiven?.Invoke();
     }
+
+    private void OnSceneRestarted()
+    {
+        while (_arrows.Count > 0)
+        {
+            _arrows.Pop();
+        }
+    }
 }
