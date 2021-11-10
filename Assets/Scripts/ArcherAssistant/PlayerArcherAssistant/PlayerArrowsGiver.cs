@@ -9,6 +9,7 @@ public class PlayerArrowsGiver : MonoBehaviour
     [SerializeField] private float _duration;
     [SerializeField] private float _giveDelay;
     [SerializeField] private Transform _target;
+    [SerializeField] private LosePanel _losePanel;
 
     private Coroutine _giveArrowsCoroutine;
     private ArcherAssistant _archerAssistant;
@@ -16,6 +17,7 @@ public class PlayerArrowsGiver : MonoBehaviour
 
     public event Action AllArrowsGiven;
     public event Action<Arrow> ArrowGiven;
+    public event Action<Arrow> ArrowGone;
 
     private void Awake()
     {
@@ -26,12 +28,14 @@ public class PlayerArrowsGiver : MonoBehaviour
     {
         _archerAssistant.ArrowsTransferStarted += OnArrowsTransferStarted;
         _archerAssistant.ArrowsTransferStopped += OnArrowsTransferStopped;
+        _losePanel.LevelRestarted += OnLevelRestarted;
     }
 
     private void OnDisable()
     {
         _archerAssistant.ArrowsTransferStarted -= OnArrowsTransferStarted;
         _archerAssistant.ArrowsTransferStopped -= OnArrowsTransferStopped;
+        _losePanel.LevelRestarted -= OnLevelRestarted;
     }
 
     public void AddArrow(Arrow arrow)
@@ -57,6 +61,7 @@ public class PlayerArrowsGiver : MonoBehaviour
         while (_arrows.Count > 0)
         {
             var arrow = _arrows.Pop();
+            ArrowGone?.Invoke(arrow);
 
             arrow.Transform.parent = null;
             arrow.transform.DOMove(target.position, _duration).OnComplete(() =>
@@ -71,7 +76,7 @@ public class PlayerArrowsGiver : MonoBehaviour
         AllArrowsGiven?.Invoke();
     }
 
-    private void OnSceneRestarted()
+    private void OnLevelRestarted()
     {
         while (_arrows.Count > 0)
         {

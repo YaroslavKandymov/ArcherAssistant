@@ -11,6 +11,11 @@ public class RestartSceneBehavior : ISceneReloader
         foreach (var arrow in arrows)
         {
             arrow.gameObject.SetActive(false);
+
+            if(arrow.Transform.parent == null)
+            {
+                arrow.Destroy();
+            }
         }
 
         foreach (var assistant in assistants)

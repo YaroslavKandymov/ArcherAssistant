@@ -6,7 +6,6 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _particleSystem;
-    [SerializeField] private float _seconds;
     [SerializeField] private Vector3 _startScale;
 
     private ArrowMover _arrowMover;
@@ -24,13 +23,13 @@ public class Arrow : MonoBehaviour
 
     private void OnEnable()
     {
-        _arrowMover.Shoted += OnShoted;
+        _arrowMover.Shooted += OnShooted;
         _arrowMover.Stopped += OnStopped;
     }
 
     private void OnDisable()
     {
-        _arrowMover.Shoted -= OnShoted;
+        _arrowMover.Shooted -= OnShooted;
         _arrowMover.Stopped -= OnStopped;
     }
 
@@ -60,7 +59,12 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    private void OnShoted()
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnShooted()
     {
         ActivateCollider(true);
     }

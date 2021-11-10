@@ -11,12 +11,14 @@ public class ArrowMover : MonoBehaviour
 
     private Rigidbody _rigidbody;
     private Vector3 _velocity;
+    private Arrow _arrow;
 
-    public event Action Shoted;
+    public event Action Shooted;
     public event Action Stopped;
 
     private void Awake()
     {
+        _arrow = GetComponent<Arrow>();
         _rigidbody = GetComponent<Rigidbody>();
         _particleSystem = GetComponentInChildren<ParticleSystem>(true);
         _particleSystem.gameObject.SetActive(false);
@@ -43,6 +45,11 @@ public class ArrowMover : MonoBehaviour
         Stopped?.Invoke();
     }
 
+    public void SetState(ArrowStates state)
+    {
+        _arrow.ArrowState = state;
+    }
+
     private void Shot(Transform target, Vector3 spread)
     {
         transform.LookAt(target);
@@ -52,7 +59,7 @@ public class ArrowMover : MonoBehaviour
 
         SetArrowValues(RigidbodyConstraints.None, _velocity, false, true);
 
-        Shoted?.Invoke();
+        Shooted?.Invoke();
     }
 
     private void SetArrowValues(RigidbodyConstraints constraints, Vector3 velocity, bool kinematic, bool particleSystemActivity)

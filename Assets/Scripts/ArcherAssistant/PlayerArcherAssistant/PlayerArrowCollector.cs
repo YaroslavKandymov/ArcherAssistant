@@ -37,7 +37,7 @@ public class PlayerArrowCollector : MonoBehaviour
     {
         _archerAssistant.ArrowTaken += OnArrowTaken;
         _archerAssistant.MaxArrowsCountReached += OnMaxArrowsCountReached;
-        _playerArrowsGiver.ArrowGiven += OnArrowGiven;
+        _playerArrowsGiver.ArrowGone += OnArrowGiven;
         _panel.LevelRestarted += OnLevelRestarted;
     }
 
@@ -45,7 +45,7 @@ public class PlayerArrowCollector : MonoBehaviour
     {
         _archerAssistant.ArrowTaken -= OnArrowTaken;
         _archerAssistant.MaxArrowsCountReached -= OnMaxArrowsCountReached;
-        _playerArrowsGiver.ArrowGiven -= OnArrowGiven;
+        _playerArrowsGiver.ArrowGone -= OnArrowGiven;
         _panel.LevelRestarted -= OnLevelRestarted;
     }
 

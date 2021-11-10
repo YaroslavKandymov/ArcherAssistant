@@ -68,10 +68,11 @@ public class LosePanel : Panel
     {
         yield return new WaitForSeconds(_duration);
 
-        PanelOpener.Open(_gamePanel, false);
-
+        LevelRestarted?.Invoke();
         Reloader.Restart(_assistants, _archers, _quivers);
 
-        LevelRestarted?.Invoke();
+        yield return new WaitForSeconds(_duration);
+
+        PanelOpener.Open(_gamePanel, false);
     }
 }

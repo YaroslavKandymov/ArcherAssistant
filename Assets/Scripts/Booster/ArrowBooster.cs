@@ -34,13 +34,13 @@ public class ArrowBooster : ObjectPool<Arrow>
             {
                 _spawnArrowsCount = newArrowsCount - newArrowsCount / _coefficient;
             }
-
+            Debug.Log(_spawnArrowsCount);
             for (int i = 0; i < _spawnArrowsCount; i++)
             {
                 if (TryGetObject(out Arrow arrow))
                 {
                     arrow.ActivateCollider(false);
-                    arrow.Transform.position = new Vector3(_position.x, _position.y - 2, _position.z);
+                    arrow.Transform.position = new Vector3(_position.x, _position.y - 5, _position.z);
                     arrow.gameObject.SetActive(true);
 
                     player.TakeArrow(arrow);

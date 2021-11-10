@@ -10,9 +10,20 @@ public class ArrowsSpawner : ObjectPool<Arrow>
     [SerializeField] private float _secondsBetweenSpawn;
     [SerializeField] private float _randomCorner;
     [SerializeField] private int _startArrowsCount;
+    [SerializeField] private LosePanel _losePanel;
 
     private SpawnPoint[] _spawnPoints;
     private WaitForSeconds _seconds;
+
+    private void OnEnable()
+    {
+        _losePanel.LevelRestarted += OnLevelRestarted;
+    }
+
+    private void OnDisable()
+    {
+        _losePanel.LevelRestarted -= OnLevelRestarted;
+    }
 
     private void Start()
     {
@@ -25,11 +36,6 @@ public class ArrowsSpawner : ObjectPool<Arrow>
         PositionStartArrows(_startArrowsCount);
 
         StartCoroutine(Spawn());
-    }
-
-    public void Reset()
-    {
-        PositionStartArrows(_startArrowsCount);
     }
 
     private void PositionStartArrows(int count)
@@ -63,5 +69,16 @@ public class ArrowsSpawner : ObjectPool<Arrow>
 
             arrow.gameObject.SetActive(true);
         }
+    }
+
+    private void OnLevelRestarted()
+    {
+        foreach (var arrow in Pool)
+        {
+            arrow.Transform.parent = null;
+        }
+
+        Initialize(_arrowTemplate);
+        PositionStartArrows(_startArrowsCount);
     }
 }
