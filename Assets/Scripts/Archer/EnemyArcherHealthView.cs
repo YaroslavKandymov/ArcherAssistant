@@ -53,6 +53,11 @@ public class EnemyArcherHealthView : MonoBehaviour
     private void OnLevelRestarted()
     {
         _slider.DOValue(_slider.maxValue, _duration).SetEase(Ease.Linear);
+
+        foreach (var image in _images)
+        {
+            image.sprite = _defaultSprite;
+        }
     }
 
     private void OnDied(EnemyArcherHealth health)

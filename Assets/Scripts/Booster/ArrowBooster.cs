@@ -34,7 +34,7 @@ public class ArrowBooster : ObjectPool<Arrow>
             {
                 _spawnArrowsCount = newArrowsCount - newArrowsCount / _coefficient;
             }
-            Debug.Log(_spawnArrowsCount);
+           
             for (int i = 0; i < _spawnArrowsCount; i++)
             {
                 if (TryGetObject(out Arrow arrow))

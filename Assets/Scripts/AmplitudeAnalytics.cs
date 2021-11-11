@@ -69,8 +69,11 @@ public class AmplitudeAnalytics : MonoBehaviour
         _sessionID = _sessionID + 1;
         Amplitude.Instance.setUserProperty("session_id", _sessionID);
 
-        Dictionary<string, object> dictionary = new Dictionary<string, object>();
-        dictionary.Add("count", _sessionID);
+        Dictionary<string, object> dictionary = new Dictionary<string, object>
+        {
+            { "count", _sessionID }
+        };
+
         FireEvent("game_start", dictionary);
 
         int daysAfter = DateTime.Today.Subtract(DateTime.Parse(_regDayFull)).Days;
