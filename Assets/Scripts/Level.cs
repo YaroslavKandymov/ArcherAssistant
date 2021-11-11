@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    [SerializeField] private int _levelNumber;
     [SerializeField] private StartPanel _startPanel;
     [SerializeField] private EndGamePanel _endGamePanel;
     [SerializeField] private LosePanel _losePanel;
@@ -13,8 +12,9 @@ public class Level : MonoBehaviour
 
     private float _time;
     private Coroutine _coroutine;
+    private int _number;
 
-    public int LevelNumber => _levelNumber;
+    public int Number => _number;
 
     public event Action<Dictionary<string, object>> Started;
     public event Action<Dictionary<string, object>> Complete;
@@ -23,7 +23,9 @@ public class Level : MonoBehaviour
 
     private void Awake()
     {
-        if (_levelNumber == 1)
+        _number = ++LevelUtility.LevelNumber;
+
+        if (_number == 1)
             _amplitudeAnalytics.Init();
     }
 
@@ -43,11 +45,16 @@ public class Level : MonoBehaviour
         _losePanel.LevelRestarted -= OnLevelRestarted;
     }
 
+    public void SetLevelNumber(int number)
+    {
+        _number = number;
+    }
+
     private void OnLevelStarted()
     {
         Dictionary<string, object> startDictionary = new Dictionary<string, object>
         {
-            { "level", _levelNumber}
+            { "level", _number}
         };
 
         _time = 0;
@@ -62,7 +69,7 @@ public class Level : MonoBehaviour
 
         Dictionary<string, object> dictionary = new Dictionary<string, object>
         {
-            { "level", _levelNumber},
+            { "level", _number},
             { "time_spent", _time}
         };
 
@@ -73,7 +80,7 @@ public class Level : MonoBehaviour
     {
         Dictionary<string, object> lostDictionary = new Dictionary<string, object>
         {
-            { "level", _levelNumber},
+            { "level", _number},
             { "reason", "death"},
             { "time_spent", _time}
         };
@@ -86,7 +93,7 @@ public class Level : MonoBehaviour
     {
         Dictionary<string, object> dictionary = new Dictionary<string, object>
         {
-            { "level", _levelNumber}
+            { "level", _number}
         };
 
         _time = 0;

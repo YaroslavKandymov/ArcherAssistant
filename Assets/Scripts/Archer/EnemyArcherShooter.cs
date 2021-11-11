@@ -19,6 +19,7 @@ public class EnemyArcherShooter : MonoBehaviour
     private Quiver _quiver;
     private WaitForSeconds _timeToGetArrow;
     private WaitForSeconds _timeBeforeRelease;
+    private bool _isLooking;
 
     private void Start()
     {
@@ -32,12 +33,14 @@ public class EnemyArcherShooter : MonoBehaviour
     private void Update()
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(EnemyArcherAnimatorController.States.TakeDamage))
-        {
             return;
-        }
+        
 
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(EnemyArcherAnimatorController.States.Death))
             return;
+
+        if(_isLooking)
+            transform.LookAt(_targetPoint);
 
         if (_lastShootTime <= 0)
         {
@@ -67,7 +70,8 @@ public class EnemyArcherShooter : MonoBehaviour
             yield break;
 
         _animator.SetTrigger(EnemyArcherAnimatorController.States.Hold);
-        _ray.Activate();
+        _ray.Activate(_currentArrow);
+        _isLooking = true;
 
         yield return _timeBeforeRelease;
 
@@ -75,6 +79,7 @@ public class EnemyArcherShooter : MonoBehaviour
         _currentArrow.transform.position = _shootPoint.position;
         _currentArrow.gameObject.SetActive(true);
         _currentArrow.TargetShot(_targetPoint, true);
+        _isLooking = false;
 
         _animator.SetTrigger(EnemyArcherAnimatorController.Params.Release);
     }

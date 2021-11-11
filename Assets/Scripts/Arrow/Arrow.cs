@@ -11,8 +11,10 @@ public class Arrow : MonoBehaviour
     private ArrowMover _arrowMover;
     private Collider _collider;
 
-    public ArrowStates ArrowState;
     public Transform Transform { get; private set; }
+    public ArrowStates ArrowState;
+
+    public event Action Stopped;
 
     private void Awake()
     {
@@ -72,6 +74,7 @@ public class Arrow : MonoBehaviour
     private void OnStopped()
     {
         ActivateCollider(true);
+        Stopped?.Invoke();
     }
 
     public void ActivateCollider(bool breaker)

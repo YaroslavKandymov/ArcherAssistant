@@ -1,4 +1,4 @@
 public interface ISceneLoader
 {
-    void Load(string sceneName);
+    void Load(string sceneName, Level level);
 }

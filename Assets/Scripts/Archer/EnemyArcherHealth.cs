@@ -57,7 +57,7 @@ public class EnemyArcherHealth : MonoBehaviour
                 }
                 else
                 {
-                    _animator.Play(EnemyArcherAnimatorController.States.TakeDamage);
+                    //_animator.Play(EnemyArcherAnimatorController.States.TakeDamage);
                     StartCoroutine(PlayTakeDamageEffect());
                 }
             }
@@ -106,6 +106,7 @@ public class EnemyArcherHealth : MonoBehaviour
     private void OnLevelRestarted()
     {
         IsDied = false;
+        _panel.LevelRestarted -= OnLevelRestarted;
         gameObject.SetActive(true);
 
         _hitCount = 0;

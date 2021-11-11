@@ -7,9 +7,9 @@ public class WinPanel : Panel
 {
     [SerializeField] private Button _nextLevelButton;
     [SerializeField] private Button _exitGameButton;
-    [SerializeField] private Panel _startPanel;
     [SerializeField] private string _sceneName;
     [SerializeField] private float _duration;
+    [SerializeField] private Level _level;
 
     private void Awake()
     {
@@ -56,7 +56,6 @@ public class WinPanel : Panel
     {
         yield return new WaitForSeconds(_duration);
 
-        SceneLoader.Load(_sceneName);
-        PanelOpener.Open(_startPanel, true);
+        SceneLoader.Load(_sceneName, _level);
     }
 }

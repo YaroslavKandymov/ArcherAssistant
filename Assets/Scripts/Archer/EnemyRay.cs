@@ -11,6 +11,8 @@ public class EnemyRay : MonoBehaviour
     private WaitForSeconds _onSeconds;
     private WaitForSeconds _offSeconds;
     private LineRenderer _lineRenderer;
+    private bool _isMoving;
+    private Arrow _currentArrow;
 
     private void Start()
     {
@@ -22,23 +24,40 @@ public class EnemyRay : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _lineRenderer.SetPosition(0, _startPosition.position);
-        _lineRenderer.SetPosition(1, _target.position);
+        if (_isMoving == true)
+        {
+            _lineRenderer.SetPosition(0, _startPosition.position);
+            _lineRenderer.SetPosition(1, _target.position);
+        }
     }
 
-    public void Activate()
+    public void Activate(Arrow arrow)
     {
+        _currentArrow = arrow;
+        _currentArrow.Stopped += OnStopped;
         StartCoroutine(TurnOnRay());
+    }
+
+    private void SetActive(bool switcher)
+    {
+        _lineRenderer.enabled = switcher;
     }
 
     private IEnumerator TurnOnRay()
     {
         yield return _onSeconds;
 
-        _lineRenderer.enabled = true;
+        SetActive(true);
+        _isMoving = true;
 
         yield return _offSeconds;
 
-        _lineRenderer.enabled = false;
+        _isMoving = false;
+    }
+
+    private void OnStopped()
+    {
+        SetActive(false);
+        _currentArrow.Stopped -= OnStopped;
     }
 }

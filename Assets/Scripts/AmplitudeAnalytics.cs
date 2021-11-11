@@ -54,7 +54,7 @@ public class AmplitudeAnalytics : MonoBehaviour
 
     private void GameStart()
     {
-        if (_level.LevelNumber == 1)
+        if (_level.Number == 1)
         {
             _regDay = DateTime.Today.ToString("dd/MM/yy");
             _regDayFull = DateTime.Today.ToString();
@@ -109,7 +109,7 @@ public class AmplitudeAnalytics : MonoBehaviour
 
     private void SettingUserProperties()
     {
-        int lastLevel = _level.LevelNumber;
+        int lastLevel = _level.Number;
         Amplitude.Instance.setUserProperty("level_last", lastLevel);
     }
 }
