@@ -9,12 +9,12 @@ public class LosePanel : Panel
 {
     [SerializeField] private float _duration;
     [SerializeField] private Button _restartButton;
-    [SerializeField] private Button _exitButton;
     [SerializeField] private Panel _gamePanel;
     [SerializeField] private ArcherAssistant[] _assistants;
     [SerializeField] private Archer[] _archers;
     
     private List<Quiver> _quivers = new List<Quiver>();
+    private Vector3 _restartButtonDefaultScale;
 
     public event Action LevelRestarted;
 
@@ -28,18 +28,18 @@ public class LosePanel : Panel
 
         foreach (var assistant in _assistants)
             _quivers.Add(assistant.GetComponent<Quiver>());
+
+        _restartButtonDefaultScale = _restartButton.transform.localScale;
     }
 
     private void OnEnable()
     {
         _restartButton.onClick.AddListener(OnRestartButtonClick);
-        _exitButton.onClick.AddListener(OnExitButtonClick);
     }
 
     private void OnDisable()
     {
         _restartButton.onClick.RemoveListener(OnRestartButtonClick);
-        _exitButton.onClick.RemoveListener(OnExitButtonClick);
     }
 
     protected override void InitBehaviors()
@@ -58,21 +58,31 @@ public class LosePanel : Panel
         StartCoroutine(OpenGamePanel());
     }
 
-    private void OnExitButtonClick()
-    {
-        _exitButton.transform.DOScale(_exitButton.transform.localScale * 0.8f, _duration);
-        GameCloser.Close();
-    }
-
     private IEnumerator OpenGamePanel()
     {
         yield return new WaitForSeconds(_duration);
 
+        Time.timeScale = 1;
+
         LevelRestarted?.Invoke();
         Reloader.Restart(_assistants, _archers, _quivers);
 
-        yield return new WaitForSeconds(_duration);
+        var arrows = GameObject.FindObjectsOfType<Arrow>();
+
+        foreach (var arrow in arrows)
+        {
+            arrow.gameObject.SetActive(false);
+
+            if (arrow.Transform.parent == null)
+            {
+                if (arrow != null)
+                {
+                    arrow.Destroy();
+                }
+            }
+        }
 
         PanelOpener.Open(_gamePanel, false);
+        _restartButton.transform.DOScale(_restartButtonDefaultScale, _duration);
     }
 }

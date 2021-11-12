@@ -104,6 +104,12 @@ public class ArcherShooter : MonoBehaviour
 
         if(_enemies.Count > 0) 
             _currentEnemy = GetTargetPoint();
+
+        foreach (var target in _targets)
+            if (target.IsDied == false)
+                return;
+
+        _canShoot = false;
     }
 
     private Transform GetTargetPoint()
@@ -124,5 +130,8 @@ public class ArcherShooter : MonoBehaviour
 
             _killedEnemies.Clear();
         }
+
+        if (_quiver.ArrowsCount > 0)
+            _canShoot = true;
     }
 }

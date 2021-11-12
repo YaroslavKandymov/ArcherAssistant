@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class EnemyRay : MonoBehaviour
     private LineRenderer _lineRenderer;
     private bool _isMoving;
     private Arrow _currentArrow;
+
+    public event Action Stopped;
 
     private void Start()
     {
@@ -53,6 +56,7 @@ public class EnemyRay : MonoBehaviour
         yield return _offSeconds;
 
         _isMoving = false;
+        Stopped?.Invoke();
     }
 
     private void OnStopped()
