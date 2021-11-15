@@ -52,7 +52,7 @@ public class LosePanel : Panel
 
     private void OnRestartButtonClick()
     {
-        _restartButton.transform.DOScale(_restartButton.transform.localScale * 0.8f, _duration);
+        _restartButton.transform.DOScale(_restartButton.transform.localScale * 0.8f, _duration).SetLoops(1, LoopType.Yoyo);
         PanelCloser.Close(this, true, _duration);
 
         StartCoroutine(OpenGamePanel());
@@ -63,8 +63,6 @@ public class LosePanel : Panel
         yield return new WaitForSeconds(_duration);
 
         Time.timeScale = 1;
-
-        LevelRestarted?.Invoke();
         Reloader.Restart(_assistants, _archers, _quivers);
 
         var arrows = GameObject.FindObjectsOfType<Arrow>();
@@ -81,6 +79,8 @@ public class LosePanel : Panel
                 }
             }
         }
+
+        LevelRestarted?.Invoke();
 
         PanelOpener.Open(_gamePanel, false);
         _restartButton.transform.DOScale(_restartButtonDefaultScale, _duration);

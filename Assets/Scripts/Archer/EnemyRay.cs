@@ -38,6 +38,7 @@ public class EnemyRay : MonoBehaviour
     {
         _currentArrow = arrow;
         _currentArrow.Stopped += OnStopped;
+
         StartCoroutine(TurnOnRay());
     }
 

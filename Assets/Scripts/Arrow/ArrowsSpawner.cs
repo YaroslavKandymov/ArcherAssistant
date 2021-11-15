@@ -73,12 +73,6 @@ public class ArrowsSpawner : ObjectPool<Arrow>
 
     private void OnLevelRestarted()
     {
-        foreach (var arrow in Pool)
-        {
-            arrow.Transform.parent = null;
-        }
-
-        Initialize(_arrowTemplate);
         PositionStartArrows(_startArrowsCount);
     }
 }
