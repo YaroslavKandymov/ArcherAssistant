@@ -56,6 +56,9 @@ public class WinPanel : Panel
     {
         yield return new WaitForSeconds(_duration);
 
+        var number = ++LevelUtility.LevelNumber;
+
+        _level.SetLevelNumber(number);
         SceneLoader.Load(_sceneName, _level);
     }
 }

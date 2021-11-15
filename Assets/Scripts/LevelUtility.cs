@@ -1,4 +1,4 @@
 public static class LevelUtility
 {
-    public static int LevelNumber = 0;
+    public static int LevelNumber = 1;
 }

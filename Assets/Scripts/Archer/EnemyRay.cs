@@ -16,6 +16,7 @@ public class EnemyRay : MonoBehaviour
     private Arrow _currentArrow;
 
     public event Action Stopped;
+    public event Action Deactivated;
 
     private void Start()
     {
@@ -64,5 +65,6 @@ public class EnemyRay : MonoBehaviour
     {
         SetActive(false);
         _currentArrow.Stopped -= OnStopped;
+        Deactivated?.Invoke();
     }
 }

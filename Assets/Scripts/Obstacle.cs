@@ -6,7 +6,7 @@ public class Obstacle : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerMover player))
         {
-            player.Fall();
+            
         }
     }
 }

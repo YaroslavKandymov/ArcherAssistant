@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(ArcherAssistant))]
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private bl_Joystick _joystick;
 
     private Animator _animator;
     private bool _flipRotation = true;
+    private bool _freeze;
 
     private void Start()
     {
@@ -16,6 +16,9 @@ public class PlayerMover : MonoBehaviour
 
     private void Update()
     {
+        if(_freeze)
+            return;
+
         float vertical = _joystick.Vertical;
         float horizontal = _joystick.Horizontal;
 
@@ -29,9 +32,9 @@ public class PlayerMover : MonoBehaviour
         PlayAnimations(vertical, horizontal);
     }
 
-    public void Fall()
+    public void FreezeMoving(bool flag)
     {
-        _animator.Play(ArcherAssistantAnimatorController.States.Fall);
+        _freeze = flag;
     }
 
     private void PlayAnimations(float vertical, float horizontal)
@@ -40,9 +43,6 @@ public class PlayerMover : MonoBehaviour
             return;
 
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.GiveArrow))
-            return;
-
-        if (_animator.GetCurrentAnimatorStateInfo(0).IsName(ArcherAssistantAnimatorController.States.Fall))
             return;
 
         if (Mathf.Abs(vertical) >= 0.1f || Mathf.Abs(horizontal) >= 0.1f)

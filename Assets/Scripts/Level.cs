@@ -23,8 +23,6 @@ public class Level : MonoBehaviour
 
     private void Awake()
     {
-        _number = ++LevelUtility.LevelNumber;
-
         if (_number == 1)
             _amplitudeAnalytics.Init();
     }

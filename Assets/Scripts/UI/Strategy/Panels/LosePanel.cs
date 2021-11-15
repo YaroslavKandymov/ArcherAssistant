@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LosePanel : Panel
@@ -62,8 +63,8 @@ public class LosePanel : Panel
     {
         yield return new WaitForSeconds(_duration);
 
-        Time.timeScale = 1;
-        Reloader.Restart(_assistants, _archers, _quivers);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        /*Reloader.Restart(_assistants, _archers, _quivers);
 
         var arrows = GameObject.FindObjectsOfType<Arrow>();
 
@@ -71,16 +72,11 @@ public class LosePanel : Panel
         {
             arrow.gameObject.SetActive(false);
 
-            if (arrow.Transform.parent == null)
+            if (arrow.transform.parent == null)
             {
-                if (arrow != null)
-                {
-                    arrow.Destroy();
-                }
+                arrow.Destroy();
             }
-        }
-
-        LevelRestarted?.Invoke();
+        }*/
 
         PanelOpener.Open(_gamePanel, false);
         _restartButton.transform.DOScale(_restartButtonDefaultScale, _duration);
