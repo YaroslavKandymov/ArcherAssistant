@@ -9,7 +9,6 @@ public class WinPanel : Panel
     [SerializeField] private Button _exitGameButton;
     [SerializeField] private string _sceneName;
     [SerializeField] private float _duration;
-    [SerializeField] private Level _level;
 
     private void Awake()
     {
@@ -56,9 +55,8 @@ public class WinPanel : Panel
     {
         yield return new WaitForSeconds(_duration);
 
-        var number = ++LevelUtility.LevelNumber;
+       ++LevelUtility.LevelNumber;
 
-        _level.SetLevelNumber(number);
-        SceneLoader.Load(_sceneName, _level);
+        SceneLoader.Load(_sceneName);
     }
 }

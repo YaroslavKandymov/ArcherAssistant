@@ -7,8 +7,9 @@ public class PlayerShadow : MonoBehaviour
     [SerializeField] private Vector3 _startPosition;
     [SerializeField] private Vector3 _startRotation;
     [SerializeField] private ArcherAssistant _archerAssistant;
-    [SerializeField] private EnemyRay[] _enemyRays;
+    [SerializeField] private EnemyArcherHealth _enemyArcherHealth;
 
+    private EnemyRay _enemyRay;
     private Animator _animator;
     private PlayerMover _mover;
     private Transform _transform;
@@ -24,26 +25,25 @@ public class PlayerShadow : MonoBehaviour
         _mover = GetComponent<PlayerMover>();
         _meshRenderers = GetComponentsInChildren<MeshRenderer>();
         _skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        _enemyRay = _enemyArcherHealth.GetComponentInChildren<EnemyRay>();
 
         ActiveMeshes(false);
     }
 
     private void OnEnable()
     {
-        foreach (var enemyRay in _enemyRays)
-        {
-            enemyRay.Stopped += OnStopped;
-            enemyRay.Deactivated += OnDeactivated;
-        }
+        _enemyRay.Stopped += OnStopped;
+        _enemyRay.Deactivated += OnDeactivated;
+
+        _enemyArcherHealth.Died += OnDied;
     }
 
     private void OnDisable()
     {
-        foreach (var enemyRay in _enemyRays)
-        {
-            enemyRay.Stopped -= OnStopped;
-            enemyRay.Deactivated -= OnDeactivated;
-        }
+        _enemyRay.Stopped -= OnStopped;
+        _enemyRay.Deactivated -= OnDeactivated;
+
+        _enemyArcherHealth.Died -= OnDied;
     }
 
     private void OnStopped()
@@ -53,6 +53,11 @@ public class PlayerShadow : MonoBehaviour
         ActiveMeshes(true);
         _animator.speed = 0;
         _mover.FreezeMoving(true);
+    }
+
+    private void OnDied(EnemyArcherHealth health)
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnDeactivated()

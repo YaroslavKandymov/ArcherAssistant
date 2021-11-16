@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class FloatingJoystick : MonoBehaviour
 {
-    [SerializeField] private float _inactivityTime;
-
     private Vector3 _position;
     private Vector3 _startPosition;
-    private float _time;
 
     private void Start()
     {
