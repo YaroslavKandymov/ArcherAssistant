@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Animator))]
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private bl_Joystick _joystick;
+    [SerializeField] private Joystick _joystick;
 
     private Animator _animator;
     private bool _flipRotation = true;

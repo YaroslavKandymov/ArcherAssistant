@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FloatingJoystick : MonoBehaviour
+public class ArcherFloatingJoystick : MonoBehaviour
 {
     private Vector3 _position;
     private Vector3 _startPosition;
@@ -13,7 +13,7 @@ public class FloatingJoystick : MonoBehaviour
 
     private void Update()
     {
-        if (Input.touchCount > 0)
+        /*if (Input.touchCount > 0)
         {
             Touch myTouch = Input.touches[0];
 
@@ -33,6 +33,6 @@ public class FloatingJoystick : MonoBehaviour
         else
         {
             _position = _startPosition;
-        }
+        }*/
     }
 }
