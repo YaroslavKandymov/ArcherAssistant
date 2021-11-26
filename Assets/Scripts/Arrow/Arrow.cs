@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(ArrowMover))]
 public class Arrow : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _particleSystem;
     [SerializeField] private Vector3 _startScale;
 
     private ArrowMover _arrowMover;
@@ -61,9 +59,9 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    public void Destroy()
+    public void ActivateCollider(bool breaker)
     {
-        Destroy(gameObject);
+        _collider.enabled = breaker;
     }
 
     private void OnShooted()
@@ -75,10 +73,5 @@ public class Arrow : MonoBehaviour
     {
         ActivateCollider(true);
         Stopped?.Invoke();
-    }
-
-    public void ActivateCollider(bool breaker)
-    {
-        _collider.enabled = breaker;
     }
 }

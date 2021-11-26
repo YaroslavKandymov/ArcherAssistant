@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,10 +10,7 @@ public class LosePanel : Panel
     [SerializeField] private float _duration;
     [SerializeField] private Button _restartButton;
     [SerializeField] private Panel _gamePanel;
-    [SerializeField] private ArcherAssistant[] _assistants;
-    [SerializeField] private Archer[] _archers;
-    
-    private List<Quiver> _quivers = new List<Quiver>();
+
     private Vector3 _restartButtonDefaultScale;
 
     public event Action LevelRestarted;
@@ -23,12 +19,6 @@ public class LosePanel : Panel
     {
         InitBehaviors();
         PanelCloser.Close(this);
-
-        foreach (var archer in _archers)
-            _quivers.Add(archer.GetComponent<Quiver>());
-
-        foreach (var assistant in _assistants)
-            _quivers.Add(assistant.GetComponent<Quiver>());
 
         _restartButtonDefaultScale = _restartButton.transform.localScale;
     }
@@ -64,19 +54,6 @@ public class LosePanel : Panel
         yield return new WaitForSeconds(_duration);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        /*Reloader.Restart(_assistants, _archers, _quivers);
-
-        var arrows = GameObject.FindObjectsOfType<Arrow>();
-
-        foreach (var arrow in arrows)
-        {
-            arrow.gameObject.SetActive(false);
-
-            if (arrow.transform.parent == null)
-            {
-                arrow.Destroy();
-            }
-        }*/
 
         PanelOpener.Open(_gamePanel, false);
         _restartButton.transform.DOScale(_restartButtonDefaultScale, _duration);
